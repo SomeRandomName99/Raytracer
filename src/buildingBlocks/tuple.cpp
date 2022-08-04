@@ -9,10 +9,10 @@ Tuple::Tuple(float x_, float y_, float z_, float w_): x{x_},
                                                       {}
 
 bool Tuple::isVector() const {
-  return floatEqual(this->w, 1.0f);
+  return floatEqual(this->w, 0.0f);
 }
 bool Tuple::isPoint() const {
-  return floatEqual(this->w, 0.0f);
+  return floatEqual(this->w, 1.0f);
 }
 
 bool Tuple::operator==(const Tuple& rhs) const {
@@ -25,9 +25,27 @@ bool Tuple::operator==(const Tuple& rhs) const {
   return allEqual;
 }
 
+Tuple Tuple::operator+(const Tuple& rhs) const {
+  return Tuple(this->x+rhs.x, this->y+rhs.y, 
+               this->z+rhs.z, this->w+rhs.w);
+}
+
+Tuple Tuple::operator-(const Tuple& rhs)  const{
+  return Tuple(this->x-rhs.x, this->y-rhs.y, 
+               this->z-rhs.z, this->w-rhs.w);
+}
+Tuple Tuple::operator*(const double& rhs) const{
+  return Tuple(this->x*rhs, this->y*rhs, 
+               this->z*rhs, this->w*rhs);
+}
+Tuple Tuple::operator/(const double& rhs) const{
+  return Tuple(this->x/rhs, this->y/rhs, 
+               this->z/rhs, this->w/rhs);
+}
+
 Tuple Point(float x,float y, float z){
-  return Tuple(x,y,z,0);
+  return Tuple(x,y,z,1);
 }
 Tuple Vector(float x,float y, float z){
-  return Tuple(x,y,z,1);
+  return Tuple(x,y,z,0);
 }

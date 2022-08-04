@@ -9,14 +9,17 @@ public:
     bool isVector() const;
     bool isPoint() const;
 
-    bool operator==(const Tuple& rhs) const;
+    bool operator==(const Tuple& rhs)  const;
+    Tuple operator+(const Tuple& rhs)  const;
+    Tuple operator-(const Tuple& rhs)  const;
+    Tuple operator*(const double& rhs) const;
+    Tuple operator/(const double& rhs) const;
 
     float x;
     float y;
     float z;
     float w;
 };
-
 Tuple Point(float x,float y, float z);
 Tuple Vector(float x,float y, float z);
 
