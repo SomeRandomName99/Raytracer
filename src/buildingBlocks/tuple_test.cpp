@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <cmath>
 
 #include "include/tuple.h"
 
@@ -141,4 +142,71 @@ TEST(tuple_test, tuple_scalar_division_by_scalar_correct) {
     const auto tuple1 = Tuple(1, -2, 3, -4);
     const auto tuple2 = Tuple(0.5, -1, 1.5, -2);
     EXPECT_EQ(tuple1/2, tuple2);
+}
+
+/* =========== Operations Test magnitude =========== */
+TEST(tuple_test, tuple_magnitude_x_1_correct) {
+    const auto vec1 = Vector(1, 0, 0);
+    EXPECT_FLOAT_EQ(vec1.magnitude(), 1);
+}
+
+TEST(tuple_test, tuple_magnitude_y_1_correct) {
+    const auto vec1 = Vector(0, 1, 0);
+    EXPECT_FLOAT_EQ(vec1.magnitude(), 1);
+}
+
+TEST(tuple_test, tuple_magnitude_z_1_correct) {
+    const auto vec1 = Vector(0, 0, 1);
+    EXPECT_FLOAT_EQ(vec1.magnitude(), 1);
+}
+
+TEST(tuple_test, tuple_magnitude_all_pos_correct) {
+    const auto vec1 = Vector(1, 2, 3);
+    EXPECT_FLOAT_EQ(vec1.magnitude(), std::sqrt(14));
+}
+
+TEST(tuple_test, tuple_magnitude_all_neg_correct) {
+    const auto vec1 = Vector(-1, -2, -3);
+    EXPECT_FLOAT_EQ(vec1.magnitude(), std::sqrt(14));
+}
+
+/* =========== Operations Test magnitude =========== */
+TEST(tuple_test, tuple_normalize_one_axis_correct) {
+    const auto vec1 = Vector(4, 0, 0);
+    const auto vec2 = Vector(1, 0, 0);
+    EXPECT_EQ(vec1.nomrmalize(), vec2);
+}
+
+TEST(tuple_test, tuple_normalize_all_axes_correct) {
+    const auto vec1 = Vector(1, 2, 3);
+    const auto vec2 = Vector(1/std::sqrt(14), 2/std::sqrt(14), 3/std::sqrt(14));
+    EXPECT_EQ(vec1.nomrmalize(), vec2);
+}
+
+TEST(tuple_test, tuple_normalize_mag_1_correct) {
+    const auto vec1 = Vector(1, 2, 3);
+    const auto vec2 = vec1.nomrmalize();
+    EXPECT_FLOAT_EQ(vec2.magnitude(), 1);
+}
+
+/* =========== Operations Test dot product =========== */
+TEST(tuple_test, tuple_dot_product_correct) {
+    const auto vec1 = Vector(1, 2, 3);
+    const auto vec2 = Vector(2, 3, 4);
+    EXPECT_FLOAT_EQ(vec1.dot(vec2), 20);
+}
+
+/* =========== Operations Test cross product =========== */
+TEST(tuple_test, tuple_a_cross_b_correct) {
+    const auto vec1 = Vector(1, 2, 3);
+    const auto vec2 = Vector(2, 3, 4);
+    const auto vec3 = Vector(-1, 2, -1);
+    EXPECT_EQ(vec1.cross(vec2), vec3);
+}
+
+TEST(tuple_test, tuple_b_cross_a_correct) {
+    const auto vec1 = Vector(1, 2, 3);
+    const auto vec2 = Vector(2, 3, 4);
+    const auto vec3 = Vector(1, -2, 1);
+    EXPECT_EQ(vec2.cross(vec1), vec3);
 }

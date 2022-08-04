@@ -15,6 +15,13 @@ public:
     Tuple operator*(const double& rhs) const;
     Tuple operator/(const double& rhs) const;
 
+    double magnitude() const;
+    Tuple nomrmalize() const;
+
+    double dot(const Tuple& rhs) const;
+    Tuple cross(const Tuple& rhs) const;
+
+
     float x;
     float y;
     float z;
