@@ -210,3 +210,10 @@ TEST(tuple_test, tuple_b_cross_a_correct) {
     const auto vec3 = Vector(1, -2, 1);
     EXPECT_EQ(vec2.cross(vec1), vec3);
 }
+
+/* =========== Operations Test negate =========== */
+TEST(tuple_test, tuple_negate_correct) {
+    const auto tuple1 = Tuple(1, 2, 3, 4);
+    const auto tuple2 = Tuple(-1, -2, -3, -4);
+    EXPECT_EQ(-tuple1, tuple2);
+}

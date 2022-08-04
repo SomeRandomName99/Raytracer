@@ -14,6 +14,7 @@ public:
     Tuple operator-(const Tuple& rhs)  const;
     Tuple operator*(const double& rhs) const;
     Tuple operator/(const double& rhs) const;
+    Tuple operator-() const;
 
     double magnitude() const;
     Tuple nomrmalize() const;

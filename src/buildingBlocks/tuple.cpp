@@ -44,6 +44,9 @@ Tuple Tuple::operator/(const double& rhs) const{
   return Tuple(this->x/rhs, this->y/rhs, 
                this->z/rhs, this->w/rhs);
 }
+Tuple Tuple::operator-() const{
+  return *this*-1;
+}
 
 double Tuple::magnitude() const{
   auto sumSquared = this->x*this->x + this->y*this->y +
