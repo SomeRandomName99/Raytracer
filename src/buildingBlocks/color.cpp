@@ -5,6 +5,10 @@ Color::Color(float red_, float green_, float blue_) : _color{Tuple(red_, green_,
                                                       red{_color.x}, green{_color.y}, blue{_color.z}
                                                       {}
 
+bool Color::operator==(const Color& rhs) const{
+  return this->_color==rhs._color;
+}
+
 Color Color::operator+(const Color& rhs) const{
   const auto newTuple = this->_color + rhs._color;
   return Color(newTuple.x, newTuple.y, newTuple.z); 

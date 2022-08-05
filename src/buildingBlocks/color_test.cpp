@@ -55,3 +55,15 @@ TEST(color_test, hadamarad_product_colors_correct) {
   EXPECT_FLOAT_EQ(color3.green, 0.2f);
   EXPECT_FLOAT_EQ(color3.blue, 0.04f);
 }
+
+TEST(color_test, color_equality_equal_correct) {
+  const auto color1 = Color(1, 0.2, 0.4);
+  const auto color2 = Color(1, 0.2, 0.4);
+  EXPECT_TRUE(color1==color2);
+}
+
+TEST(color_test, color_equality_unequal_correct) {
+  const auto color1 = Color(1, 0.2, 0.4);
+  const auto color2 = Color(0.9, 1, 0.1);
+  EXPECT_FALSE(color1==color2);
+}

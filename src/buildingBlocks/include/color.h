@@ -9,6 +9,7 @@ public:
    Color(float red, float green, float blue);
   ~Color() = default;
 
+  bool operator==(const Color& rhs) const;
   Color operator+(const Color& rhs) const;
   Color operator-(const Color& rhs) const;
   Color operator*(const float& rhs) const;
