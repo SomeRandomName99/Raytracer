@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include "include/maths.h"
 #include "include/color.h"
 
 /* =========== Creation Test =========== */
@@ -66,4 +65,10 @@ TEST(color_test, color_equality_unequal_correct) {
   const auto color1 = Color(1, 0.2, 0.4);
   const auto color2 = Color(0.9, 1, 0.1);
   EXPECT_FALSE(color1==color2);
+}
+
+/* =========== Creation Test =========== */
+TEST(color_test, color_default_zeros) {
+  const auto color1 = Color();
+  EXPECT_EQ(color1, Color(0.0f, 0.0f, 0.0f));
 }

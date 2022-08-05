@@ -1,6 +1,9 @@
 #include "include/color.h"
 #include "include/tuple.h"
 
+Color::Color() : _color{Tuple(0.0f, 0.0f, 0.0f, 0.0f)},
+                 red{_color.x}, green{_color.y}, blue{_color.z}
+                 {}
 Color::Color(float red_, float green_, float blue_) : _color{Tuple(red_, green_, blue_, 0.0f)},
                                                       red{_color.x}, green{_color.y}, blue{_color.z}
                                                       {}
