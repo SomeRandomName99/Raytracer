@@ -8,7 +8,6 @@ class Color
 public:
    Color();
    Color(float red, float green, float blue);
-  ~Color() = default;
 
   bool operator==(const Color& rhs) const;
   Color operator+(const Color& rhs) const;
@@ -16,10 +15,17 @@ public:
   Color operator*(const float& rhs) const;
   Color operator*(const Color& rhs) const; // Hadamarad Product
 
+  // Color setters and getters
+  const float& red() const;
+  void red(const float& val);
+
+  const float& green() const;
+  void green(const float& val);
+
+  const float& blue() const;
+  void blue(const float& val);
+
   Tuple  _color;
-  float& red;
-  float& green;
-  float& blue;
 };
 
 #endif // COLOR_H
