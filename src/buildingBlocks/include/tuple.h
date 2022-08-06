@@ -4,7 +4,6 @@
 class Tuple {
 public:
     Tuple(float x, float y, float z, float w);
-    ~Tuple() = default;
 
     bool isVector() const;
     bool isPoint() const;
