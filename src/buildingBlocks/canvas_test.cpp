@@ -4,13 +4,9 @@
 #include "include/canvas.h"
 
 /* =========== Creation Test =========== */
-TEST(canvas_test, canvas_create_width_correct) {
+TEST(canvas_test, canvas_creation_correct) {
   const auto canvas1 = Canvas(20, 10);
   EXPECT_EQ(canvas1.width, 20);
-}
-
-TEST(canvas_test, canvas_create_length_correct) {
-  const auto canvas1 = Canvas(20, 10);
   EXPECT_EQ(canvas1.height, 10);
 }
 

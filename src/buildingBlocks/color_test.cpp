@@ -4,18 +4,10 @@
 #include "include/color.h"
 
 /* =========== Creation Test =========== */
-TEST(color_test, color_creation_red_correct) {
+TEST(color_test, color_creation_red_green_blue_correct) {
   const auto color1 = Color(-0.5, 0.4, 1.7);
   EXPECT_FLOAT_EQ(color1.red(), -0.5f);
-}
-
-TEST(color_test, color_creation_green_correct) {
-  const auto color1 = Color(-0.5, 0.4, 1.7);
   EXPECT_FLOAT_EQ(color1.green(), 0.4f);
-}
-
-TEST(color_test, color_creation_blue_correct) {
-  const auto color1 = Color(-0.5, 0.4, 1.7);
   EXPECT_FLOAT_EQ(color1.blue(), 1.7f);
 }
 
