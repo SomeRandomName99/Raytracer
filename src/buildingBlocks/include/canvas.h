@@ -2,6 +2,8 @@
 #define CANVAS_H
 
 #include <vector>
+#include <string>
+#include <sstream>
 
 #include "include/color.h"
 
@@ -13,6 +15,16 @@ public:
   const Color& pixelAt(size_t x, size_t y) const;
   void pixelWrite(const Color& color, size_t x, size_t y);
 
+  void canvasToPPM(std::ostream& outputStream) const;
+private:
+  void PPMHeader(std::ostream& outputStream) const;
+  void PPMData(std::ostream& outputStream) const;
+  inline unsigned int convertColor(const float& colorComponent) const;
+  size_t ColorComponentToPPM(const float& colorComponent, std::ostream& outputStream, size_t rowLineLen) const;
+  size_t pixelToPPM(Color const& pixel, std::ostream& outputStream, size_t rowLineLen) const;
+  std::string rowToPPM(size_t rowIdx) const;
+
+public:
   size_t width;
   size_t height;
   std::vector<Color> pixels;
