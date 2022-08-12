@@ -68,7 +68,6 @@ size_t Canvas::pixelToPPM(Color const& pixel, std::ostream& outputStream, size_t
   return rowLineLen;
 }
 
-// Todo: Need to check whether to add a new line per color component
 std::string Canvas::rowToPPM(size_t rowIdx) const{
   std::ostringstream stream;
   const size_t offset{this->width*rowIdx};

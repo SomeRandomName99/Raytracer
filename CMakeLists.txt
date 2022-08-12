@@ -27,4 +27,10 @@ target_include_directories(rayTests PUBLIC src/buildingBlocks)
 target_link_libraries(rayTests buildingBlocks)
 target_link_libraries(rayTests GTest::GTest GTest::Main)
 
+add_executable(projectile src/extras/projectile.cpp)
+target_compile_features(projectile PRIVATE cxx_std_20)
+target_include_directories(projectile PUBLIC src/buildingBlocks)
+target_link_libraries(projectile buildingBlocks)
+target_link_libraries(projectile GTest::GTest GTest::Main)
+
 gtest_discover_tests(rayTests)
