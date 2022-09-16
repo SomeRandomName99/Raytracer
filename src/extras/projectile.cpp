@@ -18,7 +18,7 @@ struct Environment
 
 Projectile tick(Environment env, Projectile proj){
   Tuple position = proj.position + proj.velocity;
-  Tuple velocity   = proj.velocity + env.gravity + env.wind;
+  Tuple velocity = proj.velocity + env.gravity + env.wind;
 
   return Projectile(position, velocity);
 }
