@@ -13,16 +13,17 @@ private:
 public:
   template<typename... T>
   explicit Matrix(T... data): elements{data...}{};
+  Matrix(const Matrix<rows, cols>& other): elements{other.elements}{};
 
   bool operator==(const Matrix& rhs) const;
 
   const double& at(const std::size_t& row, const std::size_t& column) const;
   double& at(const std::size_t& row, const std::size_t& column);
 
-  friend Matrix<rows, cols> operator*<>(const Matrix<rows, cols>& lhs, const Matrix<rows, cols>& rhs);
+  Matrix<rows, cols>& operator*=(const Matrix<rows, cols>& rhs);
 };
 
-template <uint8_t rows, uint8_t cols> 
+template <uint8_t rows, uint8_t cols>
 const double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column) const{
   return elements.at(row*cols+column);
 }
@@ -38,17 +39,40 @@ bool Matrix<rows, cols>::operator==(const Matrix& rhs) const{
 }
 
 template <uint8_t rows, uint8_t cols> 
-Matrix<rows, cols> operator*(const Matrix<rows, cols>& lhs, const Matrix<rows, cols>& rhs) {
-  Matrix<4,4> result{};
-  
-  for (std::size_t rowIndex{0}; rowIndex < rows; rowIndex++){
-    for (std::size_t colIndex{0}; colIndex < cols; colIndex++){
-      for(std::size_t accumulateIndex{0}; accumulateIndex < cols; accumulateIndex++){
-        result.at(rowIndex, colIndex) += lhs.at(rowIndex, accumulateIndex) * rhs.at(accumulateIndex, colIndex);
+  Matrix<rows, cols>& Matrix<rows, cols>::operator*=(const Matrix<rows, cols>& rhs){
+    Matrix<rows,cols>results{};
+
+    for (std::size_t rowIndex{0}; rowIndex < rows; rowIndex++){
+      for (std::size_t colIndex{0}; colIndex < cols; colIndex++){
+        for(std::size_t accumulateIndex{0}; accumulateIndex < cols; accumulateIndex++){
+          results.at(rowIndex, colIndex) += this->at(rowIndex, accumulateIndex) * rhs.at(accumulateIndex, colIndex);
+        }
       }
     }
+    this->elements.swap(results.elements);
+    return *this;
   }
 
-  return result;
+template <uint8_t rows, uint8_t cols> 
+inline Matrix<rows, cols> operator*(Matrix<rows, cols> lhs, const Matrix<rows, cols>& rhs)
+{
+  lhs *= rhs;
+  return lhs;
 }
+
+template <uint8_t rows, uint8_t cols> 
+std::ostream& operator<<(std::ostream& os, const Matrix<rows, cols>& rhs) {
+  // Test screen output to see if correct   
+  std::cout << std::setw(14) << "The Matrix:" << '\n';
+  for( int a = 0; a < rows; ++a) {
+      for( int b = 0; b < cols; ++b)
+      {
+          std::cout << ' ' << rhs.at(a,b) << ' ';
+      }
+      std::cout << '\n';
+  }
+
+  return os;
+}
+
 #endif //MATRIX_H
