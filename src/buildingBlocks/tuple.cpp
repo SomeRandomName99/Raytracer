@@ -1,4 +1,5 @@
 #include <cmath>
+#include <ostream>
 
 #include "include/tuple.h"
 #include "include/maths.h"
@@ -73,4 +74,10 @@ Tuple Point(float x,float y, float z){
 }
 Tuple Vector(float x,float y, float z){
   return Tuple(x,y,z,0);
+}
+
+std::ostream& operator<<(std::ostream& os, const Tuple& rhs) {
+  os << rhs.x << ' ' << rhs.y << ' ' << rhs.z << ' ' << rhs.w << '\n';
+
+  return os;
 }

@@ -85,3 +85,17 @@ TEST(matrix_test, Matrix_multiplication) {
 
   EXPECT_EQ(M3, M4);
 }
+
+TEST(matrix_test, Matrix_vector_multiply) {
+  const Matrix<4,4>M1{1.0, 2.0, 3.0, 4.0,
+                      2.0, 4.0, 4.0, 2.0,
+                      8.0, 6.0, 4.0, 1.0,
+                      0.0, 0.0, 0.0, 1.0};
+
+  const Tuple T1{1.0f,2.0f,3.0f,1.0f};
+  const Tuple T3{18.0f,24.0f,33.0f,1.0f};
+
+  Tuple T2 = M1 * T1;
+
+  EXPECT_EQ(T2, T3);
+}

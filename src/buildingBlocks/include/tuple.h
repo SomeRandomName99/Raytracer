@@ -1,6 +1,8 @@
 #ifndef TUPLE_H
 #define TUPLE_H
 
+#include <ostream>
+
 class Tuple {
 public:
     Tuple(float x, float y, float z, float w);
@@ -29,5 +31,7 @@ public:
 };
 Tuple Point(float x,float y, float z);
 Tuple Vector(float x,float y, float z);
+
+std::ostream& operator<<(std::ostream& os, const Tuple& rhs);
 
 #endif // TUPLE_H
