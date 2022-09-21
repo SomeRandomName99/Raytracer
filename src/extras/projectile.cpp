@@ -35,9 +35,9 @@ int main(void){
   auto canvas = Canvas(900, 500);
   const auto orange = Color(1.0f, 0.65f, 0.0f); 
 
-  while(p.position.y > 0){
-    std::cout <<  canvas.width-p.position.x  << ' ' << canvas.height-p.position.y << '\n';
-    canvas.pixelWrite(orange, canvas.width-p.position.x-1, canvas.height-p.position.y-1);
+  while(p.position.y() > 0){
+    std::cout <<  canvas.width-p.position.x()  << ' ' << canvas.height-p.position.y() << '\n';
+    canvas.pixelWrite(orange, canvas.width-p.position.x()-1, canvas.height-p.position.y()-1);
     p = tick(e, p);
   }
 

@@ -99,3 +99,13 @@ TEST(matrix_test, Matrix_vector_multiply) {
 
   EXPECT_EQ(T2, T3);
 }
+
+TEST(matrix_test, Matrix_vector_multiply_identity) {
+  const auto M1 = Matrix<4,4>::identity();
+
+  const Tuple T1{1.0f,2.0f,3.0f,1.0f};
+
+  Tuple T2 = M1 * T1;
+
+  EXPECT_EQ(T2, T1);
+}

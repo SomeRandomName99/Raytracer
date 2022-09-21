@@ -2,10 +2,11 @@
 #define TUPLE_H
 
 #include <ostream>
+#include <array>
 
 class Tuple {
 public:
-    Tuple(float x, float y, float z, float w);
+    explicit Tuple(double x, double y, double z, double w): data{x,y,z,w}{};
 
     bool isVector() const;
     bool isPoint() const;
@@ -23,14 +24,20 @@ public:
     double dot(const Tuple& rhs) const;
     Tuple cross(const Tuple& rhs) const;
 
+    
+    const double& x() const;
+    double& x();
+    const double& y() const;
+    double& y();
+    const double& z() const;
+    double& z();
+    const double& w() const;
+    double& w();
 
-    float x;
-    float y;
-    float z;
-    float w;
+    std::array<double, 4> data;
 };
-Tuple Point(float x,float y, float z);
-Tuple Vector(float x,float y, float z);
+Tuple Point(double x,double y, double z);
+Tuple Vector(double x,double y, double z);
 
 std::ostream& operator<<(std::ostream& os, const Tuple& rhs);
 

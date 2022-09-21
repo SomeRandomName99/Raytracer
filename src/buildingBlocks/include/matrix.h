@@ -22,6 +22,8 @@ public:
   const double& at(const std::size_t& row, const std::size_t& column) const;
   double& at(const std::size_t& row, const std::size_t& column);
 
+  static Matrix<rows, cols> identity();
+
   Matrix<rows, cols>& operator*=(const Matrix<rows, cols>& rhs);
 };
 
@@ -62,9 +64,6 @@ inline Matrix<rows, cols> operator*(Matrix<rows, cols> lhs, const Matrix<rows, c
   return lhs;
 }
 
-
-
-// TODO rewrite Tuple to use an array and fix narrowing
 template <uint8_t rows, uint8_t cols>
 typename std::enable_if<rows==4, Tuple>::type
 operator*(const Matrix<rows, cols>& lhs, const Tuple& rhs){
@@ -88,6 +87,15 @@ std::ostream& operator<<(std::ostream& os, const Matrix<rows, cols>& rhs) {
   }
 
   return os;
+}
+
+template<>
+inline Matrix<4,4> Matrix<4,4>::identity(){
+  return Matrix<4, 4>{
+        1.f, 0.f, 0.f, 0.f ,
+        0.f, 1.f, 0.f, 0.f ,
+        0.f, 0.f, 1.f, 0.f ,
+        0.f, 0.f, 0.f, 1.f};
 }
 
 #endif //MATRIX_H
