@@ -26,6 +26,7 @@ public:
 
   Matrix<rows, cols>& operator*=(const Matrix<rows, cols>& rhs);
   Matrix<rows, cols> transpose() const;
+  double determinant() const;
 };
 
 template <uint8_t rows, uint8_t cols>
@@ -110,6 +111,13 @@ Matrix<rows, cols> Matrix<rows, cols>::transpose() const{
   }
 
   return result;
+}
+
+template<>
+double Matrix<2,2>::determinant() const{
+  auto det = this->at(0,0)*this->at(1,1) - this->at(0,1)*this->at(1,0);
+
+  return det;
 }
 
 #endif //MATRIX_H

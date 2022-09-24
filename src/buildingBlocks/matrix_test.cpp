@@ -128,3 +128,11 @@ TEST(matrix_test, Matrix_transpose_identity) {
 
   EXPECT_EQ(M1, M1.transpose());
 }
+
+TEST(matrix_test, Matrix_determinant) {
+  const Matrix<2,2> M1{ 1.0, 5.0,
+                       -3.0, 2.0};
+  const auto determinantM1 = 17.0f;
+
+  EXPECT_EQ(M1.determinant(), determinantM1);
+}
