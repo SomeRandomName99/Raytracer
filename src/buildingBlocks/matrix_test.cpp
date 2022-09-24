@@ -109,3 +109,22 @@ TEST(matrix_test, Matrix_vector_multiply_identity) {
 
   EXPECT_EQ(T2, T1);
 }
+
+TEST(matrix_test, Matrix_transpose) {
+  const Matrix<4,4> M1{0.0, 9.0, 3.0, 0.0,
+                       9.0, 8.0, 0.0, 8.0, 
+                       1.0, 8.0, 5.0, 3.0,
+                       0.0, 0.0, 5.0, 8.0};
+  const Matrix<4,4> M2 = M1.transpose();
+  const Matrix<4,4> M3{0.0, 9.0, 1.0, 0.0,
+                       9.0, 8.0, 8.0, 0.0,
+                       3.0, 0.0, 5.0, 5.0,
+                       0.0, 8.0, 3.0, 8.0};
+  EXPECT_EQ(M3, M2);
+}
+
+TEST(matrix_test, Matrix_transpose_identity) {
+  const Matrix<4,4> M1 = Matrix<4,4>::identity();
+
+  EXPECT_EQ(M1, M1.transpose());
+}

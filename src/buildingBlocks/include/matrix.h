@@ -25,6 +25,7 @@ public:
   static Matrix<rows, cols> identity();
 
   Matrix<rows, cols>& operator*=(const Matrix<rows, cols>& rhs);
+  Matrix<rows, cols> transpose() const;
 };
 
 template <uint8_t rows, uint8_t cols>
@@ -96,6 +97,19 @@ inline Matrix<4,4> Matrix<4,4>::identity(){
         0.f, 1.f, 0.f, 0.f ,
         0.f, 0.f, 1.f, 0.f ,
         0.f, 0.f, 0.f, 1.f};
+}
+
+template <uint8_t rows, uint8_t cols>
+Matrix<rows, cols> Matrix<rows, cols>::transpose() const{
+  Matrix<rows, cols> result{};
+
+  for(std::size_t rowIndex{0}; rowIndex < rows; rowIndex++){
+    for(std::size_t colIndex{0}; colIndex < cols; colIndex++){
+      result.at(colIndex, rowIndex) = this->at(rowIndex, colIndex);
+    }
+  }
+
+  return result;
 }
 
 #endif //MATRIX_H
