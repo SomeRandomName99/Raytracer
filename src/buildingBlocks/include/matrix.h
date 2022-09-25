@@ -114,10 +114,28 @@ Matrix<rows, cols> Matrix<rows, cols>::transpose() const{
 }
 
 template<>
-double Matrix<2,2>::determinant() const{
-  auto det = this->at(0,0)*this->at(1,1) - this->at(0,1)*this->at(1,0);
+double Matrix<1,1>::determinant() const{
+  auto determinant = this->at(0,0);
 
-  return det;
+  return determinant;
+}
+
+template<>
+double Matrix<2,2>::determinant() const{
+  auto determinant = this->at(0,0)*this->at(1,1) - this->at(0,1)*this->at(1,0);
+
+  return determinant;
+}
+
+template <uint8_t rows, uint8_t cols>
+double Matrix<rows,cols>::determinant() const{
+  double determinant{};
+
+  for(std::size_t colIndex{0}; colIndex < cols; colIndex++){
+    determinant += this->at(0, colIndex)*cofactor(*this, 0, colIndex);
+  }
+
+  return determinant;
 }
 
 template <uint8_t rows, uint8_t cols>
@@ -138,6 +156,20 @@ submatrix(const Matrix<rows, cols>& matrix, const std::size_t& skipRow, const st
   }
 
   return result;
+}
+
+template<uint8_t rows, uint8_t cols>
+double minor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column){
+    auto subMatrix =  submatrix(matrix, row, column);
+    return subMatrix.determinant();  
+}
+
+template<uint8_t rows, uint8_t cols>
+inline double cofactor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column){
+
+  double cofactor = (row+column)%2 ? -1*minor(matrix, row, column) : minor(matrix, row, column);
+
+  return cofactor;
 }
 
 #endif //MATRIX_H

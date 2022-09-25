@@ -159,3 +159,43 @@ TEST(matrix_test, Matrix_4x4_to_3x3_submatrix){
 
   EXPECT_EQ(submatrix(M1, 2, 1), subMatrix);
 }
+
+TEST(matrix_test, Matrix_3x3_cofactor){
+  const Matrix<3,3> M1{ 3.0, 5.0, 0.0,
+                        2.0,-1.0,-7.0,
+                        6.0,-1.0, 5.0};
+
+  const Matrix<3,3> subMatrix{-6.0, 1.0, 6.0,
+                              -8.0, 8.0, 6.0,
+                              -7.0,-1.0, 1.0};
+
+  EXPECT_EQ(minor(M1,0,0), -12);
+  EXPECT_EQ(minor(M1,0,0), cofactor(M1,0,0));
+
+  EXPECT_EQ(minor(M1,1,0), 25);
+  EXPECT_EQ(minor(M1,1,0), -cofactor(M1,1,0));
+}
+
+TEST(matrix_test, Matrix_3x3_determinant){
+  const Matrix<3,3> M1{ 1.0, 2.0, 6.0,
+                       -5.0, 8.0,-4.0,
+                        2.0, 6.0, 4.0};
+
+  EXPECT_EQ(cofactor(M1,0,0), 56);
+  EXPECT_EQ(cofactor(M1,0,1), 12);
+  EXPECT_EQ(cofactor(M1,0,2), -46);
+  EXPECT_EQ(M1.determinant(), -196);
+}
+
+TEST(matrix_test, Matrix_4x4_determinant){
+  const Matrix<4,4> M1{-2.0,-8.0, 3.0, 5.0,
+                       -3.0, 1.0, 7.0, 3.0,
+                        1.0, 2.0,-9.0, 6.0,
+                       -6.0, 7.0, 7.0,-9.0};
+
+  EXPECT_EQ(cofactor(M1,0,0), 690);
+  EXPECT_EQ(cofactor(M1,0,1), 447);
+  EXPECT_EQ(cofactor(M1,0,2), 210);
+  EXPECT_EQ(cofactor(M1,0,3),  51);
+  EXPECT_EQ(M1.determinant(),-4071);
+}
