@@ -136,3 +136,26 @@ TEST(matrix_test, Matrix_determinant) {
 
   EXPECT_EQ(M1.determinant(), determinantM1);
 }
+
+TEST(matrix_test, Matrix_3x3_to_2x2_submatrix){
+  const Matrix<3,3> M1{ 1.0, 5.0, 0.0,
+                       -3.0, 2.0, 7.0,
+                        0.0, 6.0,-3.0};
+  const Matrix<2,2> subMatrix{-3.0, 2.0,
+                               0.0, 6.0};
+
+  EXPECT_EQ(submatrix(M1, 0, 2), subMatrix);
+}
+
+TEST(matrix_test, Matrix_4x4_to_3x3_submatrix){
+  const Matrix<4,4> M1{-6.0, 1.0, 1.0, 6.0,
+                        -8.0, 5.0, 8.0, 6.0,
+                        -1.0, 0.0, 8.0, 2.0,
+                        -7.0, 1.0,-1.0, 1.0};
+
+  const Matrix<3,3> subMatrix{-6.0, 1.0, 6.0,
+                              -8.0, 8.0, 6.0,
+                              -7.0,-1.0, 1.0};
+
+  EXPECT_EQ(submatrix(M1, 2, 1), subMatrix);
+}

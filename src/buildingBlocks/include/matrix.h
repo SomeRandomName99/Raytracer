@@ -120,4 +120,24 @@ double Matrix<2,2>::determinant() const{
   return det;
 }
 
+template <uint8_t rows, uint8_t cols>
+typename std::enable_if<(rows>2 && cols>2), Matrix<rows-1, cols-1>>::type
+submatrix(const Matrix<rows, cols>& matrix, const std::size_t& skipRow, const std::size_t& skipColumn) {
+  Matrix<rows-1, cols-1> result{};
+
+  std::size_t resultRowIndex{};
+  std::size_t resultColIndex{};
+  for(std::size_t rowIndex{0}; rowIndex < rows; rowIndex++){
+    if(rowIndex==skipRow){continue;}
+    resultColIndex = 0;
+    for(std::size_t colIndex{0}; colIndex < cols; colIndex++){
+      if(colIndex==skipColumn){continue;}
+      result.at(resultRowIndex, resultColIndex++) = matrix.at(rowIndex, colIndex);
+    }
+    resultRowIndex++;
+  }
+
+  return result;
+}
+
 #endif //MATRIX_H
