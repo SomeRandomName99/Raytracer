@@ -199,3 +199,23 @@ TEST(matrix_test, Matrix_4x4_determinant){
   EXPECT_EQ(cofactor(M1,0,3),  51);
   EXPECT_EQ(M1.determinant(),-4071);
 }
+
+TEST(matrix_test, Matrix_invertible_true){
+  const Matrix<4,4> M1{ 6.0, 4.0, 4.0, 4.0,
+                        5.0, 5.0, 7.0, 6.0,
+                        4.0,-9.0, 3.0,-7.0,
+                        9.0, 1.0, 7.0,-6.0};
+
+  EXPECT_EQ(M1.determinant(), -2120);
+  EXPECT_TRUE(M1.invertible());
+}
+
+TEST(matrix_test, Matrix_invertible_false){
+  const Matrix<4,4> M1{-4.0, 2.0,-2.0,-3.0,
+                        9.0, 6.0, 2.0, 6.0,
+                        0.0,-5.0, 1.0,-5.0,
+                        0.0, 0.0, 0.0, 0.0};
+
+  EXPECT_EQ(M1.determinant(), 0);
+  EXPECT_FALSE(M1.invertible());
+}

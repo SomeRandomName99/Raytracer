@@ -27,6 +27,7 @@ public:
   Matrix<rows, cols>& operator*=(const Matrix<rows, cols>& rhs);
   Matrix<rows, cols> transpose() const;
   double determinant() const;
+  bool invertible() const;
 };
 
 template <uint8_t rows, uint8_t cols>
@@ -166,10 +167,15 @@ double minor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std
 
 template<uint8_t rows, uint8_t cols>
 inline double cofactor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column){
-
   double cofactor = (row+column)%2 ? -1*minor(matrix, row, column) : minor(matrix, row, column);
 
   return cofactor;
+}
+
+template<uint8_t rows, uint8_t cols>
+bool Matrix<rows, cols>::invertible() const{
+  if(this->determinant() != 0){return true;}
+  else{return false;}
 }
 
 #endif //MATRIX_H
