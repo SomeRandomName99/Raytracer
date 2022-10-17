@@ -12,7 +12,6 @@ include(GoogleTest)
 
 add_library(buildingBlocks STATIC
            src/buildingBlocks/tuple.cpp
-           src/buildingBlocks/maths.cpp
            src/buildingBlocks/color.cpp
            src/buildingBlocks/canvas.cpp)
 target_compile_features(buildingBlocks PUBLIC cxx_std_20)

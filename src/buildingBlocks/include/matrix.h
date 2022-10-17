@@ -4,8 +4,10 @@
 #include <array>
 #include <concepts>
 #include <cstdint>
+#include <algorithm>
 
 #include <include/tuple.h>
+#include <include/maths.h>
 
 template <uint8_t rows, uint8_t cols> 
 class Matrix
@@ -42,7 +44,9 @@ double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column
 
 template <uint8_t rows, uint8_t cols> 
 bool Matrix<rows, cols>::operator==(const Matrix& rhs) const{
-  return this->elements==rhs.elements;
+  return std::equal(this->elements.cbegin(), this->elements.cend(),
+                    rhs.elements.cbegin()  , rhs.elements.cend(), 
+                    floatEqual<double>);
 }
 
 template <uint8_t rows, uint8_t cols> 
@@ -178,4 +182,19 @@ bool Matrix<rows, cols>::invertible() const{
   else{return false;}
 }
 
+template<uint8_t rows, uint8_t cols>
+typename std::enable_if<(rows>=2 && cols>=2), Matrix<rows, cols>>::type
+inverse(const Matrix<rows, cols>& matrix){
+  Matrix<rows, cols> result{};
+  auto determinant = matrix.determinant();
+
+  for(std::size_t rowIndex{0}; rowIndex < rows; rowIndex++){
+    for(std::size_t colIndex{0}; colIndex < cols; colIndex++){
+      auto cofact = cofactor(matrix, rowIndex, colIndex);
+      result.at(colIndex, rowIndex) = cofact/determinant;
+    }
+  }
+
+  return result;
+}
 #endif //MATRIX_H
