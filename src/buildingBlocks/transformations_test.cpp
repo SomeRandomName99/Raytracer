@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <numbers>
 
 #include "include/transformations.h"
 #include "include/tuple.h"
@@ -59,4 +60,56 @@ TEST(transformations_test, scaling_multiplication_inverse_translation_matrix){
   auto transformedVector = transform_inverse * v;
 
   EXPECT_EQ(transformedVector, Vector(-2,2,2));
+}
+
+TEST(transformations_test, reflections_backwards){
+  auto transform         = scaling(-1,1,1);
+  auto p                 = Point(2,3,4);
+
+  auto transformedVector = transform * p;
+
+  EXPECT_EQ(transformedVector, Point(-2,3,4));
+}
+
+/* =========== Rotation =========== */
+TEST(transformations_test, rotate_x_axis){
+  auto p                         = Point(0,1,0);
+  auto halfQuarterTransform      = rotation_x(std::numbers::pi/4);
+  auto fullQuarterTransform      = rotation_x(std::numbers::pi/2);
+
+
+  auto halfQuarter = halfQuarterTransform * p;
+  auto fullQuarter = fullQuarterTransform * p;
+
+
+  EXPECT_EQ(halfQuarter, Point(0,std::sqrt(2)/2,std::sqrt(2)/2));
+  EXPECT_EQ(fullQuarter, Point(0,0,1));
+}
+
+TEST(transformations_test, rotate_y_axis){
+  auto p                         = Point(0,0,1);
+  auto halfQuarterTransform      = rotation_y(std::numbers::pi/4);
+  auto fullQuarterTransform      = rotation_y(std::numbers::pi/2);
+
+
+  auto halfQuarter = halfQuarterTransform * p;
+  auto fullQuarter = fullQuarterTransform * p;
+
+
+  EXPECT_EQ(halfQuarter, Point(std::sqrt(2)/2,0,std::sqrt(2)/2));
+  EXPECT_EQ(fullQuarter, Point(1,0,0));
+}
+
+TEST(transformations_test, rotate_z_axis){
+  auto p                         = Point(0,1,0);
+  auto halfQuarterTransform      = rotation_z(std::numbers::pi/4);
+  auto fullQuarterTransform      = rotation_z(std::numbers::pi/2);
+
+
+  auto halfQuarter = halfQuarterTransform * p;
+  auto fullQuarter = fullQuarterTransform * p;
+
+
+  EXPECT_EQ(halfQuarter, Point(-std::sqrt(2)/2,std::sqrt(2)/2,0));
+  EXPECT_EQ(fullQuarter, Point(-1,0,0));
 }
