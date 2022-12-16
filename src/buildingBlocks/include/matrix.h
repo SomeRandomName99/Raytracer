@@ -5,9 +5,10 @@
 #include <concepts>
 #include <cstdint>
 #include <algorithm>
+#include <iostream>
 
-#include <include/tuple.h>
-#include <include/maths.h>
+#include "include/tuple.h"
+#include "include/maths.h"
 
 template <uint8_t rows, uint8_t cols> 
 class Matrix
@@ -119,14 +120,14 @@ Matrix<rows, cols> Matrix<rows, cols>::transpose() const{
 }
 
 template<>
-double Matrix<1,1>::determinant() const{
+inline double Matrix<1,1>::determinant() const{
   auto determinant = this->at(0,0);
 
   return determinant;
 }
 
 template<>
-double Matrix<2,2>::determinant() const{
+inline double Matrix<2,2>::determinant() const{
   auto determinant = this->at(0,0)*this->at(1,1) - this->at(0,1)*this->at(1,0);
 
   return determinant;

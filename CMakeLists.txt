@@ -13,7 +13,8 @@ include(GoogleTest)
 add_library(buildingBlocks STATIC
            src/buildingBlocks/tuple.cpp
            src/buildingBlocks/color.cpp
-           src/buildingBlocks/canvas.cpp)
+           src/buildingBlocks/canvas.cpp
+          src/buildingBlocks/transformations.cpp)
 target_compile_features(buildingBlocks PUBLIC cxx_std_20)
 target_include_directories(buildingBlocks PUBLIC src/buildingBlocks)
 
@@ -21,7 +22,8 @@ add_executable(rayTests src/buildingBlocks/tuple_test.cpp
                         src/buildingBlocks/maths_test.cpp
                         src/buildingBlocks/color_test.cpp
                         src/buildingBlocks/canvas_test.cpp
-                        src/buildingBlocks/matrix_test.cpp)
+                        src/buildingBlocks/matrix_test.cpp
+                        src/buildingBlocks/transformations_test.cpp)
 target_compile_features(rayTests PRIVATE cxx_std_20)
 target_include_directories(rayTests PUBLIC src/buildingBlocks)
 target_link_libraries(rayTests buildingBlocks)

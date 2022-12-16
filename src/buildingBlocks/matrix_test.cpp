@@ -219,3 +219,79 @@ TEST(matrix_test, Matrix_invertible_false){
   EXPECT_EQ(M1.determinant(), 0);
   EXPECT_FALSE(M1.invertible());
 }
+
+TEST(matrix_test, Matrix_inverse_thorough){
+  const Matrix<4,4> M1{-5.0, 2.0, 6.0,-8.0,
+                        1.0,-5.0, 1.0, 8.0,
+                        7.0, 7.0,-6.0,-7.0,
+                        1.0,-3.0, 7.0, 4.0};
+  auto M2 = inverse(M1);
+
+  std::array<double, 16> cofactors{116, 240, 128,-24,
+                                  -430,-775,-236, 277,
+                                  -42, -119,-28,  105,
+                                  -278,-433,-160, 163};
+  std::transform(cofactors.cbegin(), cofactors.cend(), 
+                 cofactors.begin(), 
+                 [M1](const double& arrayElement){return arrayElement/M1.determinant();});
+  const Matrix<4,4> M3{cofactors};
+
+  EXPECT_EQ(M1.determinant(), 532);
+  EXPECT_EQ(cofactor(M1, 2, 3), -160);
+  EXPECT_EQ(M2.at(3,2), -160.0/532);
+  EXPECT_EQ(cofactor(M1, 3, 2), 105);
+  EXPECT_EQ(M2.at(2,3), 105.0/532);
+  EXPECT_EQ(M3, M2);
+}
+
+TEST(matrix_test, Matrix_inverse_Simple1){
+  const Matrix<4,4> M1{ 8.0,-5.0, 9.0, 2.0,
+                        7.0, 5.0, 6.0, 1.0,
+                       -6.0, 0.0, 9.0, 6.0,
+                       -3.0, 0.0,-9.0,-4.0};
+  auto M2 = inverse(M1);
+
+  std::array<double, 16> cofactors{  90,    90,   165,   315,
+                                    45,   -72,   -15,   -18,
+                                  -210,  -210,  -255,  -540,
+                                   405,   405,   450,  1125};
+  std::transform(cofactors.cbegin(), cofactors.cend(), 
+                 cofactors.begin(), 
+                 [M1](const double& arrayElement){return arrayElement/M1.determinant();});
+  const Matrix<4,4> M3{cofactors};
+
+  EXPECT_EQ(M3, M2);
+}
+
+TEST(matrix_test, Matrix_inverse_Simple2){
+  const Matrix<4,4> M1{ 9.0, 3.0, 0.0, 9.0,
+                       -5.0,-2.0,-6.0,-3.0,
+                       -4.0, 9.0, 6.0, 4.0,
+                       -7.0, 6.0, 6.0, 2.0};
+  auto M2 = inverse(M1);
+
+  std::array<double, 16> cofactors{ -66.0,  -126.0,   234.0,  -360.0,
+                                   -126.0,    54.0,   594.0,  -540.0,
+                                    -47.0,  -237.0,  -177.0,   210.0,
+                                    288.0,   108.0,  -432.0,   540.0};
+  std::transform(cofactors.cbegin(), cofactors.cend(), 
+                 cofactors.begin(), 
+                 [M1](const double& arrayElement){return arrayElement/M1.determinant();});
+  const Matrix<4,4> M3{cofactors};
+
+  EXPECT_EQ(M3, M2);
+}
+
+TEST(matrix_test, Matrix_multiply_product_by_inverse){
+  const Matrix<4,4> M1{ 3.0,-9.0, 7.0, 3.0,
+                        3.0,-8.0, 2.0,-9.0,
+                       -4.0, 4.0, 4.0, 1.0,
+                       -6.0, 5.0,-1.0, 1.0};
+  const Matrix<4,4> M2{ 8.0, 2.0, 2.0, 2.0,
+                        3.0,-1.0, 7.0, 0.0,
+                        7.0, 0.0, 5.0, 4.0,
+                        6.0,-2.0, 0.0, 5.0};
+  auto M3 = M1*M2;
+  auto M4 = M3*inverse(M2);
+  EXPECT_TRUE(M1==M4);
+}
