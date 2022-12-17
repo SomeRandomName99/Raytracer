@@ -48,3 +48,18 @@ Matrix<4,4> rotation_z(double rads){
   rotationMatrix.at(1,1) =  std::cos(rads);
   return rotationMatrix;
 }
+
+Matrix<4,4> shearing(double x_y, double x_z, 
+                     double y_x, double y_z,
+                     double z_x, double z_y){
+  auto shearingMatrix = Matrix<4,4>::identity();
+
+  shearingMatrix.at(0,1) =  x_y;
+  shearingMatrix.at(0,2) =  x_z;
+  shearingMatrix.at(1,0) =  y_x;
+  shearingMatrix.at(1,2) =  y_z;
+  shearingMatrix.at(2,0) =  z_x;
+  shearingMatrix.at(2,1) =  z_y;
+
+  return shearingMatrix;
+}

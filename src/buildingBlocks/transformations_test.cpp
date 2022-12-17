@@ -113,3 +113,83 @@ TEST(transformations_test, rotate_z_axis){
   EXPECT_EQ(halfQuarter, Point(-std::sqrt(2)/2,std::sqrt(2)/2,0));
   EXPECT_EQ(fullQuarter, Point(-1,0,0));
 }
+
+/* =========== Shearing =========== */
+TEST(transformations_test, shearing_x_y){
+  auto transform = shearing(1,0,0,0,0,0);
+  auto p         = Point(2,3,4);
+
+  auto transformedVector = transform * p;
+
+  EXPECT_EQ(transformedVector, Point(5,3,4));
+}
+TEST(transformations_test, shearing_x_z){
+  auto transform = shearing(0,1,0,0,0,0);
+  auto p         = Point(2,3,4);
+
+  auto transformedVector = transform * p;
+
+  EXPECT_EQ(transformedVector, Point(6,3,4));
+}
+TEST(transformations_test, shearing_y_x){
+  auto transform = shearing(0,0,1,0,0,0);
+  auto p         = Point(2,3,4);
+
+  auto transformedVector = transform * p;
+
+  EXPECT_EQ(transformedVector, Point(2,5,4));
+}
+TEST(transformations_test, shearing_y_z){
+  auto transform = shearing(0,0,0,1,0,0);
+  auto p         = Point(2,3,4);
+
+  auto transformedVector = transform * p;
+
+  EXPECT_EQ(transformedVector, Point(2,7,4));
+}
+TEST(transformations_test, shearing_z_x){
+  auto transform = shearing(0,0,0,0,1,0);
+  auto p         = Point(2,3,4);
+
+  auto transformedVector = transform * p;
+
+  EXPECT_EQ(transformedVector, Point(2,3,6));
+}
+TEST(transformations_test, shearing_z_y){
+  auto transform = shearing(0,0,0,0,0,1);
+  auto p         = Point(2,3,4);
+
+  auto transformedVector = transform * p;
+
+  EXPECT_EQ(transformedVector, Point(2,3,7));
+}
+
+/* =========== Chained transformations =========== */
+TEST(transformations_test, transformations_applied_in_sequence){
+  auto p = Point(1,0,1);
+  auto A = rotation_x(std::numbers::pi/2);
+  auto B = scaling(5,5,5);
+  auto C = translation(10,5,7);
+
+  auto p2 = A * p;
+  EXPECT_EQ(p2, Point(1,-1,0));
+
+  auto p3 = B * p2;
+  EXPECT_EQ(p3, Point(5,-5,0));
+
+  auto p4 = C * p3;
+  EXPECT_EQ(p4, Point(15,0,7));
+}
+
+TEST(transformations_test, chained_transformations){
+  auto p = Point(1,0,1);
+  auto A = rotation_x(std::numbers::pi/2);
+  auto B = scaling(5,5,5);
+  auto C = translation(10,5,7);
+
+  // applied in reverse order to match the order above because
+  // matrix multiplication is not commutative
+  auto T = C * B * A;
+  auto p2 = T * p;
+  EXPECT_EQ(p2, Point(15,0,7));
+}
