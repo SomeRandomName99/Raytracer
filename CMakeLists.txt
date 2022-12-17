@@ -35,4 +35,10 @@ target_include_directories(projectile PUBLIC src/buildingBlocks)
 target_link_libraries(projectile buildingBlocks)
 target_link_libraries(projectile GTest::GTest GTest::Main)
 
+add_executable(clock src/extras/clock.cpp)
+target_compile_features(clock PRIVATE cxx_std_20)
+target_include_directories(clock PUBLIC src/buildingBlocks)
+target_link_libraries(clock buildingBlocks)
+target_link_libraries(clock GTest::GTest GTest::Main)
+
 gtest_discover_tests(rayTests)

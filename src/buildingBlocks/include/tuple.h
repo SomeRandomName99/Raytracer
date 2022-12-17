@@ -7,6 +7,7 @@
 class Tuple {
 public:
     explicit Tuple(double x, double y, double z, double w): data{x,y,z,w}{};
+    Tuple() = default;
 
     bool isVector() const;
     bool isPoint() const;
