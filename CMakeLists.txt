@@ -15,7 +15,8 @@ add_library(buildingBlocks STATIC
            src/buildingBlocks/color.cpp
            src/buildingBlocks/canvas.cpp
            src/buildingBlocks/transformations.cpp
-           src/buildingBlocks/ray.cpp)
+           src/buildingBlocks/ray.cpp
+           src/buildingBlocks/sphere.cpp)
 target_compile_features(buildingBlocks PUBLIC cxx_std_20)
 target_include_directories(buildingBlocks PUBLIC src/buildingBlocks)
 
@@ -25,7 +26,8 @@ add_executable(rayTests src/buildingBlocks/tests/tuple_test.cpp
                         src/buildingBlocks/tests/canvas_test.cpp
                         src/buildingBlocks/tests/matrix_test.cpp
                         src/buildingBlocks/tests/transformations_test.cpp
-                        src/buildingBlocks/tests/ray_test.cpp)
+                        src/buildingBlocks/tests/ray_test.cpp
+                        src/buildingBlocks/tests/sphere_test.cpp)
 target_compile_features(rayTests PRIVATE cxx_std_20)
 target_include_directories(rayTests PUBLIC src/buildingBlocks)
 target_link_libraries(rayTests buildingBlocks)
