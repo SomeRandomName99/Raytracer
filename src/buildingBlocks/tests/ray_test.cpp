@@ -13,7 +13,7 @@ TEST(ray_test, ray_creation) {
   EXPECT_EQ(direction, ray.direction);
 }
 
-TEST(ray_test, distance_compoutation) {
+TEST(ray_test, distance_computation) {
   const Ray::Ray r{Point(2, 3, 4), Vector(1, 0, 0)};
 
   EXPECT_EQ(position(r, 0),   Point(2, 3, 4));

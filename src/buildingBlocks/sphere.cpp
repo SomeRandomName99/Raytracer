@@ -1,10 +1,10 @@
-#include "include/sphere.h"
-#include "include/maths.h"
-
 #include <cmath>
 
+#include "include/sphere.h"
+#include "include/intersections.h"
+#include "include/maths.h"
 
-std::vector<double> Sphere::intersect(const Ray::Ray& ray) const{
+std::vector<Intersection> Sphere::intersect(const Ray::Ray& ray) const{
   // For now we assume that the sphere is always at the origin
   const auto SphereCenterToRay = ray.origin - Point(0, 0, 0);
 
@@ -15,9 +15,13 @@ std::vector<double> Sphere::intersect(const Ray::Ray& ray) const{
   const auto discriminant = b*b - 4*a*c;
 
   if (discriminant < 0.)
-    return std::vector<double>{};
+    return std::vector<Intersection>{};
 
   const auto t1 = (-b - std::sqrt(discriminant)) / (2*a);
   const auto t2 = (-b + std::sqrt(discriminant)) / (2*a);
-  return std::vector<double>{t1, t2};
+  return std::vector<Intersection>{ Intersection{t1, *this}, Intersection{t2, *this} };
+}
+
+bool Sphere::operator==(const Sphere& other) const{
+  return this == &other;
 }

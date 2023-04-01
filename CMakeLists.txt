@@ -27,7 +27,8 @@ add_executable(rayTests src/buildingBlocks/tests/tuple_test.cpp
                         src/buildingBlocks/tests/matrix_test.cpp
                         src/buildingBlocks/tests/transformations_test.cpp
                         src/buildingBlocks/tests/ray_test.cpp
-                        src/buildingBlocks/tests/sphere_test.cpp)
+                        src/buildingBlocks/tests/sphere_test.cpp
+                        src/buildingBlocks/tests/intersections_test.cpp)
 target_compile_features(rayTests PRIVATE cxx_std_20)
 target_include_directories(rayTests PUBLIC src/buildingBlocks)
 target_link_libraries(rayTests buildingBlocks)
