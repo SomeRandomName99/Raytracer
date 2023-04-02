@@ -23,5 +23,15 @@ auto intersections(const Arg&... arg){
   return std::vector<Intersection>{arg...};
 }
 
+/**
+ * @brief A function that returns the intersection with the least distance.
+ * 
+ * This is used to find the first object that is intersection in order to display it first.
+ * 
+ * @param intersections a vector containing information about all the intersected objects
+ * @return Intersection* a pointer to the struct containing info the first object that the ray intersected with
+ */
+Intersection* hit(const std::vector<Intersection>& intersectionss);
+
 
 #endif // INTERSECTIONS_H

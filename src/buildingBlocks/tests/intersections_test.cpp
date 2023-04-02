@@ -23,3 +23,42 @@ TEST(intersection_tests, AggregationOfIntersections){
   EXPECT_EQ(xs[0].object, s);
   EXPECT_EQ(xs[1].object, s);
 }
+
+/* =========== Hit Test =========== */
+TEST(hit_tests, AllIntersectionsPositiveT){
+  const auto s = Sphere();
+  const auto i1 = Intersection(1, s);
+  const auto i2 = Intersection(2, s);
+  const auto xs = intersections(i1, i2);
+
+  EXPECT_EQ(hit(xs), &i1);
+}
+
+TEST(hit_tests, SomeIntersectionsNegativeT){
+  const auto s = Sphere();
+  const auto i1 = Intersection(-1, s);
+  const auto i2 = Intersection( 1, s);
+  const auto xs = intersections(i1, i2);
+
+  EXPECT_EQ(hit(xs), &i2);
+}
+
+TEST(hit_tests, AllIntersectionsNegativeT){
+  const auto s = Sphere();
+  const auto i1 = Intersection(-2, s);
+  const auto i2 = Intersection(-1, s);
+  const auto xs = intersections(i1, i2);
+
+  EXPECT_EQ(hit(xs), std::nullptr_t);
+}
+
+TEST(hit_tests, ReturnLowestNonNegativeT){
+  const auto s = Sphere();
+  const auto i1 = Intersection(5, s);
+  const auto i2 = Intersection(7, s);
+  const auto i3 = Intersection(-3, s);
+  const auto i4 = Intersection(2, s);
+  const auto xs = intersections(i1, i2, i3, i4);
+
+  EXPECT_EQ(hit(xs), &i4);
+}
