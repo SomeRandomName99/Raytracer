@@ -27,7 +27,7 @@ struct Intersection
  * 
  * @param \sa{Sphere} 
  * @param \sa{Ray} 
- * @return std::vector<\sa{Intersection}> vector containing all recorded intersections
+ * @return std::vector< \sa{Intersection} > vector containing all recorded intersections
  */
 std::vector<Intersection> intersect(const Sphere& sphere, const Ray::Ray& ray);
 
