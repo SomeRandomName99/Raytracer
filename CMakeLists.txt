@@ -16,7 +16,8 @@ add_library(buildingBlocks STATIC
            src/buildingBlocks/canvas.cpp
            src/buildingBlocks/transformations.cpp
            src/buildingBlocks/ray.cpp
-           src/buildingBlocks/sphere.cpp)
+           src/buildingBlocks/sphere.cpp
+           src/buildingBlocks/intersections.cpp)
 target_compile_features(buildingBlocks PUBLIC cxx_std_20)
 target_include_directories(buildingBlocks PUBLIC src/buildingBlocks)
 

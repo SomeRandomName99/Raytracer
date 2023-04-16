@@ -31,7 +31,7 @@ TEST(hit_tests, AllIntersectionsPositiveT){
   const auto i2 = Intersection(2, s);
   const auto xs = intersections(i1, i2);
 
-  EXPECT_EQ(hit(xs), &i1);
+  EXPECT_EQ(*hit(xs), i1);
 }
 
 TEST(hit_tests, SomeIntersectionsNegativeT){
@@ -40,7 +40,7 @@ TEST(hit_tests, SomeIntersectionsNegativeT){
   const auto i2 = Intersection( 1, s);
   const auto xs = intersections(i1, i2);
 
-  EXPECT_EQ(hit(xs), &i2);
+  EXPECT_EQ(*hit(xs), i2);
 }
 
 TEST(hit_tests, AllIntersectionsNegativeT){
@@ -49,7 +49,7 @@ TEST(hit_tests, AllIntersectionsNegativeT){
   const auto i2 = Intersection(-1, s);
   const auto xs = intersections(i1, i2);
 
-  EXPECT_EQ(hit(xs), std::nullptr_t);
+  EXPECT_EQ(hit(xs), std::nullopt);
 }
 
 TEST(hit_tests, ReturnLowestNonNegativeT){
@@ -60,5 +60,7 @@ TEST(hit_tests, ReturnLowestNonNegativeT){
   const auto i4 = Intersection(2, s);
   const auto xs = intersections(i1, i2, i3, i4);
 
-  EXPECT_EQ(hit(xs), &i4);
+  auto result = *hit(xs);
+  auto result2 = hit(xs).value();
+  EXPECT_EQ(*hit(xs), i4);
 }

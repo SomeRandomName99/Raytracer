@@ -3,7 +3,7 @@
 
 #include "include/matrix.h"
 
-TEST(matrix_test, Matrix_creation_4x4) {
+TEST(matrix_tests, Matrix_creation_4x4) {
   const Matrix<4,4>M1{1.0, 2.0, 3.0, 4.0, 
                       5.5, 6.5, 7.5, 8.5, 
                       9.0, 10.0, 11.0, 12.0, 
@@ -18,7 +18,7 @@ TEST(matrix_test, Matrix_creation_4x4) {
   EXPECT_EQ(M1.at(3,2), 15.5);
 }
 
-TEST(matrix_test, Matrix_creation_2x2) {
+TEST(matrix_tests, Matrix_creation_2x2) {
   const Matrix<2,2>M1{-3.0, 5.0,
                        1.0,-2.0};
 
@@ -28,7 +28,7 @@ TEST(matrix_test, Matrix_creation_2x2) {
   EXPECT_EQ(M1.at(1,1), -2);
 }
 
-TEST(matrix_test, Matrix_creation_3x3) {
+TEST(matrix_tests, Matrix_creation_3x3) {
   const Matrix<3,3>M1{-3.0, 5.0, 0.0,
                        1.0,-2.0, -7.0,
                        0.0, 1.0, 1.0};
@@ -38,7 +38,7 @@ TEST(matrix_test, Matrix_creation_3x3) {
   EXPECT_EQ(M1.at(2,2), 1);
 }
 
-TEST(matrix_test, Matrix_equality_identical) {
+TEST(matrix_tests, Matrix_equality_identical) {
   const Matrix<4,4>M1{1.0, 2.0, 3.0, 4.0,
                       5.0, 6.0, 7.0, 8.0,
                       9.0, 8.0, 7.0, 6.0,
@@ -52,7 +52,7 @@ TEST(matrix_test, Matrix_equality_identical) {
   EXPECT_EQ(M1, M2);
 }
 
-TEST(matrix_test, Matrix_equality_different) {
+TEST(matrix_tests, Matrix_equality_different) {
   const Matrix<4,4>M1{1.0, 2.0, 3.0, 4.0,
                       5.0, 6.0, 7.0, 8.0,
                       9.0, 8.0, 7.0, 6.0,
@@ -66,7 +66,7 @@ TEST(matrix_test, Matrix_equality_different) {
   EXPECT_NE(M1, M2);
 }
 
-TEST(matrix_test, Matrix_multiplication) {
+TEST(matrix_tests, Matrix_multiplication) {
   const Matrix<4,4>M1{1.0, 2.0, 3.0, 4.0,
                       5.0, 6.0, 7.0, 8.0,
                       9.0, 8.0, 7.0, 6.0,
@@ -86,7 +86,7 @@ TEST(matrix_test, Matrix_multiplication) {
   EXPECT_EQ(M3, M4);
 }
 
-TEST(matrix_test, Matrix_vector_multiply) {
+TEST(matrix_tests, Matrix_vector_multiply) {
   const Matrix<4,4>M1{1.0, 2.0, 3.0, 4.0,
                       2.0, 4.0, 4.0, 2.0,
                       8.0, 6.0, 4.0, 1.0,
@@ -100,7 +100,7 @@ TEST(matrix_test, Matrix_vector_multiply) {
   EXPECT_EQ(T2, T3);
 }
 
-TEST(matrix_test, Matrix_vector_multiply_identity) {
+TEST(matrix_tests, Matrix_vector_multiply_identity) {
   const auto M1 = Matrix<4,4>::identity();
 
   const Tuple T1{1.0f,2.0f,3.0f,1.0f};
@@ -110,7 +110,7 @@ TEST(matrix_test, Matrix_vector_multiply_identity) {
   EXPECT_EQ(T2, T1);
 }
 
-TEST(matrix_test, Matrix_transpose) {
+TEST(matrix_tests, Matrix_transpose) {
   const Matrix<4,4> M1{0.0, 9.0, 3.0, 0.0,
                        9.0, 8.0, 0.0, 8.0, 
                        1.0, 8.0, 5.0, 3.0,
@@ -123,13 +123,13 @@ TEST(matrix_test, Matrix_transpose) {
   EXPECT_EQ(M3, M2);
 }
 
-TEST(matrix_test, Matrix_transpose_identity) {
+TEST(matrix_tests, Matrix_transpose_identity) {
   const Matrix<4,4> M1 = Matrix<4,4>::identity();
 
   EXPECT_EQ(M1, M1.transpose());
 }
 
-TEST(matrix_test, Matrix_determinant) {
+TEST(matrix_tests, Matrix_determinant) {
   const Matrix<2,2> M1{ 1.0, 5.0,
                        -3.0, 2.0};
   const auto determinantM1 = 17.0f;
@@ -137,7 +137,7 @@ TEST(matrix_test, Matrix_determinant) {
   EXPECT_EQ(M1.determinant(), determinantM1);
 }
 
-TEST(matrix_test, Matrix_3x3_to_2x2_submatrix){
+TEST(matrix_tests, Matrix_3x3_to_2x2_submatrix){
   const Matrix<3,3> M1{ 1.0, 5.0, 0.0,
                        -3.0, 2.0, 7.0,
                         0.0, 6.0,-3.0};
@@ -147,7 +147,7 @@ TEST(matrix_test, Matrix_3x3_to_2x2_submatrix){
   EXPECT_EQ(submatrix(M1, 0, 2), subMatrix);
 }
 
-TEST(matrix_test, Matrix_4x4_to_3x3_submatrix){
+TEST(matrix_tests, Matrix_4x4_to_3x3_submatrix){
   const Matrix<4,4> M1{-6.0, 1.0, 1.0, 6.0,
                         -8.0, 5.0, 8.0, 6.0,
                         -1.0, 0.0, 8.0, 2.0,
@@ -160,7 +160,7 @@ TEST(matrix_test, Matrix_4x4_to_3x3_submatrix){
   EXPECT_EQ(submatrix(M1, 2, 1), subMatrix);
 }
 
-TEST(matrix_test, Matrix_3x3_cofactor){
+TEST(matrix_tests, Matrix_3x3_cofactor){
   const Matrix<3,3> M1{ 3.0, 5.0, 0.0,
                         2.0,-1.0,-7.0,
                         6.0,-1.0, 5.0};
@@ -176,7 +176,7 @@ TEST(matrix_test, Matrix_3x3_cofactor){
   EXPECT_EQ(minor(M1,1,0), -cofactor(M1,1,0));
 }
 
-TEST(matrix_test, Matrix_3x3_determinant){
+TEST(matrix_tests, Matrix_3x3_determinant){
   const Matrix<3,3> M1{ 1.0, 2.0, 6.0,
                        -5.0, 8.0,-4.0,
                         2.0, 6.0, 4.0};
@@ -187,7 +187,7 @@ TEST(matrix_test, Matrix_3x3_determinant){
   EXPECT_EQ(M1.determinant(), -196);
 }
 
-TEST(matrix_test, Matrix_4x4_determinant){
+TEST(matrix_tests, Matrix_4x4_determinant){
   const Matrix<4,4> M1{-2.0,-8.0, 3.0, 5.0,
                        -3.0, 1.0, 7.0, 3.0,
                         1.0, 2.0,-9.0, 6.0,
@@ -200,7 +200,7 @@ TEST(matrix_test, Matrix_4x4_determinant){
   EXPECT_EQ(M1.determinant(),-4071);
 }
 
-TEST(matrix_test, Matrix_invertible_true){
+TEST(matrix_tests, Matrix_invertible_true){
   const Matrix<4,4> M1{ 6.0, 4.0, 4.0, 4.0,
                         5.0, 5.0, 7.0, 6.0,
                         4.0,-9.0, 3.0,-7.0,
@@ -210,7 +210,7 @@ TEST(matrix_test, Matrix_invertible_true){
   EXPECT_TRUE(M1.invertible());
 }
 
-TEST(matrix_test, Matrix_invertible_false){
+TEST(matrix_tests, Matrix_invertible_false){
   const Matrix<4,4> M1{-4.0, 2.0,-2.0,-3.0,
                         9.0, 6.0, 2.0, 6.0,
                         0.0,-5.0, 1.0,-5.0,
@@ -220,7 +220,7 @@ TEST(matrix_test, Matrix_invertible_false){
   EXPECT_FALSE(M1.invertible());
 }
 
-TEST(matrix_test, Matrix_inverse_thorough){
+TEST(matrix_tests, Matrix_inverse_thorough){
   const Matrix<4,4> M1{-5.0, 2.0, 6.0,-8.0,
                         1.0,-5.0, 1.0, 8.0,
                         7.0, 7.0,-6.0,-7.0,
@@ -244,7 +244,7 @@ TEST(matrix_test, Matrix_inverse_thorough){
   EXPECT_EQ(M3, M2);
 }
 
-TEST(matrix_test, Matrix_inverse_Simple1){
+TEST(matrix_tests, Matrix_inverse_Simple1){
   const Matrix<4,4> M1{ 8.0,-5.0, 9.0, 2.0,
                         7.0, 5.0, 6.0, 1.0,
                        -6.0, 0.0, 9.0, 6.0,
@@ -263,7 +263,7 @@ TEST(matrix_test, Matrix_inverse_Simple1){
   EXPECT_EQ(M3, M2);
 }
 
-TEST(matrix_test, Matrix_inverse_Simple2){
+TEST(matrix_tests, Matrix_inverse_Simple2){
   const Matrix<4,4> M1{ 9.0, 3.0, 0.0, 9.0,
                        -5.0,-2.0,-6.0,-3.0,
                        -4.0, 9.0, 6.0, 4.0,
@@ -282,7 +282,7 @@ TEST(matrix_test, Matrix_inverse_Simple2){
   EXPECT_EQ(M3, M2);
 }
 
-TEST(matrix_test, Matrix_multiply_product_by_inverse){
+TEST(matrix_tests, Matrix_multiply_product_by_inverse){
   const Matrix<4,4> M1{ 3.0,-9.0, 7.0, 3.0,
                         3.0,-8.0, 2.0,-9.0,
                        -4.0, 4.0, 4.0, 1.0,

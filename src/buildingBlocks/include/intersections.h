@@ -3,8 +3,10 @@
 
 #include <vector>
 #include <concepts>
+#include <optional>
 
-class Sphere;
+#include "include/tuple.h"
+#include "include/sphere.h"
 
 /**
  * @brief A class that stores relevant info regarding an intersecion
@@ -14,9 +16,20 @@ class Sphere;
  */
 struct Intersection
 {
+  bool operator==(Intersection const& other) const;
+
   double t;
   const Sphere& object;
 };
+
+/**
+ * @brief Calculate and return \sa{Intersection} between ray and sphere 
+ * 
+ * @param \sa{Sphere} 
+ * @param \sa{Ray} 
+ * @return std::vector<\sa{Intersection}> vector containing all recorded intersections
+ */
+std::vector<Intersection> intersect(const Sphere& sphere, const Ray::Ray& ray);
 
 template<std::same_as<Intersection> ... Arg> 
 auto intersections(const Arg&... arg){
@@ -29,9 +42,9 @@ auto intersections(const Arg&... arg){
  * This is used to find the first object that is intersection in order to display it first.
  * 
  * @param intersections a vector containing information about all the intersected objects
- * @return Intersection* a pointer to the struct containing info the first object that the ray intersected with
+ * @return const Intersection* a pointer to the struct containing info the first object that the ray intersected with
  */
-Intersection* hit(const std::vector<Intersection>& intersectionss);
+std::optional<Intersection> hit(const std::vector<Intersection>& intersections);
 
 
 #endif // INTERSECTIONS_H

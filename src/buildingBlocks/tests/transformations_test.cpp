@@ -5,7 +5,7 @@
 #include "include/tuple.h"
 
 /* =========== Translation =========== */
-TEST(transformations_test, multiplication_translation_matrix){
+TEST(transformations_tests, multiplication_translation_matrix){
   auto transform = translation(5,-3,2);
   auto p         = Point(-3,4,5);
 
@@ -14,7 +14,7 @@ TEST(transformations_test, multiplication_translation_matrix){
   EXPECT_EQ(transformedPoint, Point(2,1,7));
 }
 
-TEST(transformations_test, translation_multiplication_inverse_translation_matrix){
+TEST(transformations_tests, translation_multiplication_inverse_translation_matrix){
   auto transform = translation(5,-3, 2);
   auto transform_inverse = inverse(transform);
   auto p         = Point(-3,4,5);
@@ -24,7 +24,7 @@ TEST(transformations_test, translation_multiplication_inverse_translation_matrix
   EXPECT_EQ(transformedPoint, Point(-8,7,3));
 }
 
-TEST(transformations_test, multiplication_does_not_affect_vectors){
+TEST(transformations_tests, multiplication_does_not_affect_vectors){
   auto transform = translation(5,-3,2);
   auto v         = Vector(-3,4,5);
 
@@ -34,7 +34,7 @@ TEST(transformations_test, multiplication_does_not_affect_vectors){
 }
 
 /* =========== Scaling =========== */
-TEST(transformations_test, scaling_point){
+TEST(transformations_tests, scaling_point){
   auto transform = scaling(2,3,4);
   auto p         = Point(-4,6,8);
 
@@ -43,7 +43,7 @@ TEST(transformations_test, scaling_point){
   EXPECT_EQ(transformedPoint, Point(-8,18,32));
 }
 
-TEST(transformations_test, scaling_vector){
+TEST(transformations_tests, scaling_vector){
   auto transform = scaling(2,3,4);
   auto v         = Vector(-4,6,8);
 
@@ -52,7 +52,7 @@ TEST(transformations_test, scaling_vector){
   EXPECT_EQ(transformedVector, Vector(-8,18,32));
 }
 
-TEST(transformations_test, scaling_multiplication_inverse_translation_matrix){
+TEST(transformations_tests, scaling_multiplication_inverse_translation_matrix){
   auto transform         = scaling(2,3,4);
   auto transform_inverse = inverse(transform);
   auto v                 = Vector(-4,6,8);
@@ -62,7 +62,7 @@ TEST(transformations_test, scaling_multiplication_inverse_translation_matrix){
   EXPECT_EQ(transformedVector, Vector(-2,2,2));
 }
 
-TEST(transformations_test, reflections_backwards){
+TEST(transformations_tests, reflections_backwards){
   auto transform         = scaling(-1,1,1);
   auto p                 = Point(2,3,4);
 
@@ -72,7 +72,7 @@ TEST(transformations_test, reflections_backwards){
 }
 
 /* =========== Rotation =========== */
-TEST(transformations_test, rotate_x_axis){
+TEST(transformations_tests, rotate_x_axis){
   auto p                         = Point(0,1,0);
   auto halfQuarterTransform      = rotation_x(std::numbers::pi/4);
   auto fullQuarterTransform      = rotation_x(std::numbers::pi/2);
@@ -86,7 +86,7 @@ TEST(transformations_test, rotate_x_axis){
   EXPECT_EQ(fullQuarter, Point(0,0,1));
 }
 
-TEST(transformations_test, rotate_y_axis){
+TEST(transformations_tests, rotate_y_axis){
   auto p                         = Point(0,0,1);
   auto halfQuarterTransform      = rotation_y(std::numbers::pi/4);
   auto fullQuarterTransform      = rotation_y(std::numbers::pi/2);
@@ -100,7 +100,7 @@ TEST(transformations_test, rotate_y_axis){
   EXPECT_EQ(fullQuarter, Point(1,0,0));
 }
 
-TEST(transformations_test, rotate_z_axis){
+TEST(transformations_tests, rotate_z_axis){
   auto p                         = Point(0,1,0);
   auto halfQuarterTransform      = rotation_z(std::numbers::pi/4);
   auto fullQuarterTransform      = rotation_z(std::numbers::pi/2);
@@ -115,7 +115,7 @@ TEST(transformations_test, rotate_z_axis){
 }
 
 /* =========== Shearing =========== */
-TEST(transformations_test, shearing_x_y){
+TEST(transformations_tests, shearing_x_y){
   auto transform = shearing(1,0,0,0,0,0);
   auto p         = Point(2,3,4);
 
@@ -123,7 +123,7 @@ TEST(transformations_test, shearing_x_y){
 
   EXPECT_EQ(transformedVector, Point(5,3,4));
 }
-TEST(transformations_test, shearing_x_z){
+TEST(transformations_tests, shearing_x_z){
   auto transform = shearing(0,1,0,0,0,0);
   auto p         = Point(2,3,4);
 
@@ -131,7 +131,7 @@ TEST(transformations_test, shearing_x_z){
 
   EXPECT_EQ(transformedVector, Point(6,3,4));
 }
-TEST(transformations_test, shearing_y_x){
+TEST(transformations_tests, shearing_y_x){
   auto transform = shearing(0,0,1,0,0,0);
   auto p         = Point(2,3,4);
 
@@ -139,7 +139,7 @@ TEST(transformations_test, shearing_y_x){
 
   EXPECT_EQ(transformedVector, Point(2,5,4));
 }
-TEST(transformations_test, shearing_y_z){
+TEST(transformations_tests, shearing_y_z){
   auto transform = shearing(0,0,0,1,0,0);
   auto p         = Point(2,3,4);
 
@@ -147,7 +147,7 @@ TEST(transformations_test, shearing_y_z){
 
   EXPECT_EQ(transformedVector, Point(2,7,4));
 }
-TEST(transformations_test, shearing_z_x){
+TEST(transformations_tests, shearing_z_x){
   auto transform = shearing(0,0,0,0,1,0);
   auto p         = Point(2,3,4);
 
@@ -155,7 +155,7 @@ TEST(transformations_test, shearing_z_x){
 
   EXPECT_EQ(transformedVector, Point(2,3,6));
 }
-TEST(transformations_test, shearing_z_y){
+TEST(transformations_tests, shearing_z_y){
   auto transform = shearing(0,0,0,0,0,1);
   auto p         = Point(2,3,4);
 
@@ -165,7 +165,7 @@ TEST(transformations_test, shearing_z_y){
 }
 
 /* =========== Chained transformations =========== */
-TEST(transformations_test, transformations_applied_in_sequence){
+TEST(transformations_tests, transformations_applied_in_sequence){
   auto p = Point(1,0,1);
   auto A = rotation_x(std::numbers::pi/2);
   auto B = scaling(5,5,5);
@@ -181,7 +181,7 @@ TEST(transformations_test, transformations_applied_in_sequence){
   EXPECT_EQ(p4, Point(15,0,7));
 }
 
-TEST(transformations_test, chained_transformations){
+TEST(transformations_tests, chained_transformations){
   auto p = Point(1,0,1);
   auto A = rotation_x(std::numbers::pi/2);
   auto B = scaling(5,5,5);

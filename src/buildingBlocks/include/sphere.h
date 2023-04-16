@@ -2,15 +2,14 @@
 #define SPHERE_H
 
 #include <vector>
+#include <atomic>
 
-#include "include/intersections.h"
 #include "include/tuple.h"
 #include "include/ray.h"
 
+
 class Sphere
 {
-private:
-
 public:
   /**
   * @brief Return the t values correspondig to points at which the ray intersects the sphere's surface
@@ -20,8 +19,15 @@ public:
   * 
   * @param ray a Ray object contaning basic info such as direction and starting point.
   */
-  std::vector<Intersection> intersect(const Ray::Ray& ray) const;
+  Sphere(): id{ID++}{}
   bool operator==(Sphere const& other) const;
+
+static std::atomic<size_t> ID;
+
+std::size_t id;
+unsigned long int radius;
+Tuple origin;
 };
+
 
 #endif // SPHERE_H
