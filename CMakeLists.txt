@@ -47,4 +47,10 @@ target_include_directories(clock PUBLIC src/buildingBlocks)
 target_link_libraries(clock buildingBlocks)
 target_link_libraries(clock GTest::GTest GTest::Main)
 
+add_executable(ballProjection src/extras/ballProjection.cpp)
+target_compile_features(ballProjection PRIVATE cxx_std_20)
+target_include_directories(ballProjection PUBLIC src/buildingBlocks)
+target_link_libraries(ballProjection buildingBlocks)
+target_link_libraries(ballProjection GTest::GTest GTest::Main)
+
 gtest_discover_tests(rayTests)

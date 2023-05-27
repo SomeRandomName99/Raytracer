@@ -23,10 +23,9 @@ int main(void){
   auto canvas = Canvas(500, 500);
 
   for (size_t index = 0; index < points.size(); index++){
-    auto p = rotation_z((std::numbers::pi/6)*index)*Point(0,1,0);
-    points.at(index) = p;
+    points.at(index) = transformations::rotation_z((std::numbers::pi/6)*index)*Point(0,1,0);
     
-    std::cout << p << '\n';
+    std::cout << points.at(index) << '\n';
     drawOnCanvas(canvas, points.at(index));
   }
 
