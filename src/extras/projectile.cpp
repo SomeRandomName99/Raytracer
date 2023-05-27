@@ -25,7 +25,7 @@ Projectile tick(Environment env, Projectile proj){
 
 int main(void){
   auto start    = Point(0,1,0);
-  auto velocity = Vector(1,1.8,0).nomrmalize() * 11.25;
+  auto velocity = Vector(1,1.8,0).normalize() * 11.25;
   auto p        = Projectile(start, velocity);
 
   auto gravity  = Vector(0, -0.1, 0);

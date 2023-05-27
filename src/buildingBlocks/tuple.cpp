@@ -76,7 +76,7 @@ double Tuple::magnitude() const{
                     this->z()*this->z() + this->w()*this->w();
   return std::sqrt(sumSquared);
 }
-Tuple Tuple::nomrmalize() const{
+Tuple Tuple::normalize() const{
   return *this/this->magnitude();
 }
 

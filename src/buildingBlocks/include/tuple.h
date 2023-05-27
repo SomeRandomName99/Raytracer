@@ -20,7 +20,7 @@ public:
     Tuple operator-() const;
 
     double magnitude() const;
-    Tuple nomrmalize() const;
+    Tuple normalize() const;
 
     double dot(const Tuple& rhs) const;
     Tuple cross(const Tuple& rhs) const;

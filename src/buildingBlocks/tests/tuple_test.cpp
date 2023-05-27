@@ -150,18 +150,18 @@ TEST(tuple_tests, tuple_magnitude_all_neg_correct) {
 TEST(tuple_tests, tuple_normalize_one_axis_correct) {
     const auto vec1 = Vector(4, 0, 0);
     const auto vec2 = Vector(1, 0, 0);
-    EXPECT_EQ(vec1.nomrmalize(), vec2);
+    EXPECT_EQ(vec1.normalize(), vec2);
 }
 
 TEST(tuple_tests, tuple_normalize_all_axes_correct) {
     const auto vec1 = Vector(1, 2, 3);
     const auto vec2 = Vector(1/std::sqrt(14), 2/std::sqrt(14), 3/std::sqrt(14));
-    EXPECT_EQ(vec1.nomrmalize(), vec2);
+    EXPECT_EQ(vec1.normalize(), vec2);
 }
 
 TEST(tuple_tests, tuple_normalize_mag_1_correct) {
     const auto vec1 = Vector(1, 2, 3);
-    const auto vec2 = vec1.nomrmalize();
+    const auto vec2 = vec1.normalize();
     EXPECT_FLOAT_EQ(vec2.magnitude(), 1);
 }
 
