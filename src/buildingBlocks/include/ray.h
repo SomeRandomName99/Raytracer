@@ -12,7 +12,7 @@ namespace Ray{
   };
 
   Tuple position(const Ray &ray, const double time);
-  Ray   transform(const Ray &ray, const Matrix<4,4> &transform);
+  Ray   transform(const Ray &ray, const Matrix<4,4> &transformation);
 }
 
 #endif // RAY_H
