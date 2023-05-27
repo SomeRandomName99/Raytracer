@@ -60,7 +60,5 @@ TEST(hit_tests, ReturnLowestNonNegativeT){
   const auto i4 = Intersection(2, s);
   const auto xs = intersections(i1, i2, i3, i4);
 
-  auto result = *hit(xs);
-  auto result2 = hit(xs).value();
   EXPECT_EQ(*hit(xs), i4);
 }
