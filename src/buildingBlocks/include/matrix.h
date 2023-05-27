@@ -18,7 +18,6 @@ private:
 public:
   template<typename... T>
   explicit Matrix(T... data): elements{data...}{};
-  Matrix(const Matrix<rows, cols>& other): elements{other.elements}{};
 
   bool operator==(const Matrix& rhs) const;
 
