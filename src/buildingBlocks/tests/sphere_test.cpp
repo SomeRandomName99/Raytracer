@@ -1,4 +1,6 @@
 #include <gtest/gtest.h>
+#include <numbers>
+#include <cmath>
 
 #include "include/ray.h"
 #include "include/sphere.h"
@@ -97,4 +99,53 @@ TEST(sphere_tests, IntersectingTranslatedSphereWithRay) {
   const auto xs = intersect(s,r);
 
   EXPECT_EQ(0, xs.size());
+}
+
+/* =========== Intersection tests =========== */
+TEST(sphere_tests, NormalOnSphereXAxis) {
+  auto s = Sphere();
+
+  EXPECT_EQ(s.normalAt(Point(1, 0, 0)), Vector(1, 0, 0));
+}
+
+TEST(sphere_tests, NormalOnSphereYAxis) {
+  auto s = Sphere();
+
+  EXPECT_EQ(s.normalAt(Point(0, 1, 0)), Vector(0, 1, 0));
+}
+
+TEST(sphere_tests, NormalOnSphereZAxis) {
+  auto s = Sphere();
+
+  EXPECT_EQ(s.normalAt(Point(0, 0, 1)), Vector(0, 0, 1));
+}
+
+TEST(sphere_tests, NormalOnSphereNonAxialPoint) {
+  auto s = Sphere();
+
+  EXPECT_EQ(s.normalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3)), 
+            Vector(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
+}
+
+TEST(sphere_tests, NormalOnSphereNormalized) {
+  auto s = Sphere();
+  auto n = s.normalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
+
+  EXPECT_EQ(n, n.normalize());
+}
+
+TEST(sphere_tests, NormalOnATranslatedSphere) {
+  auto s = Sphere();
+  s.setTransform(transformations::translation(0, 1, 0));
+  auto n = s.normalAt(Point(0, 1+std::sqrt(2)/2, -std::sqrt(2)/2));
+
+  EXPECT_EQ(n, Vector(0, std::sqrt(2)/2, -std::sqrt(2)/2));
+}
+
+TEST(sphere_tests, NormalOnATransformedSphere) {
+  auto s = Sphere();
+  s.setTransform(transformations::scaling(1, 0.5, 1) * transformations::rotation_z(std::numbers::pi/5));
+  auto n = s.normalAt(Point(0, std::sqrt(2)/2, -std::sqrt(2)/2));
+
+  EXPECT_EQ(n, Vector(0, 0.9701425, -0.2425356));
 }
