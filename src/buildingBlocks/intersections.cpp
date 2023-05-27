@@ -12,10 +12,11 @@ bool Intersection::operator==(const Intersection& other) const{
 
 std::vector<Intersection> intersect(const Sphere& sphere, const Ray::Ray& ray){
   // For now we assume that the sphere is always at the origin
-  const auto SphereCenterToRay = ray.origin - Point(0, 0, 0);
+  const auto transformedRay    = Ray::transform(ray, inverse(sphere.transformation));
+  const auto SphereCenterToRay = transformedRay.origin - Point(0, 0, 0);
 
-  const auto a = ray.direction.dot(ray.direction);
-  const auto b = 2 * ray.direction.dot(SphereCenterToRay);
+  const auto a = transformedRay.direction.dot(transformedRay.direction);
+  const auto b = 2 * transformedRay.direction.dot(SphereCenterToRay);
   const auto c = SphereCenterToRay.dot(SphereCenterToRay) - 1; // where 1 is the radius of the sphere
 
   const auto discriminant = b*b - 4*a*c;

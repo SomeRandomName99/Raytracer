@@ -6,27 +6,23 @@
 
 #include "include/tuple.h"
 #include "include/ray.h"
+#include "transformations.h"
+#include "matrix.h"
 
 
-class Sphere
+struct Sphere
 {
-public:
-  /**
-  * @brief Return the t values correspondig to points at which the ray intersects the sphere's surface
-  *
-  * This function will also calculate intersection behind the origin's start point, as they will be used for calculating
-  * reflectionsn and other lighting effects later on.
-  * 
-  * @param ray a Ray object contaning basic info such as direction and starting point.
-  */
-  Sphere(): id{ID++}{}
-  bool operator==(Sphere const& other) const;
-
-static std::atomic<size_t> ID;
+Sphere(): id{ID++}, transformation{Matrix<4,4>::identity()}{}
+bool operator==(Sphere const& other) const;
+void setTransform(const Matrix<4,4> &transformation);
 
 std::size_t id;
 unsigned long int radius;
 Tuple origin;
+Matrix<4,4> transformation;
+
+private: 
+static std::atomic<size_t> ID;
 };
 
 
