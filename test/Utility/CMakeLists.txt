@@ -1,0 +1,10 @@
+target_sources(
+  Tests
+  PRIVATE
+    ColorTests.cpp 
+    FloatAlmostEqualsTests.cpp 
+    MatrixTests.cpp 
+    RayTests.cpp 
+    TransformationsTests.cpp 
+    TupleTests.cpp
+)
