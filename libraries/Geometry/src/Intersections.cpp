@@ -10,6 +10,14 @@ bool Intersection::operator==(const Intersection& other) const{
          this->object == other.object;
 }
 
+/**
+ * Calculates the intersections between a sphere and a ray.
+ *
+ * @param sphere The sphere to intersect with.
+ * @param ray The ray to intersect with the sphere.
+ * @return A vector of Intersection objects representing the points of intersection.
+ *         If there are no intersections, an empty vector is returned.
+ */
 std::vector<Intersection> intersect(const Sphere& sphere, const Ray::Ray& ray){
   // For now we assume that the sphere is always at the origin
   const auto transformedRay    = Ray::transform(ray, inverse(sphere.transformation));
@@ -29,6 +37,12 @@ std::vector<Intersection> intersect(const Sphere& sphere, const Ray::Ray& ray){
   return std::vector<Intersection>{ Intersection{t1, sphere}, Intersection{t2, sphere} };
 }
 
+/**
+ * Finds the smallest positive intersection from a vector of intersections.
+ *
+ * @param intersections A vector of intersections to search through.
+ * @return The smallest positive intersection, wrapped in std::optional. If no positive intersection is found, returns std::nullopt.
+ */
 std::optional<Intersection> hit(const std::vector<Intersection>& intersections){
   auto positiveT = intersections | std::views::filter([](const auto& intersection) { return intersection.t > 0.0; });
   auto smallestIntersection = std::ranges::min_element(positiveT, {}, [](const auto& intersection){return intersection.t;});

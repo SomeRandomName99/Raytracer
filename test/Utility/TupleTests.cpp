@@ -193,3 +193,18 @@ TEST(tuple_tests, tuple_negate_correct) {
     const auto tuple2 = Tuple(-1, -2, -3, -4);
     EXPECT_EQ(-tuple1, tuple2);
 }
+
+/* =========== Reflection tests ================ */
+TEST(tuple_tests, reflectVectorApproachingat45Degrees) {
+    const auto vector    = Vector(1, -1, 0);
+    const auto normal    = Vector(0, -1, 0);
+    const auto reflected = vector.reflect(normal);
+    EXPECT_EQ(reflected, Vector(1,1,0));
+}
+
+TEST(tuple_tests, reflectVectorOffSlantedSurface) {
+    const auto vector    = Vector(0, -1, 0);
+    const auto normal    = Vector(std::sqrt(2)/2, std::sqrt(2)/2, 0);
+    const auto reflected = vector.reflect(normal);
+    EXPECT_EQ(reflected, Vector(1, 0, 0));
+}

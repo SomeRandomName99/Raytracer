@@ -76,6 +76,7 @@ double Tuple::magnitude() const{
                     this->z()*this->z() + this->w()*this->w();
   return std::sqrt(sumSquared);
 }
+
 Tuple Tuple::normalize() const{
   return *this/this->magnitude();
 }
@@ -85,10 +86,15 @@ double Tuple::dot(const Tuple& rhs) const{
                      this->z()*rhs.z() + this->w()*rhs.w();
   return multAndACum;
 }
+
 Tuple Tuple::cross(const Tuple& rhs) const{
   return Vector(this->y()*rhs.z() - this->z()*rhs.y(),
                 this->z()*rhs.x() - this->x()*rhs.z(),
                 this->x()*rhs.y() - this->y()*rhs.x());
+}
+
+Tuple Tuple::reflect(const Tuple& normal) const{
+  return *this - (normal * 2 * this->dot(normal));
 }
 
 Tuple Point(double x, double y, double z){

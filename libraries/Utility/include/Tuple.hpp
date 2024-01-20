@@ -24,7 +24,7 @@ public:
 
     double dot(const Tuple& rhs) const;
     Tuple cross(const Tuple& rhs) const;
-
+    Tuple reflect(const Tuple& reflect) const;
     
     const double& x() const;
     double& x();
