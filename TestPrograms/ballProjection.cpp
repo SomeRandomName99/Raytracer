@@ -10,6 +10,7 @@
 #include "Ray.hpp"
 #include "Sphere.hpp"
 #include "Intersections.hpp"
+#include "Light.hpp"
 
 using namespace raytracer;
 
@@ -26,7 +27,10 @@ utility::Tuple pixelToWorldCoords(unsigned int widthPixel, unsigned int heightPi
 int main(void){
   const auto rayOrigin = utility::Point(0, 0, -3);
   auto sphere          = geometry::Sphere();
+  sphere.material.surfaceColor_ = utility::Color(1,0.2,1);
   sphere.setTransform(utility::transformations::shearing(1,0,0,0,0,0)*utility::transformations::scaling(1,0.5,1));
+
+  auto lightSource = scene::PointLight(utility::Color(1,1,1), utility::Point(-10,10,-10));
 
   // Assuming square wall and canvas
   const int wallZOffset    = 10;
@@ -45,7 +49,12 @@ int main(void){
       auto intersections = geometry::intersect(sphere, firedRay);
 
       if(intersections.size() > 0){
-        canvas.pixelWrite(shadow, x, y);
+        auto hit               = geometry::hit(intersections);
+        auto intersectionPoint = firedRay.position(hit->t);
+        auto normal            = hit->object.normalAt(intersectionPoint);
+        auto eyeVector         = -firedRay.direction_;
+        auto color             = scene::lighting(hit->object.material, lightSource, intersectionPoint, eyeVector, normal);   
+        canvas.pixelWrite(color, x, y);
       } else {
         canvas.pixelWrite(wallcolor, x, y);
       }
