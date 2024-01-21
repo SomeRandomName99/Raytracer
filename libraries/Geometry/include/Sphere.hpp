@@ -9,22 +9,26 @@
 #include "Transformations.hpp"
 #include "Matrix.hpp"
 
+namespace raytracer {
+namespace geometry {
 
 struct Sphere
 {
-Sphere(): id{ID++}, transformation{Matrix<4,4>::identity()}{}
+Sphere(): id{ID++}, transformation{utility::Matrix<4,4>::identity()}{}
 bool operator==(Sphere const& other) const;
-void setTransform(const Matrix<4,4> &transformation);
-Tuple normalAt(const Tuple &point) const;
+void setTransform(const utility::Matrix<4,4> &transformation);
+utility::Tuple normalAt(const utility::Tuple &point) const;
 
 std::size_t id;
 unsigned long int radius;
-Tuple origin;
-Matrix<4,4> transformation;
+utility::Tuple origin;
+utility::Matrix<4,4> transformation;
 
 private: 
 static std::atomic<size_t> ID;
 };
 
+} // namespace geometry
+} // namespace raytracer
 
 #endif // SPHERE_H

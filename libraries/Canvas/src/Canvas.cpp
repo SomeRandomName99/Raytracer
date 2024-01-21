@@ -4,6 +4,8 @@
 
 #include "Canvas.hpp"
 
+namespace raytracer {
+
 Canvas::Canvas(size_t width_, size_t height_): width{width_}, 
                                                height{height_} {
   this->pixels.resize(width_*height_);
@@ -14,11 +16,11 @@ size_t Canvas::pixelIndex(size_t x, size_t y) const{
   return x+y*this->width;
 }
 
-const Color& Canvas::pixelAt(size_t x, size_t y) const{
+const utility::Color& Canvas::pixelAt(size_t x, size_t y) const{
   return this->pixels.at(pixelIndex(x,y));
 }
 
-void Canvas::pixelWrite(const Color& color, size_t x, size_t y){
+void Canvas::pixelWrite(const utility::Color& color, size_t x, size_t y){
   this->pixels.at(pixelIndex(x,y)) = color;
 }
 
@@ -38,16 +40,16 @@ void Canvas::PPMData(std::ostream& outputStream) const{
   }
 }
 
-inline unsigned int Canvas::convertColor(const float& colorComponent) const{
+inline unsigned int Canvas::convertColor(const float& ColorComponent) const{
   // map the range 0.0-1.0 to 0-255 which is used for the PPM format
-  if(std::isgreater(colorComponent, 1.0f)){return 255;}
-  else if(std::isless(colorComponent, 0.0f)){return 0;}
-  else{return std::ceil(255*colorComponent);}
+  if(std::isgreater(ColorComponent, 1.0f)){return 255;}
+  else if(std::isless(ColorComponent, 0.0f)){return 0;}
+  else{return std::ceil(255*ColorComponent);}
 }
 
-size_t Canvas::ColorComponentToPPM(const float& colorComponent, std::ostream& outputStream, size_t rowLineLen) const{
+size_t Canvas::ColorComponentToPPM(const float& ColorComponent, std::ostream& outputStream, size_t rowLineLen) const{
   const auto maxLineLen = 70u;
-  std::string ComponentString{std::to_string(convertColor(colorComponent))};
+  std::string ComponentString{std::to_string(convertColor(ColorComponent))};
 
   if((rowLineLen + ComponentString.size()) >= maxLineLen){
     outputStream << '\n';
@@ -60,7 +62,7 @@ size_t Canvas::ColorComponentToPPM(const float& colorComponent, std::ostream& ou
   return rowLineLen+ComponentString.size();
 }
 
-size_t Canvas::pixelToPPM(Color const& pixel, std::ostream& outputStream, size_t rowLineLen) const{
+size_t Canvas::pixelToPPM(utility::Color const& pixel, std::ostream& outputStream, size_t rowLineLen) const{
   rowLineLen = ColorComponentToPPM(pixel.red(), outputStream, rowLineLen);
   rowLineLen = ColorComponentToPPM(pixel.green(), outputStream, rowLineLen);
   rowLineLen = ColorComponentToPPM(pixel.blue(), outputStream, rowLineLen);
@@ -76,3 +78,5 @@ std::string Canvas::rowToPPM(size_t rowIdx) const{
   stream << "\n";
   return stream.str();
 }
+
+} // namespace raytracer

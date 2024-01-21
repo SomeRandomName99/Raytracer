@@ -3,6 +3,9 @@
 
 #include "Matrix.hpp"
 
+namespace raytracer {
+namespace utility {
+
 namespace transformations{
   Matrix<4,4> translation(double x, double y, double z);
   Matrix<4,4> scaling(double x, double y, double z);
@@ -15,5 +18,8 @@ namespace transformations{
                       double y_x, double y_z,
                       double z_x, double z_y);
 }
+
+} // namespace utility
+} // namespace raytracer
 
 #endif // TRANSFORMATION_H

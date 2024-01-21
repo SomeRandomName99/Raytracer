@@ -10,6 +10,9 @@
 #include "Tuple.hpp"
 #include "FloatAlmostEquals.hpp"
 
+namespace raytracer {
+namespace utility {
+
 template <uint8_t rows, uint8_t cols> 
 class Matrix
 {
@@ -197,4 +200,8 @@ inverse(const Matrix<rows, cols>& matrix){
 
   return result;
 }
+
+} // namespace utility
+} // namespace raytracer
+
 #endif //MATRIX_H

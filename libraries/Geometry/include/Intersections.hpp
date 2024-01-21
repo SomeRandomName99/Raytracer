@@ -8,6 +8,9 @@
 #include "Tuple.hpp"
 #include "Sphere.hpp"
 
+namespace raytracer {
+namespace geometry {
+
 /**
  * @brief A class that stores relevant info regarding an intersecion
  * 
@@ -27,9 +30,9 @@ struct Intersection
  * 
  * @param \sa{Sphere} 
  * @param \sa{Ray} 
- * @return std::vector< \sa{Intersection} > vector containing all recorded intersections
+ * @return std::vector< \sa{Intersection} > utility::Vector containing all recorded intersections
  */
-std::vector<Intersection> intersect(const Sphere& sphere, const Ray::Ray& ray);
+std::vector<Intersection> intersect(const Sphere& sphere, const utility::Ray::Ray& ray);
 
 template<std::same_as<Intersection> ... Arg> 
 auto intersections(const Arg&... arg){
@@ -41,10 +44,12 @@ auto intersections(const Arg&... arg){
  * 
  * This is used to find the first object that is intersection in order to display it first.
  * 
- * @param intersections a vector containing information about all the intersected objects
+ * @param intersections a utility::Vector containing information about all the intersected objects
  * @return const Intersection* a pointer to the struct containing info the first object that the ray intersected with
  */
 std::optional<Intersection> hit(const std::vector<Intersection>& intersections);
 
+} // namespace geometry
+} // namespace raytracer
 
 #endif // INTERSECTIONS_H

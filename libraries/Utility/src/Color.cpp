@@ -1,5 +1,8 @@
 #include "Color.hpp"
 
+namespace raytracer {
+namespace utility {
+
 Color::Color() : _color{Tuple(0.0f, 0.0f, 0.0f, 0.0f)}
                  {}
 Color::Color(double red_, double green_, double blue_) : _color{Tuple(red_, green_, blue_, 0.0f)}
@@ -49,3 +52,6 @@ const double& Color::blue() const{
 void Color::blue(const double& val) {
   _color.z() = val;
 }
+
+} // namespace utility
+} // namespace raytracer

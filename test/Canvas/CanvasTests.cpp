@@ -3,8 +3,10 @@
 #include <sstream>
 #include <ranges>
 
-
 #include "Canvas.hpp"
+
+using namespace raytracer;
+using namespace utility;
 
 /* =========== Creation Test =========== */
 TEST(canvas_tests, canvas_creation_correct) {

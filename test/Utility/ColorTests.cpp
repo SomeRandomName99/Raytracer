@@ -3,6 +3,9 @@
 
 #include "Color.hpp"
 
+using namespace raytracer;
+using namespace utility;
+
 /* =========== Creation Test =========== */
 TEST(color_tests, color_creation_red_green_blue_correct) {
   const auto color1 = Color(-0.5, 0.4, 1.7);

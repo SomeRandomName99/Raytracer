@@ -3,6 +3,8 @@
 #include "Transformations.hpp"
 #include "Ray.hpp"
 
+using namespace raytracer;
+using namespace utility;
 using namespace Ray;
 
 TEST(ray_tests, ray_creation) {

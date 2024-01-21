@@ -3,6 +3,8 @@
 
 #include "Tuple.hpp"
 
+using namespace raytracer;
+using namespace utility;
 
 /* =========== Creation Test w = 1 =========== */
 TEST(tuple_tests, tuple_w_1_x_y_z_correct) {

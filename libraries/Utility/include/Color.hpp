@@ -3,6 +3,9 @@
 
 #include "Tuple.hpp"
 
+namespace raytracer {
+namespace utility {
+
 class Color
 {
 public:
@@ -25,7 +28,10 @@ public:
   const double& blue() const;
   void blue(const double& val);
 
-  Tuple  _color;
+  utility::Tuple  _color;
 };
+
+} // namespace utility
+} // namespace raytracer  
 
 #endif // COLOR_H

@@ -6,11 +6,14 @@
 #include "Sphere.hpp"
 #include "Intersections.hpp"
 
+using namespace raytracer;
+using namespace utility;
+
 /* =========== Intersection tests =========== */
 TEST(sphere_tests, raySphereInterSectionAtTwoPoints) {
   const auto r = Ray::Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  const auto s = Sphere();
-  const auto xs = intersect(s,r);
+  const auto s = geometry::Sphere();
+  const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
   EXPECT_FLOAT_EQ(xs.at(0).t, 4.0);
@@ -19,8 +22,8 @@ TEST(sphere_tests, raySphereInterSectionAtTwoPoints) {
 
 TEST(sphere_tests, raySphereInterSectionAtATangent) {
   const auto r = Ray::Ray(Point(0, 1, -5), Vector(0, 0, 1));
-  const auto s = Sphere();
-  const auto xs = intersect(s,r);
+  const auto s = geometry::Sphere();
+  const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
   EXPECT_FLOAT_EQ(xs.at(0).t, 5.0);
@@ -29,16 +32,16 @@ TEST(sphere_tests, raySphereInterSectionAtATangent) {
 
 TEST(sphere_tests, rayMissesSphere) {
   const auto r = Ray::Ray(Point(0, 2, -5), Vector(0, 0, 1));
-  const auto s = Sphere();
-  const auto xs = intersect(s,r);
+  const auto s = geometry::Sphere();
+  const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(0, xs.size());
 }
 
 TEST(sphere_tests, rayOriginatesInsideSphere) {
   const auto r = Ray::Ray(Point(0, 0, 0), Vector(0, 0, 1));
-  const auto s = Sphere();
-  const auto xs = intersect(s,r);
+  const auto s = geometry::Sphere();
+  const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
   EXPECT_FLOAT_EQ(xs.at(0).t, -1.0);
@@ -47,8 +50,8 @@ TEST(sphere_tests, rayOriginatesInsideSphere) {
 
 TEST(sphere_tests, sphereBehindRay) {
   const auto r = Ray::Ray(Point(0, 0, 5), Vector(0, 0, 1));
-  const auto s = Sphere();
-  const auto xs = intersect(s,r);
+  const auto s = geometry::Sphere();
+  const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
   EXPECT_FLOAT_EQ(xs.at(0).t, -6.0);
@@ -57,8 +60,8 @@ TEST(sphere_tests, sphereBehindRay) {
 
 TEST(sphere_tests, setObjectOnIntersection) {
   const auto r = Ray::Ray(Point(0, 0, 5), Vector(0, 0, 1));
-  const auto s = Sphere();
-  const auto xs = intersect(s,r);
+  const auto s = geometry::Sphere();
+  const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
   EXPECT_EQ(xs.at(0).object, s);
@@ -67,13 +70,13 @@ TEST(sphere_tests, setObjectOnIntersection) {
 
 /* =========== Transform tests =========== */
 TEST(sphere_tests, defaultTransformation) {
-  const auto s = Sphere();
+  const auto s = geometry::Sphere();
 
   EXPECT_EQ(s.transformation, (Matrix<4,4>::identity()));
 }
 
 TEST(sphere_tests, SetTransform) {
-  auto s = Sphere();
+  auto s = geometry::Sphere();
   const auto t = transformations::translation(2, 3, 4);
 
   s.setTransform(t);
@@ -83,9 +86,9 @@ TEST(sphere_tests, SetTransform) {
 
 TEST(sphere_tests, IntersectingScaledSphereWithRay) {
   const auto r = Ray::Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  auto s = Sphere();
+  auto s = geometry::Sphere();
   s.setTransform(transformations::scaling(2, 2, 2));
-  const auto xs = intersect(s,r);
+  const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
   EXPECT_EQ(xs.at(0).t, 3);
@@ -94,48 +97,48 @@ TEST(sphere_tests, IntersectingScaledSphereWithRay) {
 
 TEST(sphere_tests, IntersectingTranslatedSphereWithRay) {
   const auto r = Ray::Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  auto s = Sphere();
+  auto s = geometry::Sphere();
   s.setTransform(transformations::translation(5, 0, 0));
-  const auto xs = intersect(s,r);
+  const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(0, xs.size());
 }
 
 /* =========== Intersection tests =========== */
 TEST(sphere_tests, NormalOnSphereXAxis) {
-  auto s = Sphere();
+  auto s = geometry::Sphere();
 
   EXPECT_EQ(s.normalAt(Point(1, 0, 0)), Vector(1, 0, 0));
 }
 
 TEST(sphere_tests, NormalOnSphereYAxis) {
-  auto s = Sphere();
+  auto s = geometry::Sphere();
 
   EXPECT_EQ(s.normalAt(Point(0, 1, 0)), Vector(0, 1, 0));
 }
 
 TEST(sphere_tests, NormalOnSphereZAxis) {
-  auto s = Sphere();
+  auto s = geometry::Sphere();
 
   EXPECT_EQ(s.normalAt(Point(0, 0, 1)), Vector(0, 0, 1));
 }
 
 TEST(sphere_tests, NormalOnSphereNonAxialPoint) {
-  auto s = Sphere();
+  auto s = geometry::Sphere();
 
   EXPECT_EQ(s.normalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3)), 
             Vector(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
 }
 
 TEST(sphere_tests, NormalOnSphereNormalized) {
-  auto s = Sphere();
+  auto s = geometry::Sphere();
   auto n = s.normalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
 
   EXPECT_EQ(n, n.normalize());
 }
 
 TEST(sphere_tests, NormalOnATranslatedSphere) {
-  auto s = Sphere();
+  auto s = geometry::Sphere();
   s.setTransform(transformations::translation(0, 1, 0));
   auto n = s.normalAt(Point(0, 1+std::sqrt(2)/2, -std::sqrt(2)/2));
 
@@ -143,7 +146,7 @@ TEST(sphere_tests, NormalOnATranslatedSphere) {
 }
 
 TEST(sphere_tests, NormalOnATransformedSphere) {
-  auto s = Sphere();
+  auto s = geometry::Sphere();
   s.setTransform(transformations::scaling(1, 0.5, 1) * transformations::rotation_z(std::numbers::pi/5));
   auto n = s.normalAt(Point(0, std::sqrt(2)/2, -std::sqrt(2)/2));
 

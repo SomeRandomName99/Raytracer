@@ -4,6 +4,8 @@
 #include "Tuple.hpp"
 #include "FloatAlmostEquals.hpp"
 
+namespace raytracer {
+namespace utility { 
 
 bool Tuple::isVector() const {
   return floatEqual(this->w(), 0.0);
@@ -109,3 +111,6 @@ std::ostream& operator<<(std::ostream& os, const Tuple& rhs) {
 
   return os;
 }
+
+} // namespace utility
+} // namespace raytracer

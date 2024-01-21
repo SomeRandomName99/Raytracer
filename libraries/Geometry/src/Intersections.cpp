@@ -5,6 +5,9 @@
 
 #include "Intersections.hpp"
 
+namespace raytracer {
+namespace geometry {
+
 bool Intersection::operator==(const Intersection& other) const{
   return this->t      == other.t &&
          this->object == other.object;
@@ -15,13 +18,13 @@ bool Intersection::operator==(const Intersection& other) const{
  *
  * @param sphere The sphere to intersect with.
  * @param ray The ray to intersect with the sphere.
- * @return A vector of Intersection objects representing the points of intersection.
- *         If there are no intersections, an empty vector is returned.
+ * @return A utility::Vector of Intersection objects representing the points of intersection.
+ *         If there are no intersections, an empty utility::Vector is returned.
  */
-std::vector<Intersection> intersect(const Sphere& sphere, const Ray::Ray& ray){
+std::vector<Intersection> intersect(const Sphere& sphere, const utility::Ray::Ray& ray){
   // For now we assume that the sphere is always at the origin
-  const auto transformedRay    = Ray::transform(ray, inverse(sphere.transformation));
-  const auto SphereCenterToRay = transformedRay.origin - Point(0, 0, 0);
+  const auto transformedRay    = utility::Ray::transform(ray, inverse(sphere.transformation));
+  const auto SphereCenterToRay = transformedRay.origin - utility::Point(0, 0, 0);
 
   const auto a = transformedRay.direction.dot(transformedRay.direction);
   const auto b = 2 * transformedRay.direction.dot(SphereCenterToRay);
@@ -38,9 +41,9 @@ std::vector<Intersection> intersect(const Sphere& sphere, const Ray::Ray& ray){
 }
 
 /**
- * Finds the smallest positive intersection from a vector of intersections.
+ * Finds the smallest positive intersection from a utility::Vector of intersections.
  *
- * @param intersections A vector of intersections to search through.
+ * @param intersections A utility::Vector of intersections to search through.
  * @return The smallest positive intersection, wrapped in std::optional. If no positive intersection is found, returns std::nullopt.
  */
 std::optional<Intersection> hit(const std::vector<Intersection>& intersections){
@@ -52,3 +55,6 @@ std::optional<Intersection> hit(const std::vector<Intersection>& intersections){
     return std::nullopt;
   return *smallestIntersection;
 }
+
+} // namespace geometry
+} // namespace raytracer

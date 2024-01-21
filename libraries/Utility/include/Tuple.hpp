@@ -4,6 +4,9 @@
 #include <ostream>
 #include <array>
 
+namespace raytracer {
+namespace utility {
+
 class Tuple {
 public:
     explicit Tuple(double x, double y, double z, double w): data{x,y,z,w}{};
@@ -41,5 +44,8 @@ Tuple Point(double x,double y, double z);
 Tuple Vector(double x,double y, double z);
 
 std::ostream& operator<<(std::ostream& os, const Tuple& rhs);
+
+} // namespace utility
+} // namespace raytracer
 
 #endif // TUPLE_H

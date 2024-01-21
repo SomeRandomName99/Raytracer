@@ -4,6 +4,9 @@
 #include <concepts>
 #include <cmath>
 
+namespace raytracer {
+namespace utility {
+
 template <typename T> 
 requires std::floating_point<T> 
 extern bool floatEqual(T a, T b){
@@ -12,5 +15,8 @@ extern bool floatEqual(T a, T b){
 
   return (std::fabs(a-b) < epsilon);
 }
+
+} // namespace utility
+} // namespace raytracer
 
 #endif 

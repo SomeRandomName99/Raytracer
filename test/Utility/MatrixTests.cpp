@@ -3,6 +3,9 @@
 
 #include "Matrix.hpp"
 
+using namespace raytracer;
+using namespace utility;
+
 TEST(matrix_tests, Matrix_creation_4x4) {
   const Matrix<4,4>M1{1.0, 2.0, 3.0, 4.0, 
                       5.5, 6.5, 7.5, 8.5, 

@@ -4,6 +4,9 @@
 #include "Transformations.hpp"
 #include "Tuple.hpp"
 
+using namespace raytracer;
+using namespace utility;
+
 /* =========== Translation =========== */
 TEST(transformations_tests, multiplication_translation_matrix){
   auto transform = transformations::translation(5,-3,2);

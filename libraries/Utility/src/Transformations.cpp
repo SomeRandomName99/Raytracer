@@ -2,7 +2,8 @@
 
 #include "Transformations.hpp"
 
-
+namespace raytracer {
+namespace utility {
 namespace transformations{
   Matrix<4,4> translation(double x, double y, double z){
     auto translationMatrix = Matrix<4,4>::identity();
@@ -65,3 +66,6 @@ namespace transformations{
     return shearingMatrix;
   }
 }
+
+} // namespace utility
+} // namespace raytracer
