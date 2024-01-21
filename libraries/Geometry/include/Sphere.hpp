@@ -8,6 +8,7 @@
 #include "Ray.hpp"
 #include "Transformations.hpp"
 #include "Matrix.hpp"
+#include "Material.hpp"
 
 namespace raytracer {
 namespace geometry {
@@ -23,6 +24,7 @@ std::size_t id;
 unsigned long int radius;
 utility::Tuple origin;
 utility::Matrix<4,4> transformation;
+material::Material material;
 
 private: 
 static std::atomic<size_t> ID;

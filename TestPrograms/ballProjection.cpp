@@ -41,7 +41,7 @@ int main(void){
       utility::Tuple pointOnWall = pixelToWorldCoords(x, y, canvasSize, canvasToWallConversionRatio);
       pointOnWall.z() = wallZOffset;
 
-      utility::Ray::Ray firedRay{rayOrigin, (pointOnWall - rayOrigin).normalize()};
+      utility::Ray firedRay{rayOrigin, (pointOnWall - rayOrigin).normalize()};
       auto intersections = geometry::intersect(sphere, firedRay);
 
       if(intersections.size() > 0){

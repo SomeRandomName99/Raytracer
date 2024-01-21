@@ -5,13 +5,14 @@
 #include "Ray.hpp"
 #include "Sphere.hpp"
 #include "Intersections.hpp"
+#include "Material.hpp"
 
 using namespace raytracer;
 using namespace utility;
 
 /* =========== Intersection tests =========== */
 TEST(sphere_tests, raySphereInterSectionAtTwoPoints) {
-  const auto r = Ray::Ray(Point(0, 0, -5), Vector(0, 0, 1));
+  const auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   const auto s = geometry::Sphere();
   const auto xs = geometry::intersect(s,r);
 
@@ -21,7 +22,7 @@ TEST(sphere_tests, raySphereInterSectionAtTwoPoints) {
 }
 
 TEST(sphere_tests, raySphereInterSectionAtATangent) {
-  const auto r = Ray::Ray(Point(0, 1, -5), Vector(0, 0, 1));
+  const auto r = Ray(Point(0, 1, -5), Vector(0, 0, 1));
   const auto s = geometry::Sphere();
   const auto xs = geometry::intersect(s,r);
 
@@ -31,7 +32,7 @@ TEST(sphere_tests, raySphereInterSectionAtATangent) {
 }
 
 TEST(sphere_tests, rayMissesSphere) {
-  const auto r = Ray::Ray(Point(0, 2, -5), Vector(0, 0, 1));
+  const auto r = Ray(Point(0, 2, -5), Vector(0, 0, 1));
   const auto s = geometry::Sphere();
   const auto xs = geometry::intersect(s,r);
 
@@ -39,7 +40,7 @@ TEST(sphere_tests, rayMissesSphere) {
 }
 
 TEST(sphere_tests, rayOriginatesInsideSphere) {
-  const auto r = Ray::Ray(Point(0, 0, 0), Vector(0, 0, 1));
+  const auto r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
   const auto s = geometry::Sphere();
   const auto xs = geometry::intersect(s,r);
 
@@ -49,7 +50,7 @@ TEST(sphere_tests, rayOriginatesInsideSphere) {
 }
 
 TEST(sphere_tests, sphereBehindRay) {
-  const auto r = Ray::Ray(Point(0, 0, 5), Vector(0, 0, 1));
+  const auto r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
   const auto s = geometry::Sphere();
   const auto xs = geometry::intersect(s,r);
 
@@ -59,7 +60,7 @@ TEST(sphere_tests, sphereBehindRay) {
 }
 
 TEST(sphere_tests, setObjectOnIntersection) {
-  const auto r = Ray::Ray(Point(0, 0, 5), Vector(0, 0, 1));
+  const auto r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
   const auto s = geometry::Sphere();
   const auto xs = geometry::intersect(s,r);
 
@@ -85,7 +86,7 @@ TEST(sphere_tests, SetTransform) {
 }
 
 TEST(sphere_tests, IntersectingScaledSphereWithRay) {
-  const auto r = Ray::Ray(Point(0, 0, -5), Vector(0, 0, 1));
+  const auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   auto s = geometry::Sphere();
   s.setTransform(transformations::scaling(2, 2, 2));
   const auto xs = geometry::intersect(s,r);
@@ -96,7 +97,7 @@ TEST(sphere_tests, IntersectingScaledSphereWithRay) {
 }
 
 TEST(sphere_tests, IntersectingTranslatedSphereWithRay) {
-  const auto r = Ray::Ray(Point(0, 0, -5), Vector(0, 0, 1));
+  const auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   auto s = geometry::Sphere();
   s.setTransform(transformations::translation(5, 0, 0));
   const auto xs = geometry::intersect(s,r);
@@ -151,4 +152,20 @@ TEST(sphere_tests, NormalOnATransformedSphere) {
   auto n = s.normalAt(Point(0, std::sqrt(2)/2, -std::sqrt(2)/2));
 
   EXPECT_EQ(n, Vector(0, 0.9701425, -0.2425356));
+}
+
+/* =========== Material tests =========== */
+TEST(sphere_tests, DefaultMaterial) {
+  auto s = geometry::Sphere();
+
+  EXPECT_TRUE(s.material == material::Material());
+}
+
+TEST(sphere_tests, AssignMaterial) {
+  auto s = geometry::Sphere();
+  auto m = material::Material();
+  m.ambient_ = 1;
+  s.material = m;
+
+  EXPECT_TRUE(s.material == m);
 }
