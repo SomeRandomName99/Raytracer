@@ -32,7 +32,7 @@ struct Intersection
  * @param \sa{Ray} 
  * @return std::vector< \sa{Intersection} > utility::Vector containing all recorded intersections
  */
-std::vector<Intersection> intersect(const Sphere& sphere, const utility::Ray::Ray& ray);
+std::vector<Intersection> intersect(const Sphere& sphere, const utility::Ray& ray);
 
 template<std::same_as<Intersection> ... Arg> 
 auto intersections(const Arg&... arg){

@@ -7,16 +7,19 @@
 namespace raytracer {
 namespace utility {
 
-namespace Ray{
+class Ray {
+public: 
+  Ray(Tuple origin, Tuple direction)
+      : origin_{origin}, direction_{direction} {}
 
-  struct Ray {
-    Tuple origin;
-    Tuple direction;
-  };
+  Tuple position(const double time) const;
 
-  Tuple position(const Ray &ray, const double time);
-  Ray   transform(const Ray &ray, const Matrix<4,4> &transformation);
-}
+  Tuple origin_;
+  Tuple direction_;
+};
+
+
+Ray transform(const Ray &ray, const Matrix<4,4> &transformation);
 
 } // namespace utility
 } // namespace raytracer

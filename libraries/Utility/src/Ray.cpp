@@ -3,14 +3,12 @@
 namespace raytracer {
 namespace utility {
 
-namespace Ray {
-  Tuple position(const Ray &ray, const double time){
-    return ray.origin + ray.direction * time;
-  }
+Tuple Ray::position(const double time) const {
+  return this->origin_ + this->direction_ * time;
+}
 
-  Ray transform(const Ray &ray, const Matrix<4,4> &transformation){
-    return Ray{transformation*ray.origin, transformation*ray.direction};
-  }
+Ray transform(const Ray &ray, const Matrix<4,4> &transformation){
+  return Ray{transformation*ray.origin_, transformation*ray.direction_};
 }
 
 } // namespace utility

@@ -21,13 +21,13 @@ bool Intersection::operator==(const Intersection& other) const{
  * @return A utility::Vector of Intersection objects representing the points of intersection.
  *         If there are no intersections, an empty utility::Vector is returned.
  */
-std::vector<Intersection> intersect(const Sphere& sphere, const utility::Ray::Ray& ray){
+std::vector<Intersection> intersect(const Sphere& sphere, const utility::Ray& ray){
   // For now we assume that the sphere is always at the origin
-  const auto transformedRay    = utility::Ray::transform(ray, inverse(sphere.transformation));
-  const auto SphereCenterToRay = transformedRay.origin - utility::Point(0, 0, 0);
+  const auto transformedRay    = utility::transform(ray, inverse(sphere.transformation));
+  const auto SphereCenterToRay = transformedRay.origin_ - utility::Point(0, 0, 0);
 
-  const auto a = transformedRay.direction.dot(transformedRay.direction);
-  const auto b = 2 * transformedRay.direction.dot(SphereCenterToRay);
+  const auto a = transformedRay.direction_.dot(transformedRay.direction_);
+  const auto b = 2 * transformedRay.direction_.dot(SphereCenterToRay);
   const auto c = SphereCenterToRay.dot(SphereCenterToRay) - 1; // where 1 is the radius of the sphere
 
   const auto discriminant = b*b - 4*a*c;
