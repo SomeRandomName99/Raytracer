@@ -7,11 +7,13 @@ target_link_libraries(${This} PUBLIC
   Geometry
   Utility
   Scene
+  Material
 )
 
 add_subdirectory(Canvas)
 add_subdirectory(Geometry)
 add_subdirectory(Utility)
 add_subdirectory(Scene)
+add_subdirectory(Material)
 
 gtest_discover_tests(${This})
