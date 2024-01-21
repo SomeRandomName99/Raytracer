@@ -3,6 +3,7 @@
 
 #include "Color.hpp"
 #include "Tuple.hpp"
+#include "Material.hpp"
 
 namespace raytracer {
 namespace scene {
@@ -14,6 +15,9 @@ public:
   utility::Color intensity_;
   utility::Tuple position_;
 };
+
+utility::Color lighting(const material::Material& material, const PointLight& light, const utility::Tuple& position, 
+                        const utility::Tuple& eyeVector, const utility::Tuple& normalVector);
 
 } // namespace raytracer
 } // namespace scene

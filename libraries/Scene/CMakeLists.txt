@@ -18,4 +18,5 @@ target_link_libraries(
   Scene
   PRIVATE
     Utility
+    Material
 )
