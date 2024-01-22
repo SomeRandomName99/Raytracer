@@ -2,15 +2,17 @@
 #include <ranges>
 #include <cmath>
 #include <iostream>
+#include <algorithm>
+#include <memory>
 
 #include "Intersections.hpp"
+#include "FloatAlmostEquals.hpp"
 
 namespace raytracer {
 namespace geometry {
 
-bool Intersection::operator==(const Intersection& other) const{
-  return this->t      == other.t &&
-         this->object == other.object;
+bool operator==(Intersection const& lhs, Intersection const& rhs) {
+  return utility::floatNearlyEqual(lhs.t_, rhs.t_) && lhs.object_ == rhs.object_;
 }
 
 /**
@@ -37,7 +39,19 @@ std::vector<Intersection> intersect(const Sphere& sphere, const utility::Ray& ra
 
   const auto t1 = (-b - std::sqrt(discriminant)) / (2*a);
   const auto t2 = (-b + std::sqrt(discriminant)) / (2*a);
-  return std::vector<Intersection>{ Intersection{t1, sphere}, Intersection{t2, sphere} };
+  return std::vector<Intersection>{Intersection{t1, std::make_shared<Sphere>(sphere)}, 
+                                   Intersection{t2, std::make_shared<Sphere>(sphere)}};
+}
+
+
+std::vector<Intersection> intersect_world(const scene::World& world, const utility::Ray& ray){
+  std::vector<Intersection> intersections;
+  for(const auto& object : world.objects_){
+    const auto objectIntersections = intersect(object, ray);
+    intersections.insert(intersections.end(), objectIntersections.begin(), objectIntersections.end());
+  }
+  std::ranges::sort(intersections, {}, [](const auto& intersection){return intersection.t_;});
+  return intersections;
 }
 
 /**
@@ -47,8 +61,8 @@ std::vector<Intersection> intersect(const Sphere& sphere, const utility::Ray& ra
  * @return The smallest positive intersection, wrapped in std::optional. If no positive intersection is found, returns std::nullopt.
  */
 std::optional<Intersection> hit(const std::vector<Intersection>& intersections){
-  auto positiveT = intersections | std::views::filter([](const auto& intersection) { return intersection.t > 0.0; });
-  auto smallestIntersection = std::ranges::min_element(positiveT, {}, [](const auto& intersection){return intersection.t;});
+  auto positiveT = intersections | std::views::filter([](const auto& intersection) { return intersection.t_ > 0.0; });
+  auto smallestIntersection = std::ranges::min_element(positiveT, {}, [](const auto& intersection){return intersection.t_;});
 
 
   if(smallestIntersection == positiveT.end())

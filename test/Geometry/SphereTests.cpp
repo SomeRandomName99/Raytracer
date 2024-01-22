@@ -65,8 +65,8 @@ TEST(sphere_tests, setObjectOnIntersection) {
   const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_EQ(xs.at(0).object_, s);
-  EXPECT_EQ(xs.at(1).object_, s);
+  EXPECT_TRUE(*xs.at(0).object_ == s);
+  EXPECT_TRUE(*xs.at(1).object_ == s);
 }
 
 /* =========== Transform tests =========== */

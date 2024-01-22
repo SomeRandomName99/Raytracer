@@ -21,4 +21,5 @@ target_link_libraries(
   PRIVATE
     Utility
     Material
+    Scene
 )
