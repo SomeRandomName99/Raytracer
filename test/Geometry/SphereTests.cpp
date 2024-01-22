@@ -17,8 +17,8 @@ TEST(sphere_tests, raySphereInterSectionAtTwoPoints) {
   const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).t, 4.0);
-  EXPECT_FLOAT_EQ(xs.at(1).t, 6.0);
+  EXPECT_FLOAT_EQ(xs.at(0).t_, 4.0);
+  EXPECT_FLOAT_EQ(xs.at(1).t_, 6.0);
 }
 
 TEST(sphere_tests, raySphereInterSectionAtATangent) {
@@ -27,8 +27,8 @@ TEST(sphere_tests, raySphereInterSectionAtATangent) {
   const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).t, 5.0);
-  EXPECT_FLOAT_EQ(xs.at(1).t, 5.0);
+  EXPECT_FLOAT_EQ(xs.at(0).t_, 5.0);
+  EXPECT_FLOAT_EQ(xs.at(1).t_, 5.0);
 }
 
 TEST(sphere_tests, rayMissesSphere) {
@@ -45,8 +45,8 @@ TEST(sphere_tests, rayOriginatesInsideSphere) {
   const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).t, -1.0);
-  EXPECT_FLOAT_EQ(xs.at(1).t,  1.0);
+  EXPECT_FLOAT_EQ(xs.at(0).t_, -1.0);
+  EXPECT_FLOAT_EQ(xs.at(1).t_,  1.0);
 }
 
 TEST(sphere_tests, sphereBehindRay) {
@@ -55,8 +55,8 @@ TEST(sphere_tests, sphereBehindRay) {
   const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).t, -6.0);
-  EXPECT_FLOAT_EQ(xs.at(1).t, -4.0);
+  EXPECT_FLOAT_EQ(xs.at(0).t_, -6.0);
+  EXPECT_FLOAT_EQ(xs.at(1).t_, -4.0);
 }
 
 TEST(sphere_tests, setObjectOnIntersection) {
@@ -65,8 +65,8 @@ TEST(sphere_tests, setObjectOnIntersection) {
   const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_EQ(xs.at(0).object, s);
-  EXPECT_EQ(xs.at(1).object, s);
+  EXPECT_EQ(xs.at(0).object_, s);
+  EXPECT_EQ(xs.at(1).object_, s);
 }
 
 /* =========== Transform tests =========== */
@@ -92,8 +92,8 @@ TEST(sphere_tests, IntersectingScaledSphereWithRay) {
   const auto xs = geometry::intersect(s,r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_EQ(xs.at(0).t, 3);
-  EXPECT_EQ(xs.at(1).t, 7);
+  EXPECT_EQ(xs.at(0).t_, 3);
+  EXPECT_EQ(xs.at(1).t_, 7);
 }
 
 TEST(sphere_tests, IntersectingTranslatedSphereWithRay) {

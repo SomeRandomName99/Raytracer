@@ -50,10 +50,10 @@ int main(void){
 
       if(intersections.size() > 0){
         auto hit               = geometry::hit(intersections);
-        auto intersectionPoint = firedRay.position(hit->t);
-        auto normal            = hit->object.normalAt(intersectionPoint);
+        auto intersectionPoint = firedRay.position(hit->t_);
+        auto normal            = hit->object_->normalAt(intersectionPoint);
         auto eyeVector         = -firedRay.direction_;
-        auto color             = scene::lighting(hit->object.material, lightSource, intersectionPoint, eyeVector, normal);   
+        auto color             = scene::lighting(hit->object_->material, lightSource, intersectionPoint, eyeVector, normal);   
         canvas.pixelWrite(color, x, y);
       } else {
         canvas.pixelWrite(wallcolor, x, y);
