@@ -49,7 +49,7 @@ template <uint8_t rows, uint8_t cols>
 bool Matrix<rows, cols>::operator==(const Matrix& rhs) const{
   return std::equal(this->elements.cbegin(), this->elements.cend(),
                     rhs.elements.cbegin()  , rhs.elements.cend(), 
-                    floatEqual<double>);
+                    floatNearlyEqual<double>);
 }
 
 template <uint8_t rows, uint8_t cols> 

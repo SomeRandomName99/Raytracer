@@ -8,17 +8,17 @@ namespace raytracer {
 namespace utility { 
 
 bool Tuple::isVector() const {
-  return floatEqual(this->w(), 0.0);
+  return floatNearlyEqual(this->w(), 0.0);
 }
 bool Tuple::isPoint() const {
-  return floatEqual(this->w(), 1.0);
+  return floatNearlyEqual(this->w(), 1.0);
 }
 
 bool Tuple::operator==(const Tuple& rhs) const {
-  bool xEqual = floatEqual(this->x(), rhs.x());
-  bool yEqual = floatEqual(this->y(), rhs.y());
-  bool zEqual = floatEqual(this->z(), rhs.z());
-  bool wEqual = floatEqual(this->w(), rhs.w());
+  bool xEqual = floatNearlyEqual(this->x(), rhs.x());
+  bool yEqual = floatNearlyEqual(this->y(), rhs.y());
+  bool zEqual = floatNearlyEqual(this->z(), rhs.z());
+  bool wEqual = floatNearlyEqual(this->w(), rhs.w());
 
   bool allEqual = xEqual&&yEqual&&zEqual&&wEqual;
   return allEqual;
