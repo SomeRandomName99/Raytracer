@@ -46,7 +46,7 @@ int main(void){
       pointOnWall.z() = wallZOffset;
 
       utility::Ray firedRay{rayOrigin, (pointOnWall - rayOrigin).normalize()};
-      auto intersections = geometry::intersect(sphere, firedRay);
+      auto intersections = sphere.intersect(firedRay);
 
       if(intersections.size() > 0){
         auto hit               = geometry::hit(intersections);
