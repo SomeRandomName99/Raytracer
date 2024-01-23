@@ -7,7 +7,6 @@
 #include <memory>
 
 #include "Tuple.hpp"
-#include "Sphere.hpp"
 #include "Ray.hpp"
 
 namespace raytracer {

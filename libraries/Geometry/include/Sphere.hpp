@@ -3,13 +3,13 @@
 
 #include <vector>
 #include <atomic>
+#include <memory>
 
 #include "Tuple.hpp"
 #include "Ray.hpp"
 #include "Transformations.hpp"
 #include "Matrix.hpp"
 #include "Material.hpp"
-#include "Intersections.hpp"
 
 namespace raytracer {
 namespace geometry {

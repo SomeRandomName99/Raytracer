@@ -1,5 +1,6 @@
 #include "Sphere.hpp"
 #include "FloatAlmostEquals.hpp"
+#include "Intersections.hpp"
 
 namespace raytracer {
 namespace geometry {
