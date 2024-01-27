@@ -3,6 +3,7 @@
 
 #include "Transformations.hpp"
 #include "Tuple.hpp"
+#include "Matrix.hpp"
 
 using namespace raytracer;
 using namespace utility;
@@ -195,4 +196,51 @@ TEST(transformations_tests, chained_transformations){
   auto T = C * B * A;
   auto p2 = T * p;
   EXPECT_EQ(p2, Point(15,0,7));
+}
+
+/* =========== View Transformations =========== */
+TEST(transformations_tests, view_transformation_default_orientation){
+  const auto from = Point(0,0,0);
+  const auto to   = Point(0,0,-1);
+  const auto up   = Vector(0,1,0);
+
+  const auto viewTransformMatix = transformations::view_transform(from, to, up);
+  const auto identityMatrix = Matrix<4,4>::identity();
+
+  EXPECT_EQ(viewTransformMatix, identityMatrix);
+}
+
+TEST(transformations_tests, view_transformation_positive_z_direction){
+  const auto from = Point(0,0,0);
+  const auto to   = Point(0,0,1);
+  const auto up   = Vector(0,1,0);
+
+  const auto t = transformations::view_transform(from, to, up);
+
+  EXPECT_EQ(t, transformations::scaling(-1,1,-1));
+}
+
+TEST(transformations_tests, view_transformation_moves_world){
+  const auto from = Point(0,0,8);
+  const auto to   = Point(0,0,0);
+  const auto up   = Vector(0,1,0);
+
+  const auto t = transformations::view_transform(from, to, up);
+
+  EXPECT_EQ(t, transformations::translation(0,0,-8));
+}
+
+TEST(transfromations_tests, arbitrary_view_transformation){
+  const auto from = Point(1,3,2);
+  const auto to   = Point(4,-2,8);
+  const auto up   = Vector(1,1,0);
+
+  const auto t = transformations::view_transform(from, to, up);
+
+  const auto expected = Matrix<4,4>{-0.50709255283710986, 0.50709255283710986,  0.67612340378281321, -2.3664319132398459,
+                                     0.76771593385968007, 0.60609152673132627,  0.12121830534626524, -2.8284271247461894,
+                                    -0.35856858280031806, 0.59761430466719678, -0.71713716560063612, 0.0f,
+                                     0.0f,             0.0f,              0.0f,             1.0f};
+
+  EXPECT_EQ(t, expected);
 }

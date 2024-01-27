@@ -17,6 +17,8 @@ namespace transformations{
   Matrix<4,4> shearing(double x_y, double x_z, 
                       double y_x, double y_z,
                       double z_x, double z_y);
+
+  Matrix<4,4> view_transform(const Tuple& from, const Tuple& to, const Tuple& up);
 }
 
 } // namespace utility
