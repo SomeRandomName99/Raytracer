@@ -50,7 +50,7 @@ int main(void){
 
       if(intersections.size() > 0){
         auto hit               = geometry::hit(intersections);
-        auto intersectionPoint = firedRay.position(hit->t_);
+        auto intersectionPoint = firedRay.position(hit->dist_);
         auto normal            = hit->object_->normalAt(intersectionPoint);
         auto eyeVector         = -firedRay.direction_;
         auto color             = scene::lighting(hit->object_->material, lightSource, intersectionPoint, eyeVector, normal);   

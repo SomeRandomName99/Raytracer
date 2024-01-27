@@ -5,13 +5,13 @@
 namespace raytracer {
 namespace scene {
 
-utility::Color lighting(const material::Material& material, const PointLight& light, const utility::Tuple& position, 
+utility::Color lighting(const material::Material& material, const PointLight& light, const utility::Tuple& point, 
                         const utility::Tuple& eyeVector, const utility::Tuple& normalVector){
   // combine the surface color with the light's color/intensity
   const auto effectiveColor = material.surfaceColor_ * light.intensity_;
 
   // find the direction to the light source
-  const auto lightVector = (light.position_ - position).normalize();
+  const auto lightVector = (light.position_ - point).normalize();
 
   // compute the ambient contribution
   const auto ambient = effectiveColor * material.ambient_;

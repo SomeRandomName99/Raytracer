@@ -17,6 +17,11 @@ Color Color::operator+(const Color& rhs) const{
   return Color(newTuple.x(), newTuple.y(), newTuple.z()); 
 }
 
+Color Color::operator+=(const Color& rhs) {
+  this->_color = this->_color + rhs._color;
+  return *this; 
+}
+
 Color Color::operator-(const Color& rhs) const{
   const auto newTuple = this->_color - rhs._color;
   return Color(newTuple.x(), newTuple.y(), newTuple.z()); 

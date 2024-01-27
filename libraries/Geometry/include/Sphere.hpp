@@ -32,17 +32,15 @@ void setTransform(const utility::Matrix<4,4> &transformation);
 utility::Tuple normalAt(const utility::Tuple &point) const;
 
 /**
- * Calculates the intersections between a sphere and a ray.
+ * @brief Function to calculate the intersections between a ray and a sphere.
  *
- * @param sphere The sphere to intersect with.
  * @param ray The ray to intersect with the sphere.
- * @return A utility::Vector of Intersection objects representing the points of intersection.
- *         If there are no intersections, an empty utility::Vector is returned.
- */    
+ * @return A vector of Intersection objects representing the intersections between the ray and the sphere.
+ */
 std::vector<Intersection> intersect(const utility::Ray& ray) const;
 
 std::size_t id;
-unsigned long int radius;
+float radius;
 utility::Tuple origin;
 utility::Matrix<4,4> transformation;
 material::Material material;

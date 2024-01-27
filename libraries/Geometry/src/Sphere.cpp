@@ -29,10 +29,10 @@ std::vector<Intersection> Sphere::intersect(const utility::Ray& ray) const {
   if (discriminant < 0.)
     return std::vector<Intersection>{};
 
-  const auto t1 = (-b - std::sqrt(discriminant)) / (2*a);
-  const auto t2 = (-b + std::sqrt(discriminant)) / (2*a);
-  return std::vector<Intersection>{Intersection{t1, std::make_shared<Sphere>(*this)}, 
-                                   Intersection{t2, std::make_shared<Sphere>(*this)}};
+  const auto dist1 = (-b - std::sqrt(discriminant)) / (2*a);
+  const auto dist2 = (-b + std::sqrt(discriminant)) / (2*a);
+  return std::vector<Intersection>{Intersection{dist1, std::make_shared<Sphere>(*this)}, 
+                                   Intersection{dist2, std::make_shared<Sphere>(*this)}};
 }
 
 utility::Tuple Sphere::normalAt(const utility::Tuple &worldPoint) const{

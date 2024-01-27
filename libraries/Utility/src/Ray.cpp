@@ -3,8 +3,8 @@
 namespace raytracer {
 namespace utility {
 
-Tuple Ray::position(const double time) const {
-  return this->origin_ + this->direction_ * time;
+Tuple Ray::position(const double distance) const {
+  return this->origin_ + this->direction_ * distance;
 }
 
 Ray transform(const Ray &ray, const Matrix<4,4> &transformation){
