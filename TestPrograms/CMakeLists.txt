@@ -9,3 +9,6 @@ target_link_libraries(clock Utility Geometry Canvas)
 add_executable(ballProjection ballProjection.cpp)
 target_include_directories(ballProjection PUBLIC src/buildingBlocks)
 target_link_libraries(ballProjection Utility Geometry Canvas Material Scene)
+
+add_executable(ballWorld ballWorld.cpp)
+target_link_libraries(ballWorld Utility Geometry Canvas Material Scene)
