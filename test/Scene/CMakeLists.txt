@@ -3,4 +3,5 @@ target_sources(
   PRIVATE
     LightTests.cpp 
     WorldTests.cpp
+    CameraTests.cpp
 )

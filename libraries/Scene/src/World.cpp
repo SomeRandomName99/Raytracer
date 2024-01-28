@@ -1,4 +1,5 @@
 #include "World.hpp"
+#include "Material.hpp"
 
 namespace raytracer {
 namespace scene {
@@ -26,6 +27,22 @@ utility::Color World::colorAt(const utility::Ray& ray) const{
   if (intersections.empty()) return utility::Color{0,0,0};
   const auto intersect_computations = geometry::hit(intersections)->prepareComputations(ray);
   return this->shadeHit(intersect_computations);
+}
+
+World defaultWorld(){
+  World world;
+
+  const auto light = scene::PointLight{utility::Color{1,1,1}, utility::Point(-10,10,-10)};
+  world.lights_.push_back(light);
+
+  auto s1 = geometry::Sphere{};
+  s1.material = material::Material(utility::Color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2);
+  auto s2 = geometry::Sphere{};
+  s2.setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));
+  world.objects_.push_back(std::make_shared<geometry::Sphere>(s1));
+  world.objects_.push_back(std::make_shared<geometry::Sphere>(s2));
+
+  return world;
 }
 
 } // namespace scene

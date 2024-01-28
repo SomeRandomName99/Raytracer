@@ -38,6 +38,8 @@ public:
   std::vector<std::shared_ptr<geometry::Sphere>> objects_;
 };
 
+World defaultWorld();
+
 } // namespace scene
 } // namespace raytracer
 
