@@ -22,11 +22,11 @@ TEST(world_tests, Creation){
 class defaultWorldTests : public ::testing::Test {
 protected:
   void SetUp() override {
-    this->s1.material = material::Material(utility::Color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2);
-    this->s1.radius = 1;
+    this->s1.material_ = material::Material(utility::Color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2);
+    this->s1.radius_ = 1;
 
     this->s2.setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));
-    this->s2.radius = 0.5;
+    this->s2.radius_ = 0.5;
 
     this->world.lights_.push_back(this->light);
     this->world.objects_.push_back(std::make_shared<geometry::Sphere>(this->s1));
@@ -90,11 +90,11 @@ TEST_F(defaultWorldTests, RayHits) {
 
 TEST_F(defaultWorldTests, IntersectionBehindRay) {
   const auto outer = world.objects_.front();
-  outer->material.ambient_ = 1;
+  outer->material_.ambient_ = 1;
   const auto inner = world.objects_.back();
-  inner->material.ambient_ = 1;
+  inner->material_.ambient_ = 1;
   const auto r = utility::Ray(utility::Point(0,0,0.75), utility::Vector(0,0,-1));
   const auto c = world.colorAt(r);
 
-  EXPECT_EQ(c, inner->material.surfaceColor_);
+  EXPECT_EQ(c, inner->material_.surfaceColor_);
 }

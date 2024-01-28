@@ -27,7 +27,7 @@ utility::Tuple pixelToWorldCoords(unsigned int widthPixel, unsigned int heightPi
 int main(void){
   const auto rayOrigin = utility::Point(0, 0, -3);
   auto sphere          = geometry::Sphere();
-  sphere.material.surfaceColor_ = utility::Color(1,0.2,1);
+  sphere.material_.surfaceColor_ = utility::Color(1,0.2,1);
   sphere.setTransform(utility::transformations::shearing(1,0,0,0,0,0)*utility::transformations::scaling(1,0.5,1));
 
   auto lightSource = scene::PointLight(utility::Color(1,1,1), utility::Point(-10,10,-10));
@@ -53,7 +53,7 @@ int main(void){
         auto intersectionPoint = firedRay.position(hit->dist_);
         auto normal            = hit->object_->normalAt(intersectionPoint);
         auto eyeVector         = -firedRay.direction_;
-        auto color             = scene::lighting(hit->object_->material, lightSource, intersectionPoint, eyeVector, normal);   
+        auto color             = scene::lighting(hit->object_->material_, lightSource, intersectionPoint, eyeVector, normal);   
         canvas.pixelWrite(color, x, y);
       } else {
         canvas.pixelWrite(wallcolor, x, y);
