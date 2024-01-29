@@ -1,4 +1,5 @@
 #include <fstream>
+#include <numbers>
 
 #include "Tuple.hpp"
 #include "Canvas.hpp"
@@ -23,15 +24,15 @@ int main(){
 
   auto leftWall = geometry::Sphere();
   leftWall.transformation_ = utility::transformations::translation(0, 0, 5) * 
-                             utility::transformations::rotation_y(-M_PI / 4) * 
-                             utility::transformations::rotation_x(M_PI / 2) * 
+                             utility::transformations::rotation_y(-std::numbers::pi / 4) * 
+                             utility::transformations::rotation_x(std::numbers::pi / 2) * 
                              utility::transformations::scaling(10, 0.01, 10);
   leftWall.material_ = wallMaterial;
 
   auto rightWall = geometry::Sphere();
   rightWall.transformation_ = utility::transformations::translation(0, 0, 5) * 
-                              utility::transformations::rotation_y(M_PI / 4) * 
-                              utility::transformations::rotation_x(M_PI / 2) * 
+                              utility::transformations::rotation_y(std::numbers::pi / 4) * 
+                              utility::transformations::rotation_x(std::numbers::pi / 2) * 
                               utility::transformations::scaling(10, 0.01, 10);
   rightWall.material_ = wallMaterial;
 
@@ -65,7 +66,7 @@ int main(){
   world.objects_.push_back(std::make_shared<geometry::Sphere>(left));
 
 
-  auto camera = scene::Camera(400, 200, M_PI / 3);
+  auto camera = scene::Camera(1920, 1080, std::numbers::pi / 3);
   camera.transform_ = utility::transformations::view_transform(utility::Point(0, 1.5, -5),
                                                               utility::Point(0, 1, 0), 
                                                               utility::Vector(0, 1, 0));

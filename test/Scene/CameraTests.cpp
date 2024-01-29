@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <numbers>
 
 #include "Camera.hpp"
 #include "Transformations.hpp"
