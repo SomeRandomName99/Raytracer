@@ -35,7 +35,7 @@ TEST(canvas_tests, canvas_pixel_index_2D_to_1D){
 
 TEST(canvas_tests, canvas_pixel_Write){
   auto canvas = Canvas(20, 10);
-  auto red    = Color(1.0f, 0.0f, 0.0f);
+  auto red    = Color(1.0, 0.0, 0.0);
   canvas.pixelWrite(red, 5, 5);
   EXPECT_EQ(canvas.pixelAt(5, 5), red);
 }
@@ -59,9 +59,9 @@ TEST(canvas_tests, canvas_PPM_header){
 
 TEST(canvas_tests, canvas_PPM_short_data){
   auto canvas = Canvas(5, 3);
-  canvas.pixelWrite(Color(1.5f, 0.0f, 0.0f), 0, 0);
-  canvas.pixelWrite(Color(0.0f, 0.5f, 0.0f), 2, 1);
-  canvas.pixelWrite(Color(-0.5f, 0.0f, 1.0f), 4, 2);
+  canvas.pixelWrite(Color(1.5, 0.0, 0.0), 0, 0);
+  canvas.pixelWrite(Color(0.0, 0.5, 0.0), 2, 1);
+  canvas.pixelWrite(Color(-0.5, 0.0, 1.0), 4, 2);
   
   std::stringstream stream;
   canvas.canvasToPPM(stream);
@@ -82,7 +82,7 @@ TEST(canvas_tests, canvas_PPM_long_data){
   auto canvas = Canvas(10, 2);
   for(size_t&& col : std::views::iota(0u, canvas.width)){
     for(size_t&& row : std::views::iota(0u, canvas.height)){
-      canvas.pixelWrite(Color(1, 0.8f, 0.6f), col, row);
+      canvas.pixelWrite(Color(1, 0.8, 0.6), col, row);
     }
   }
   std::stringstream stream;

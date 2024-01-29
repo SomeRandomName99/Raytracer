@@ -40,7 +40,7 @@ utility::Tuple normalAt(const utility::Tuple &point) const;
 std::vector<Intersection> intersect(const utility::Ray& ray) const;
 
 std::size_t id_;
-float radius_;
+double radius_;
 utility::Tuple origin_;
 utility::Matrix<4,4> transformation_;
 material::Material material_;

@@ -10,17 +10,17 @@ namespace material {
 class Material {
 public:
   Material()
-      : surfaceColor_{utility::Color(1.0f, 1.0f, 1.0f)}, ambient_{0.1f}, diffuse_{0.9f}, specular_{0.9f}, 
-        shininess_{200.0f} {}
-  Material(utility::Color surfaceColor, float ambient = 0.1f, float diffuse = 0.9f, 
-           float specular = 0.9f, float shininess = 200) 
+      : surfaceColor_{utility::Color(1.0, 1.0, 1.0)}, ambient_{0.1}, diffuse_{0.9}, specular_{0.9}, 
+        shininess_{200.0} {}
+  Material(utility::Color surfaceColor, double ambient = 0.1, double diffuse = 0.9, 
+           double specular = 0.9, double shininess = 200) 
         : surfaceColor_{surfaceColor}, ambient_{ambient}, diffuse_{diffuse}, specular_{specular}, shininess_{shininess} {}
 
   utility::Color surfaceColor_;
-  float ambient_;
-  float diffuse_;
-  float specular_;
-  float shininess_;
+  double ambient_;
+  double diffuse_;
+  double specular_;
+  double shininess_;
 };
 
 } // namespace raytracer

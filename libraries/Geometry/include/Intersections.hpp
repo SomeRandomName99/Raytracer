@@ -9,7 +9,7 @@
 #include "Tuple.hpp"
 #include "Ray.hpp"
 
-constexpr float SHADOW_OFFSET = 0.005f;
+constexpr double SHADOW_OFFSET = 1e-6;
 
 namespace raytracer {
 namespace geometry {
@@ -17,7 +17,7 @@ namespace geometry {
 class Sphere;
 
 struct Computations{
-  float dist;
+  double dist;
   std::shared_ptr<Sphere> object;
   utility::Tuple point;
   utility::Tuple overPoint;

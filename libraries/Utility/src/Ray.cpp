@@ -3,7 +3,7 @@
 namespace raytracer {
 namespace utility {
 
-Tuple Ray::position(const float distance) const {
+Tuple Ray::position(const double distance) const {
   return this->origin_ + this->direction_ * distance;
 }
 

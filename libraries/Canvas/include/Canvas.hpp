@@ -21,8 +21,8 @@ public:
 private:
   void PPMHeader(std::ostream& outputStream) const;
   void PPMData(std::ostream& outputStream) const;
-  inline unsigned int convertColor(const float& colorComponent) const;
-  size_t ColorComponentToPPM(const float& colorComponent, std::ostream& outputStream, size_t rowLineLen) const;
+  inline unsigned int convertColor(const double& colorComponent) const;
+  size_t ColorComponentToPPM(const double& colorComponent, std::ostream& outputStream, size_t rowLineLen) const;
   size_t pixelToPPM(utility::Color const& pixel, std::ostream& outputStream, size_t rowLineLen) const;
   std::string rowToPPM(size_t rowIdx) const;
 

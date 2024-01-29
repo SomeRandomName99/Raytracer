@@ -45,7 +45,7 @@ Computations Intersection::prepareComputations(const utility::Ray& ray) const {
  * @return The smallest positive intersection, wrapped in std::optional. If no positive intersection is found, returns std::nullopt.
  */
 std::optional<Intersection> hit(const std::vector<Intersection>& intersections) {
-  auto positiveT = intersections | std::views::filter([](const auto& intersection) { return intersection.dist_ > 0.0f; });
+  auto positiveT = intersections | std::views::filter([](const auto& intersection) { return intersection.dist_ > 0.0; });
   auto smallestIntersection = std::ranges::min_element(positiveT, {}, [](const auto& intersection){return intersection.dist_;});
 
 

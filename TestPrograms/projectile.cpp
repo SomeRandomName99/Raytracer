@@ -27,15 +27,15 @@ Projectile tick(Environment env, Projectile proj){
 
 int main(void){
   auto start    = utility::Point(0,1,0);
-  auto velocity = utility::Vector(1,1.8f,0).normalize() * 11.25f;
+  auto velocity = utility::Vector(1,1.8,0).normalize() * 11.25;
   auto p        = Projectile(start, velocity);
 
-  auto gravity  = utility::Vector(0, -0.1f, 0);
-  auto wind     = utility::Vector(-0.01f, 0, 0);
+  auto gravity  = utility::Vector(0, -0.1, 0);
+  auto wind     = utility::Vector(-0.01, 0, 0);
   auto e        = Environment(gravity, wind);
 
   auto canvas = Canvas(900, 500);
-  const auto orange = utility::Color(1.0f, 0.65f, 0.0f); 
+  const auto orange = utility::Color(1.0, 0.65, 0.0); 
 
   while(p.position.y() > 0){
     std::cout <<  canvas.width-p.position.x()  << ' ' << canvas.height-p.position.y() << '\n';

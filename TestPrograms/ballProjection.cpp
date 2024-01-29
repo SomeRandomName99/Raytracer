@@ -14,12 +14,12 @@
 
 using namespace raytracer;
 
-const auto shadow    = utility::Color(0.627f, 0.125f, 0.941f);
-const auto wallcolor = utility::Color(0.0f, 0.0f, 0.0f);
+const auto shadow    = utility::Color(0.627, 0.125, 0.941);
+const auto wallcolor = utility::Color(0.0, 0.0, 0.0);
 
-utility::Tuple pixelToWorldCoords(unsigned int widthPixel, unsigned int heightPixel, unsigned int canvasSize, float canvasToWallConversionRatio){
-  float x_axis = (widthPixel  - canvasSize/2.0f) / canvasToWallConversionRatio;
-  float y_axis = (heightPixel - canvasSize/2.0f) / canvasToWallConversionRatio;
+utility::Tuple pixelToWorldCoords(unsigned int widthPixel, unsigned int heightPixel, unsigned int canvasSize, double canvasToWallConversionRatio){
+  double x_axis = (widthPixel  - canvasSize/2.0) / canvasToWallConversionRatio;
+  double y_axis = (heightPixel - canvasSize/2.0) / canvasToWallConversionRatio;
 
   return utility::Point(x_axis, y_axis, 0);
 }
@@ -27,8 +27,8 @@ utility::Tuple pixelToWorldCoords(unsigned int widthPixel, unsigned int heightPi
 int main(void){
   const auto rayOrigin = utility::Point(0, 0, -3);
   auto sphere          = geometry::Sphere();
-  sphere.material_.surfaceColor_ = utility::Color(1,0.2f,1);
-  sphere.setTransform(utility::transformations::shearing(1,0,0,0,0,0)*utility::transformations::scaling(1,0.5f,1));
+  sphere.material_.surfaceColor_ = utility::Color(1,0.2,1);
+  sphere.setTransform(utility::transformations::shearing(1,0,0,0,0,0)*utility::transformations::scaling(1,0.5,1));
 
   auto lightSource = scene::PointLight(utility::Color(1,1,1), utility::Point(-10,10,-10));
 
@@ -36,7 +36,7 @@ int main(void){
   const int wallZOffset    = 10;
   const int wallSize       = 10;
   const int canvasSize     = 500;
-  const float canvasToWallConversionRatio = canvasSize/wallSize;
+  const double canvasToWallConversionRatio = canvasSize/wallSize;
   auto canvas = Canvas(canvasSize, canvasSize);
 
   

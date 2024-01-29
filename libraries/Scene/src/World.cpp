@@ -48,9 +48,9 @@ World defaultWorld(){
   world.lights_.push_back(light);
 
   auto s1 = geometry::Sphere{};
-  s1.material_ = material::Material(utility::Color(0.8f, 1.0f, 0.6f), 0.1f, 0.7f, 0.2f);
+  s1.material_ = material::Material(utility::Color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2);
   auto s2 = geometry::Sphere{};
-  s2.setTransform(utility::transformations::scaling(0.5f, 0.5f, 0.5f));
+  s2.setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));
   world.objects_.push_back(std::make_shared<geometry::Sphere>(s1));
   world.objects_.push_back(std::make_shared<geometry::Sphere>(s2));
 

@@ -8,39 +8,39 @@ using namespace utility;
 
 /* =========== Creation Test w = 1 =========== */
 TEST(tuple_tests, tuple_w_1_x_y_z_correct) {
-	const auto tuple = Tuple(4.3f, -4.2f, 3.1f, 1.0f);
-    EXPECT_FLOAT_EQ(tuple.x(), 4.3f);
-    EXPECT_FLOAT_EQ(tuple.y(), -4.2f);
-    EXPECT_FLOAT_EQ(tuple.z(), 3.1f);
-    EXPECT_FLOAT_EQ(tuple.w(), 1.0f);
+	const auto tuple = Tuple(4.3, -4.2, 3.1, 1.0);
+    EXPECT_FLOAT_EQ(tuple.x(), 4.3);
+    EXPECT_FLOAT_EQ(tuple.y(), -4.2);
+    EXPECT_FLOAT_EQ(tuple.z(), 3.1);
+    EXPECT_FLOAT_EQ(tuple.w(), 1.0);
 }
 
 TEST(tuple_tests, tuple_w_1_isPoint_correct) {
-	const auto tuple = Tuple(4.3f, -4.2f, 3.1f, 1.0f);
+	const auto tuple = Tuple(4.3, -4.2, 3.1, 1.0);
     EXPECT_TRUE(tuple.isPoint());
 }
 
 TEST(tuple_tests, tuple_w_1_isVector_correct) {
-	const auto tuple = Tuple(4.3f, -4.2f, 3.1f, 1.0f);
+	const auto tuple = Tuple(4.3, -4.2, 3.1, 1.0);
     EXPECT_FALSE(tuple.isVector());
 }
 
 /* =========== Creation Test w = 0 =========== */
 TEST(tuple_tests, tuple_w_0_x_y_z_w_correct) {
-	const auto tuple = Tuple(4.3f, -4.2f, 3.1f, 0);
-    EXPECT_FLOAT_EQ(tuple.x(), 4.3f);
-    EXPECT_FLOAT_EQ(tuple.y(), -4.2f);
-    EXPECT_FLOAT_EQ(tuple.z(), 3.1f);
+	const auto tuple = Tuple(4.3, -4.2, 3.1, 0);
+    EXPECT_FLOAT_EQ(tuple.x(), 4.3);
+    EXPECT_FLOAT_EQ(tuple.y(), -4.2);
+    EXPECT_FLOAT_EQ(tuple.z(), 3.1);
     EXPECT_FLOAT_EQ(tuple.w(), 0);
 }
 
 TEST(tuple_tests, tuple_w_0_isPoint_correct) {
-	const auto tuple = Tuple(4.3f, -4.2f, 3.1f, 0);
+	const auto tuple = Tuple(4.3, -4.2, 3.1, 0);
     EXPECT_FALSE(tuple.isPoint());
 }
 
 TEST(tuple_tests, tuple_w_0_isVector_correct) {
-	const auto tuple = Tuple(4.3f, -4.2f, 3.1f, 0);
+	const auto tuple = Tuple(4.3, -4.2, 3.1, 0);
     EXPECT_TRUE(tuple.isVector());
 }
 
@@ -61,14 +61,14 @@ TEST(tuple_tests, point_creation_correct) {
 
 /* =========== Operations Test equality =========== */
 TEST(tuple_tests, tuple_equality_equal_correct) {
-	const auto tuple1 = Tuple(4.3f, -4.2f, 3.1f, 0);
-    const auto tuple2 = Tuple(4.3f, -4.2f, 3.1f, 0);
+	const auto tuple1 = Tuple(4.3, -4.2, 3.1, 0);
+    const auto tuple2 = Tuple(4.3, -4.2, 3.1, 0);
     EXPECT_TRUE(tuple1==tuple2);
 }
 
 TEST(tuple_tests, tuple_equality_notEqual_correct) {
-	const auto tuple1 = Tuple(4.3f, -4.2f, 3.1f, 0);
-    const auto tuple2 = Tuple(4.3f, -4.2f, 3.1f, 1);
+	const auto tuple1 = Tuple(4.3, -4.2, 3.1, 0);
+    const auto tuple2 = Tuple(4.3, -4.2, 3.1, 1);
     EXPECT_FALSE(tuple1==tuple2);
 }
 
@@ -105,20 +105,20 @@ TEST(tuple_tests, tuple_subtraction_point_point_isVector_correct) {
 /* =========== Operations Test scalar multiplication =========== */
 TEST(tuple_tests, tuple_scalar_multiplication_by_scalar_correct) {
     const auto tuple1 = Tuple(1, -2, 3, -4);
-    const auto tuple2 = Tuple(3.5f, -7, 10.5f, -14);
-    EXPECT_EQ(tuple1*3.5f, tuple2);
+    const auto tuple2 = Tuple(3.5, -7, 10.5, -14);
+    EXPECT_EQ(tuple1*3.5, tuple2);
 }
 
 TEST(tuple_tests, tuple_scalar_multiplication_by_fraction_correct) {
     const auto tuple1 = Tuple(1, -2, 3, -4);
-    const auto tuple2 = Tuple(0.5f, -1, 1.5f, -2);
-    EXPECT_EQ(tuple1*0.5f, tuple2);
+    const auto tuple2 = Tuple(0.5, -1, 1.5, -2);
+    EXPECT_EQ(tuple1*0.5, tuple2);
 }
 
 /* =========== Operations Test scalar division =========== */
 TEST(tuple_tests, tuple_scalar_division_by_scalar_correct) {
     const auto tuple1 = Tuple(1, -2, 3, -4);
-    const auto tuple2 = Tuple(0.5f, -1, 1.5f, -2);
+    const auto tuple2 = Tuple(0.5, -1, 1.5, -2);
     EXPECT_EQ(tuple1/2, tuple2);
 }
 

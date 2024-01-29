@@ -34,7 +34,7 @@ TEST_F(lightMaterialInteractionTests, EyeBetweenLightAndSurface){
 
   const auto result = scene::lighting(m, light, position, eyeVector, normalVector, false);
 
-  EXPECT_TRUE(result  == Color(1.9f,1.9f,1.9f));
+  EXPECT_TRUE(result  == Color(1.9,1.9,1.9));
 }
 
 TEST_F(lightMaterialInteractionTests, EyeBetweenLightAndSurface45){
@@ -44,7 +44,7 @@ TEST_F(lightMaterialInteractionTests, EyeBetweenLightAndSurface45){
 
   const auto result = scene::lighting(m, light, position, eyeVector, normalVector, false);
 
-  EXPECT_TRUE(result  == Color(1.0f,1.0f,1.0f));
+  EXPECT_TRUE(result  == Color(1.0,1.0,1.0));
 }
 
 TEST_F(lightMaterialInteractionTests, EyeOppositeSurfaceLightOffset45){
@@ -54,7 +54,7 @@ TEST_F(lightMaterialInteractionTests, EyeOppositeSurfaceLightOffset45){
 
   const auto result = scene::lighting(m, light, position, eyeVector, normalVector, false);
 
-  const float colorCompExpected = 0.1f + 0.9f * std::sqrt(2)/2;
+  const double colorCompExpected = 0.1 + 0.9 * std::sqrt(2)/2;
   EXPECT_TRUE(result  == Color(colorCompExpected,colorCompExpected,colorCompExpected));
 }
 
@@ -65,7 +65,7 @@ TEST_F(lightMaterialInteractionTests, EyeInPathOfReflectionVector){
 
   const auto result = scene::lighting(m, light, position, eyeVector, normalVector, false);
 
-  const float colorCompExpected = 1.6363852f;
+  const double colorCompExpected = 0.1 + 0.9 * std::sqrt(2)/2 + 0.9;
   EXPECT_TRUE(result  == Color(colorCompExpected,colorCompExpected,colorCompExpected));
 }
 
@@ -76,7 +76,7 @@ TEST_F(lightMaterialInteractionTests, LightBehindSurface){
 
   const auto result = scene::lighting(m, light, position, eyeVector, normalVector, false);
 
-  EXPECT_TRUE(result  == Color(0.1f,0.1f,0.1f));
+  EXPECT_TRUE(result  == Color(0.1,0.1,0.1));
 }
 
 // ================== shadow Tests ==================
@@ -89,5 +89,5 @@ TEST_F(lightMaterialInteractionTests, shadowWithObjectBetweenPointAndLight){
 
   const auto result = scene::lighting(m, light, position, eyeVector, normalVector, inShadow);
 
-  EXPECT_TRUE(result  == Color(0.1f,0.1f,0.1f));
+  EXPECT_TRUE(result  == Color(0.1,0.1,0.1));
 }

@@ -21,7 +21,7 @@ TEST(ray_tests, distance_computation) {
   EXPECT_EQ(r.position(0),   Point(2, 3, 4));
   EXPECT_EQ(r.position(1),   Point(3, 3, 4));
   EXPECT_EQ(r.position(-1),  Point(1, 3, 4));
-  EXPECT_EQ(r.position(2.5f), Point(4.5f, 3, 4));
+  EXPECT_EQ(r.position(2.5), Point(4.5, 3, 4));
 }
 
 TEST(ray_tests, TranslateRay) {
