@@ -17,7 +17,8 @@ std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) co
 utility::Color World::shadeHit(const geometry::Computations& comps) const{
   auto color = utility::Color{0,0,0};
   for(const auto& light : this->lights_) {
-    color += scene::lighting(comps.object->material_, light, comps.point, comps.eyeVector, comps.normalVector);
+    color += scene::lighting(comps.object->material_, light, comps.point, comps.eyeVector, 
+                             comps.normalVector, this->isShadowed(light, comps.overPoint));
   }
   return color;
 }
@@ -29,6 +30,17 @@ utility::Color World::colorAt(const utility::Ray& ray) const{
   return this->shadeHit(intersect_computations);
 }
 
+bool World::isShadowed(const PointLight& light, const utility::Tuple& point) const{
+  const auto pointToLightVector = light.position_ - point;
+  const auto pointToLightDistance = pointToLightVector.magnitude();
+  const auto pointToLightDirection = pointToLightVector.normalize();
+  const auto pointToLightRay = utility::Ray(point, pointToLightDirection);
+  const auto intersections = this->intersect(pointToLightRay);
+  const auto hit = geometry::hit(intersections);
+
+  return hit && (hit->dist_ < pointToLightDistance);
+}
+
 World defaultWorld(){
   World world;
 
@@ -36,9 +48,9 @@ World defaultWorld(){
   world.lights_.push_back(light);
 
   auto s1 = geometry::Sphere{};
-  s1.material_ = material::Material(utility::Color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2);
+  s1.material_ = material::Material(utility::Color(0.8f, 1.0f, 0.6f), 0.1f, 0.7f, 0.2f);
   auto s2 = geometry::Sphere{};
-  s2.setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));
+  s2.setTransform(utility::transformations::scaling(0.5f, 0.5f, 0.5f));
   world.objects_.push_back(std::make_shared<geometry::Sphere>(s1));
   world.objects_.push_back(std::make_shared<geometry::Sphere>(s2));
 

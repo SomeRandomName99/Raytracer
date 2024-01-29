@@ -53,7 +53,7 @@ int main(void){
         auto intersectionPoint = firedRay.position(hit->dist_);
         auto normal            = hit->object_->normalAt(intersectionPoint);
         auto eyeVector         = -firedRay.direction_;
-        auto color             = scene::lighting(hit->object_->material_, lightSource, intersectionPoint, eyeVector, normal);   
+        auto color             = scene::lighting(hit->object_->material_, lightSource, intersectionPoint, eyeVector, normal, false);   
         canvas.pixelWrite(color, x, y);
       } else {
         canvas.pixelWrite(wallcolor, x, y);

@@ -6,7 +6,7 @@ namespace raytracer {
 namespace scene {
 
 utility::Color lighting(const material::Material& material, const PointLight& light, const utility::Tuple& point, 
-                        const utility::Tuple& eyeVector, const utility::Tuple& normalVector){
+                        const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow){
   // combine the surface color with the light's color/intensity
   const auto effectiveColor = material.surfaceColor_ * light.intensity_;
 
@@ -15,6 +15,10 @@ utility::Color lighting(const material::Material& material, const PointLight& li
 
   // compute the ambient contribution
   const auto ambient = effectiveColor * material.ambient_;
+
+  if (inShadow) {
+    return ambient; // specular and diffuse lighting are not relevant if the point is in shadow
+  }
 
   // lightDotNormal represents the cosine of the angle between the light vector and the normal vector. A negative number
   // means the light is on the other side of the surface.

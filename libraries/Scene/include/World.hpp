@@ -32,7 +32,22 @@ public:
    */
   utility::Color shadeHit(const geometry::Computations& computation) const;
 
+  /**
+   * Calculates the color at a given ray intersection point in the world.
+   *
+   * @param ray The ray to calculate the color for.
+   * @return The color at the ray intersection point.
+   */
   utility::Color colorAt(const utility::Ray& ray) const;
+
+  /**
+   * Checks if a given point in the world is shadowed by a light source.
+   *
+   * @param light The light source to check against.
+   * @param point The point to check for shadows.
+   * @return True if the point is shadowed, false otherwise.
+   */
+  bool isShadowed(const PointLight& light, const utility::Tuple& point) const;
 
   std::vector<PointLight> lights_;
   std::vector<std::shared_ptr<geometry::Sphere>> objects_;

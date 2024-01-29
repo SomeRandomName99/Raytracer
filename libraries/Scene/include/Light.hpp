@@ -17,7 +17,7 @@ public:
 };
 
 utility::Color lighting(const material::Material& material, const PointLight& light, const utility::Tuple& position, 
-                        const utility::Tuple& eyeVector, const utility::Tuple& normalVector);
+                        const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow);
 
 } // namespace raytracer
 } // namespace scene

@@ -23,14 +23,14 @@ int main(){
   floor.material_ = wallMaterial;
 
   auto leftWall = geometry::Sphere();
-  leftWall.transformation_ = utility::transformations::translation(0, 0, 5) * 
+  leftWall.transformation_ = utility::transformations::translation(0, 1.5f, 5) * 
                              utility::transformations::rotation_y(-std::numbers::pi / 4) * 
                              utility::transformations::rotation_x(std::numbers::pi / 2) * 
                              utility::transformations::scaling(10, 0.01f, 10);
   leftWall.material_ = wallMaterial;
 
   auto rightWall = geometry::Sphere();
-  rightWall.transformation_ = utility::transformations::translation(0, 0, 5) * 
+  rightWall.transformation_ = utility::transformations::translation(0, 1.5f, 5) * 
                               utility::transformations::rotation_y(std::numbers::pi / 4) * 
                               utility::transformations::rotation_x(std::numbers::pi / 2) * 
                               utility::transformations::scaling(10, 0.01f, 10);

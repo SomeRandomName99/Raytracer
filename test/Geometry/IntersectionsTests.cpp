@@ -10,9 +10,9 @@ using namespace utility;
 /* =========== Creation Test =========== */
 TEST(intersection_tests, encapsulateTAndObject){
   const auto s = geometry::Sphere();
-  const auto i = geometry::Intersection(3.5, std::make_shared<geometry::Sphere>(s));
+  const auto i = geometry::Intersection(3.5f, std::make_shared<geometry::Sphere>(s));
 
-  EXPECT_FLOAT_EQ(i.dist_, 3.5);
+  EXPECT_FLOAT_EQ(i.dist_, 3.5f);
   EXPECT_TRUE(*i.object_ == s);
 }
 
