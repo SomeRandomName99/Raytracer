@@ -10,24 +10,24 @@ class Color
 {
 public:
    Color();
-   Color(double red, double green, double blue);
+   Color(float red, float green, float blue);
 
   bool operator==(const Color& rhs) const;
   Color operator+(const Color& rhs) const;
   Color operator+=(const Color& rhs);
   Color operator-(const Color& rhs) const;
-  Color operator*(const double& rhs) const;
+  Color operator*(const float& rhs) const;
   Color operator*(const Color& rhs) const; // Hadamarad Product
 
   // Color setters and getters
-  const double& red() const;
-  void red(const double& val);
+  const float& red() const;
+  void red(const float& val);
 
-  const double& green() const;
-  void green(const double& val);
+  const float& green() const;
+  void green(const float& val);
 
-  const double& blue() const;
-  void blue(const double& val);
+  const float& blue() const;
+  void blue(const float& val);
 
   utility::Tuple  _color;
 };

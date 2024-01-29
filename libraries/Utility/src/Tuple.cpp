@@ -8,10 +8,10 @@ namespace raytracer {
 namespace utility { 
 
 bool Tuple::isVector() const {
-  return floatNearlyEqual(this->w(), 0.0);
+  return floatNearlyEqual(this->w(), 0.0f);
 }
 bool Tuple::isPoint() const {
-  return floatNearlyEqual(this->w(), 1.0);
+  return floatNearlyEqual(this->w(), 1.0f);
 }
 
 bool Tuple::operator==(const Tuple& rhs) const {
@@ -33,11 +33,11 @@ Tuple Tuple::operator-(const Tuple& rhs)  const{
   return Tuple(this->x()-rhs.x(), this->y()-rhs.y(), 
                this->z()-rhs.z(), this->w()-rhs.w());
 }
-Tuple Tuple::operator*(const double& rhs) const{
+Tuple Tuple::operator*(const float& rhs) const{
   return Tuple(this->x()*rhs, this->y()*rhs, 
                this->z()*rhs, this->w()*rhs);
 }
-Tuple Tuple::operator/(const double& rhs) const{
+Tuple Tuple::operator/(const float& rhs) const{
   return Tuple(this->x()/rhs, this->y()/rhs, 
                this->z()/rhs, this->w()/rhs);
 }
@@ -45,35 +45,35 @@ Tuple Tuple::operator-() const{
   return *this*-1;
 }
 
-const double& Tuple::x() const{
+const float& Tuple::x() const{
   return data[0];
 }
-double& Tuple::x(){
-  return const_cast<double&>(const_cast<const Tuple*>(this)->data[0]);
+float& Tuple::x(){
+  return const_cast<float&>(const_cast<const Tuple*>(this)->data[0]);
 }
 
-const double& Tuple::y() const{
+const float& Tuple::y() const{
   return data[1];
 }
-double& Tuple::y(){
-  return const_cast<double&>(const_cast<const Tuple*>(this)->data[1]);
+float& Tuple::y(){
+  return const_cast<float&>(const_cast<const Tuple*>(this)->data[1]);
 }
 
-const double& Tuple::z() const{
+const float& Tuple::z() const{
   return data[2];
 }
-double& Tuple::z(){
-  return const_cast<double&>(const_cast<const Tuple*>(this)->data[2]);
+float& Tuple::z(){
+  return const_cast<float&>(const_cast<const Tuple*>(this)->data[2]);
 }
 
-const double& Tuple::w() const{
+const float& Tuple::w() const{
   return data[3];
 }
-double& Tuple::w(){
-  return const_cast<double&>(const_cast<const Tuple*>(this)->data[3]);
+float& Tuple::w(){
+  return const_cast<float&>(const_cast<const Tuple*>(this)->data[3]);
 }
 
-double Tuple::magnitude() const{
+float Tuple::magnitude() const{
   auto sumSquared = this->x()*this->x() + this->y()*this->y() +
                     this->z()*this->z() + this->w()*this->w();
   return std::sqrt(sumSquared);
@@ -83,7 +83,7 @@ Tuple Tuple::normalize() const{
   return *this/this->magnitude();
 }
 
-double Tuple::dot(const Tuple& rhs) const{
+float Tuple::dot(const Tuple& rhs) const{
   auto multAndACum = this->x()*rhs.x() + this->y()*rhs.y() +
                      this->z()*rhs.z() + this->w()*rhs.w();
   return multAndACum;
@@ -99,10 +99,10 @@ Tuple Tuple::reflect(const Tuple& normal) const{
   return *this - (normal * 2 * this->dot(normal));
 }
 
-Tuple Point(double x, double y, double z){
+Tuple Point(float x, float y, float z){
   return Tuple(x,y,z,1);
 }
-Tuple Vector(double x, double y, double z){
+Tuple Vector(float x, float y, float z){
   return Tuple(x,y,z,0);
 }
 

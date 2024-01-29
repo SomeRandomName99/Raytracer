@@ -12,8 +12,8 @@
 const auto orange = raytracer::utility::Color(1.0f, 0.65f, 0.0f);
 
 void drawOnCanvas(raytracer::Canvas& canvas, raytracer::utility::Tuple& point){
-  auto x_axis = canvas.width/2 + point.x()*canvas.width/2*0.75;
-  auto y_axis = canvas.height/2 + point.y()*canvas.height/2*0.75;
+  auto x_axis = canvas.width/2 + point.x()*canvas.width/2*0.75f;
+  auto y_axis = canvas.height/2 + point.y()*canvas.height/2*0.75f;
 
   std::cout << "x: " << x_axis << " y: " << y_axis << '\n';
   canvas.pixelWrite(orange, x_axis, y_axis);

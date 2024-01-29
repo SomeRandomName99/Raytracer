@@ -12,7 +12,7 @@ public:
   Ray(Tuple origin, Tuple direction)
       : origin_{origin}, direction_{direction} {}
 
-  Tuple position(const double time) const;
+  Tuple position(const float time) const;
 
   Tuple origin_;
   Tuple direction_;

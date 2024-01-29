@@ -82,7 +82,7 @@ TEST(canvas_tests, canvas_PPM_long_data){
   auto canvas = Canvas(10, 2);
   for(size_t&& col : std::views::iota(0u, canvas.width)){
     for(size_t&& row : std::views::iota(0u, canvas.height)){
-      canvas.pixelWrite(Color(1, 0.8, 0.6), col, row);
+      canvas.pixelWrite(Color(1, 0.8f, 0.6f), col, row);
     }
   }
   std::stringstream stream;

@@ -5,7 +5,7 @@ namespace utility {
 
 Color::Color() : _color{Tuple(0.0f, 0.0f, 0.0f, 0.0f)}
                  {}
-Color::Color(double red_, double green_, double blue_) : _color{Tuple(red_, green_, blue_, 0.0f)}
+Color::Color(float red_, float green_, float blue_) : _color{Tuple(red_, green_, blue_, 0.0f)}
                                                       {}
 
 bool Color::operator==(const Color& rhs) const{
@@ -27,7 +27,7 @@ Color Color::operator-(const Color& rhs) const{
   return Color(newTuple.x(), newTuple.y(), newTuple.z()); 
 }
 
-Color Color::operator*(const double& rhs) const{
+Color Color::operator*(const float& rhs) const{
   const auto newTuple = this->_color * rhs;
   return Color(newTuple.x(), newTuple.y(), newTuple.z());
 }
@@ -37,24 +37,24 @@ Color Color::operator*(const Color& rhs) const{ // Hadamarad Product
 }
 
 // Color setters and getters
-const double& Color::red() const{
+const float& Color::red() const{
   return _color.x();
 }
-void Color::red(const double& val) {
+void Color::red(const float& val) {
   _color.x() = val;
 }
 
-const double& Color::green() const{
+const float& Color::green() const{
   return _color.y();
 }
-void Color::green(const double& val) {
+void Color::green(const float& val) {
   _color.y() = val;
 }
 
-const double& Color::blue() const{
+const float& Color::blue() const{
   return _color.z();
 }
-void Color::blue(const double& val) {
+void Color::blue(const float& val) {
   _color.z() = val;
 }
 

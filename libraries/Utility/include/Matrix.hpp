@@ -17,39 +17,39 @@ template <uint8_t rows, uint8_t cols>
 class Matrix
 {
 private:
-  std::array<double, rows*cols> elements;
+  std::array<float, rows*cols> elements;
 public:
   template<typename... T>
   explicit Matrix(T... data): elements{data...}{};
 
   bool operator==(const Matrix& rhs) const;
 
-  const double& at(const std::size_t& row, const std::size_t& column) const;
-  double& at(const std::size_t& row, const std::size_t& column);
+  const float& at(const std::size_t& row, const std::size_t& column) const;
+  float& at(const std::size_t& row, const std::size_t& column);
 
   static Matrix<rows, cols> identity();
 
   Matrix<rows, cols>& operator*=(const Matrix<rows, cols>& rhs);
   Matrix<rows, cols> transpose() const;
-  double determinant() const;
+  float determinant() const;
   bool invertible() const;
 };
 
 template <uint8_t rows, uint8_t cols>
-const double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column) const{
+const float& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column) const{
   return elements.at(row*cols+column);
 }
 
 template <uint8_t rows, uint8_t cols> 
-double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column){
-  return const_cast<double&>(const_cast<const Matrix*>(this)->at(row, column));
+float& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column){
+  return const_cast<float&>(const_cast<const Matrix*>(this)->at(row, column));
 }
 
 template <uint8_t rows, uint8_t cols> 
 bool Matrix<rows, cols>::operator==(const Matrix& rhs) const{
   return std::equal(this->elements.cbegin(), this->elements.cend(),
                     rhs.elements.cbegin()  , rhs.elements.cend(), 
-                    floatNearlyEqual<double>);
+                    floatNearlyEqual<float>);
 }
 
 template <uint8_t rows, uint8_t cols> 
@@ -122,22 +122,22 @@ Matrix<rows, cols> Matrix<rows, cols>::transpose() const{
 }
 
 template<>
-inline double Matrix<1,1>::determinant() const{
+inline float Matrix<1,1>::determinant() const{
   auto determinant = this->at(0,0);
 
   return determinant;
 }
 
 template<>
-inline double Matrix<2,2>::determinant() const{
+inline float Matrix<2,2>::determinant() const{
   auto determinant = this->at(0,0)*this->at(1,1) - this->at(0,1)*this->at(1,0);
 
   return determinant;
 }
 
 template <uint8_t rows, uint8_t cols>
-double Matrix<rows,cols>::determinant() const{
-  double determinant{};
+float Matrix<rows,cols>::determinant() const{
+  float determinant{};
 
   for(std::size_t colIndex{0}; colIndex < cols; colIndex++){
     determinant += this->at(0, colIndex)*cofactor(*this, 0, colIndex);
@@ -167,14 +167,14 @@ submatrix(const Matrix<rows, cols>& matrix, const std::size_t& skipRow, const st
 }
 
 template<uint8_t rows, uint8_t cols>
-double minor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column){
+float minor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column){
     auto subMatrix =  submatrix(matrix, row, column);
     return subMatrix.determinant();  
 }
 
 template<uint8_t rows, uint8_t cols>
-inline double cofactor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column){
-  double cofactor = (row+column)%2 ? -1*minor(matrix, row, column) : minor(matrix, row, column);
+inline float cofactor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column){
+  float cofactor = (row+column)%2 ? -1*minor(matrix, row, column) : minor(matrix, row, column);
 
   return cofactor;
 }

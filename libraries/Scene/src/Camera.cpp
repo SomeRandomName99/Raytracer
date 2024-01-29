@@ -9,8 +9,8 @@ namespace raytracer {
 namespace scene {
 
 utility::Ray Camera::rayForPixel(const unsigned int x, const unsigned int y) const{
-  const auto xOffsetToPixelCenter = (x + 0.5) * this->pixelSize_;
-  const auto yOffsetToPixelCenter = (y + 0.5) * this->pixelSize_;
+  const auto xOffsetToPixelCenter = (x + 0.5f) * this->pixelSize_;
+  const auto yOffsetToPixelCenter = (y + 0.5f) * this->pixelSize_;
 
   const auto worldX = this->halfWidth_  - xOffsetToPixelCenter;
   const auto worldY = this->halfHeight_ - yOffsetToPixelCenter;
