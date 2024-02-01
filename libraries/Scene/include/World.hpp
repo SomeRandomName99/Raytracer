@@ -18,11 +18,23 @@ public:
   /**
    * Calculates the intersections between a ray and a world.
    *
-   * @param world The scene::World object representing the world.
    * @param ray The utility::Ray object representing the ray.
    * @return A std::vector<Intersection> containing the intersections between the ray and the objects in the world.
    */
   std::vector<geometry::Intersection> intersect(const utility::Ray& ray) const noexcept;
+
+  /**
+   * Barebones implementation of a shadow intersection check.
+   * 
+   * @details Because this function is only used for calculating shadows, it will instantly returns if an intersection is found.
+   * As there is no need to find all of the intersections between the ray and the world, save them, and then sort them.
+   *
+   * @param ray The utility::Ray object representing the ray.
+   * @param distanceToLight The distance between the ray origin and the light source.
+   * @return True: if an intersection was found, False: otherwise.
+   */
+  bool intersectShadow(const utility::Ray& ray, double distanceToLight) const noexcept;
+
   
   /**
    * Calculates the color of a shaded hit based on the given computation.

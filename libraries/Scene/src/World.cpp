@@ -1,5 +1,6 @@
 #include "World.hpp"
 #include "Material.hpp"
+#include "FloatAlmostEquals.hpp"
 
 namespace raytracer {
 namespace scene {
@@ -13,6 +14,17 @@ std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) co
   std::ranges::sort(intersections, {}, [](const auto& intersection){ return intersection.dist_; });
   return intersections;
 }
+
+bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) const noexcept{
+  for(const auto& object : objects_){
+    const auto objectIntersections = object->intersect(ray);
+    const auto hit = geometry::hit(objectIntersections);
+    if(hit && hit->dist_ > 0.0 && hit->dist_ < distanceToLight){return true;}
+  }
+
+  return false;
+}
+
 
 utility::Color World::shadeHit(const geometry::Computations& comps) const noexcept{
   auto color = utility::Color{0,0,0};
@@ -35,10 +47,8 @@ bool World::isShadowed(const PointLight& light, const utility::Tuple& point) con
   const auto pointToLightDistance = pointToLightVector.magnitude();
   const auto pointToLightDirection = pointToLightVector.normalize();
   const auto pointToLightRay = utility::Ray(point, pointToLightDirection);
-  const auto intersections = this->intersect(pointToLightRay);
-  const auto hit = geometry::hit(intersections);
 
-  return hit && (hit->dist_ < pointToLightDistance);
+  return this->intersectShadow(pointToLightRay, pointToLightDistance);
 }
 
 World defaultWorld() noexcept{
