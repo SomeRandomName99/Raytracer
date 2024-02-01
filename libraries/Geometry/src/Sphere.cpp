@@ -11,13 +11,9 @@ bool Sphere::operator==(const Sphere& other) const noexcept{
   return this->id_ == other.id_;
 }
 
-void Sphere::setTransform(const utility::Matrix<4,4> &transformation) noexcept{
-  this->transformation_ = transformation;
-}
-
 std::vector<Intersection> Sphere::intersect(const utility::Ray& ray) const noexcept{
   // For now we assume that the sphere is always at the origin
-  const auto transformedRay    = utility::transform(ray, inverse(this->transformation_));
+  const auto transformedRay    = utility::transform(ray, inverseTransform());
   const auto SphereCenterToRay = transformedRay.origin_ - utility::Point(0, 0, 0);
 
   const auto a = transformedRay.direction_.dot(transformedRay.direction_);
@@ -36,11 +32,11 @@ std::vector<Intersection> Sphere::intersect(const utility::Ray& ray) const noexc
 }
 
 utility::Tuple Sphere::normalAt(const utility::Tuple &worldPoint) const noexcept{
-  utility::Tuple objectPoint  = inverse(this->transformation_) * worldPoint;
+  utility::Tuple objectPoint  = inverseTransform() * worldPoint;
   utility::Tuple objectNormal = objectPoint - utility::Point(0, 0, 0);
   // This is needed because the normal utility::Vector is a linear form, see below:
   // https://computergraphics.stackexchange.com/questions/1502/why-is-the-transposed-inverse-of-the-model-view-matrix-used-to-transform-the-nor
-  utility::Tuple worldNormal  = inverse(this->transformation_).transpose() * objectNormal;
+  utility::Tuple worldNormal  = inverseTransform().transpose() * objectNormal;
   worldNormal.w() = 0;
 
   return worldNormal.normalize();

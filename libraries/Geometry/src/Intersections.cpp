@@ -48,7 +48,6 @@ std::optional<Intersection> hit(const std::vector<Intersection>& intersections) 
   auto positiveT = intersections | std::views::filter([](const auto& intersection) { return intersection.dist_ > 0.0; });
   auto smallestIntersection = std::ranges::min_element(positiveT, {}, [](const auto& intersection){return intersection.dist_;});
 
-
   if(smallestIntersection == positiveT.end())
     return std::nullopt;
   return *smallestIntersection;

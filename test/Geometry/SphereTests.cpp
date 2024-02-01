@@ -73,7 +73,7 @@ TEST(sphere_tests, setObjectOnIntersection) {
 TEST(sphere_tests, defaultTransformation) {
   const auto s = geometry::Sphere();
 
-  EXPECT_EQ(s.transformation_, (Matrix<4,4>::identity()));
+  EXPECT_EQ(s.transformation(), (Matrix<4,4>::identity()));
 }
 
 TEST(sphere_tests, SetTransform) {
@@ -82,7 +82,7 @@ TEST(sphere_tests, SetTransform) {
 
   s.setTransform(t);
 
-  EXPECT_EQ(s.transformation_, t);
+  EXPECT_EQ(s.transformation(), t);
 }
 
 TEST(sphere_tests, IntersectingScaledSphereWithRay) {

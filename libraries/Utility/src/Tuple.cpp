@@ -45,34 +45,6 @@ Tuple Tuple::operator-() const noexcept{
   return *this*-1;
 }
 
-const double& Tuple::x() const noexcept{
-  return data[0];
-}
-double& Tuple::x() noexcept{
-  return const_cast<double&>(const_cast<const Tuple*>(this)->data[0]);
-}
-
-const double& Tuple::y() const noexcept{
-  return data[1];
-}
-double& Tuple::y() noexcept{
-  return const_cast<double&>(const_cast<const Tuple*>(this)->data[1]);
-}
-
-const double& Tuple::z() const noexcept{
-  return data[2];
-}
-double& Tuple::z() noexcept{
-  return const_cast<double&>(const_cast<const Tuple*>(this)->data[2]);
-}
-
-const double& Tuple::w() const noexcept{
-  return data[3];
-}
-double& Tuple::w() noexcept{
-  return const_cast<double&>(const_cast<const Tuple*>(this)->data[3]);
-}
-
 double Tuple::magnitude() const noexcept{
   auto sumSquared = this->x()*this->x() + this->y()*this->y() +
                     this->z()*this->z() + this->w()*this->w();
@@ -110,6 +82,11 @@ std::ostream& operator<<(std::ostream& os, const Tuple& rhs) noexcept {
   os << rhs.x() << ' ' << rhs.y() << ' ' << rhs.z() << ' ' << rhs.w() << '\n';
 
   return os;
+}
+
+Tuple operator*(const Tuple& lhs, const Tuple& rhs) noexcept{
+  return Tuple{lhs.x()*rhs.x(), lhs.y()*rhs.y(), 
+               lhs.z()*rhs.z(), lhs.w()*rhs.w()};
 }
 
 } // namespace utility
