@@ -25,4 +25,5 @@ target_link_libraries(
     Material
     Geometry
     Canvas
+    ${TBB_IMPORTED_TARGETS}
 )
