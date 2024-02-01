@@ -37,7 +37,7 @@ struct Computations{
 class Intersection
 {
 public:
-  Intersection(double dist, std::shared_ptr<Sphere> object) : dist_{dist}, object_{object} {}
+  Intersection(double dist, std::shared_ptr<Sphere> object) noexcept : dist_{dist}, object_{object} {}
 
   /**
    * \brief Prepares the computations for a given ray intersection.
@@ -49,13 +49,13 @@ public:
    * \param ray The ray to compute the intersection with.
    * \return An object of type Computations containing the computed intersection information.
    */
-  Computations prepareComputations(const utility::Ray& ray) const;
+  Computations prepareComputations(const utility::Ray& ray) const noexcept;
 
   double dist_; ///< Distance from the ray origin to the intersection point.
   std::shared_ptr<Sphere> object_; ///< The intersected geometry object.
 };
 
-bool operator==(Intersection const& lhs, Intersection const& rhs);
+bool operator==(Intersection const& lhs, Intersection const& rhs) noexcept;
 
 /**
  * @brief Creates a vector of intersections from the given arguments.
@@ -64,7 +64,7 @@ bool operator==(Intersection const& lhs, Intersection const& rhs);
  * @return std::vector<Intersection> The vector of intersections.
  */
 template<std::same_as<Intersection> ... Arg> 
-auto intersections(const Arg&... arg){
+auto intersections(const Arg&... arg) noexcept{
   return std::vector<Intersection>{arg...};
 }
 
@@ -76,7 +76,7 @@ auto intersections(const Arg&... arg){
  * @param intersections a utility::Vector containing information about all the intersected objects
  * @return const Intersection* a pointer to the struct containing info the first object that the ray intersected with
  */
-std::optional<Intersection> hit(const std::vector<Intersection>& intersections);
+std::optional<Intersection> hit(const std::vector<Intersection>& intersections) noexcept;
 
 } // namespace geometry
 } // namespace raytracer

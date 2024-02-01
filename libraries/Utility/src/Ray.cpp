@@ -3,11 +3,11 @@
 namespace raytracer {
 namespace utility {
 
-Tuple Ray::position(const double distance) const {
+Tuple Ray::position(const double distance) const noexcept {
   return this->origin_ + this->direction_ * distance;
 }
 
-Ray transform(const Ray &ray, const Matrix<4,4> &transformation){
+Ray transform(const Ray &ray, const Matrix<4,4> &transformation) noexcept{
   return Ray{transformation*ray.origin_, transformation*ray.direction_};
 }
 

@@ -9,11 +9,11 @@ namespace material {
 
 class Material {
 public:
-  Material()
+  Material() noexcept
       : surfaceColor_{utility::Color(1.0, 1.0, 1.0)}, ambient_{0.1}, diffuse_{0.9}, specular_{0.9}, 
         shininess_{200.0} {}
   Material(utility::Color surfaceColor, double ambient = 0.1, double diffuse = 0.9, 
-           double specular = 0.9, double shininess = 200) 
+           double specular = 0.9, double shininess = 200) noexcept 
         : surfaceColor_{surfaceColor}, ambient_{ambient}, diffuse_{diffuse}, specular_{specular}, shininess_{shininess} {}
 
   utility::Color surfaceColor_;
@@ -26,6 +26,6 @@ public:
 } // namespace raytracer
 } // namespace scene
 
-bool operator==(const raytracer::material::Material& lhs, const raytracer::material::Material& rhs);
+bool operator==(const raytracer::material::Material& lhs, const raytracer::material::Material& rhs) noexcept;
 
 #endif // MATERIAL_HPP

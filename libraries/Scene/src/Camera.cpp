@@ -8,7 +8,7 @@
 namespace raytracer {
 namespace scene {
 
-utility::Ray Camera::rayForPixel(const unsigned int x, const unsigned int y) const{
+utility::Ray Camera::rayForPixel(const unsigned int x, const unsigned int y) const noexcept{
   const auto xOffsetToPixelCenter = (x + 0.5) * this->pixelSize_;
   const auto yOffsetToPixelCenter = (y + 0.5) * this->pixelSize_;
 
@@ -22,7 +22,7 @@ utility::Ray Camera::rayForPixel(const unsigned int x, const unsigned int y) con
   return utility::Ray{origin, direction};
 }
 
-Canvas Camera::render(const World& world){
+Canvas Camera::render(const World& world) noexcept{
   auto image = Canvas(this->numHorPixels_, this->numVerPixels_);
 
   std::vector<size_t> pixelIndices(this->numHorPixels_ * this->numVerPixels_);

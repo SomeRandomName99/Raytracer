@@ -5,7 +5,7 @@
 namespace raytracer {
 namespace utility {
 namespace transformations{
-  Matrix<4,4> translation(double x, double y, double z){
+  Matrix<4,4> translation(const double x, const double y, const double z) noexcept{
     auto translationMatrix = Matrix<4,4>::identity();
     
     translationMatrix.at(0,3) = x;
@@ -14,7 +14,7 @@ namespace transformations{
     return translationMatrix;
   }
 
-  Matrix<4,4> scaling(double x, double y, double z){
+  Matrix<4,4> scaling(const double x, const double y, const double z) noexcept{
     auto translationMatrix = Matrix<4,4>::identity();
     
     translationMatrix.at(0,0) = x;
@@ -23,7 +23,7 @@ namespace transformations{
     return translationMatrix;
   }
 
-  Matrix<4,4> rotation_x(double rads){
+  Matrix<4,4> rotation_x(const double rads) noexcept{
     auto rotationMatrix = Matrix<4,4>::identity();
 
     rotationMatrix.at(1,1) =  std::cos(rads);
@@ -32,7 +32,7 @@ namespace transformations{
     rotationMatrix.at(2,2) =  std::cos(rads);
     return rotationMatrix;
   }
-  Matrix<4,4> rotation_y(double rads){
+  Matrix<4,4> rotation_y(const double rads) noexcept{
     auto rotationMatrix = Matrix<4,4>::identity();
 
     rotationMatrix.at(0,0) =  std::cos(rads);
@@ -41,7 +41,7 @@ namespace transformations{
     rotationMatrix.at(2,2) =  std::cos(rads);
     return rotationMatrix;
   }
-  Matrix<4,4> rotation_z(double rads){
+  Matrix<4,4> rotation_z(const double rads) noexcept{
     auto rotationMatrix = Matrix<4,4>::identity();
 
     rotationMatrix.at(0,0) =  std::cos(rads);
@@ -51,9 +51,9 @@ namespace transformations{
     return rotationMatrix;
   }
 
-  Matrix<4,4> shearing(double x_y, double x_z, 
-                      double y_x, double y_z,
-                      double z_x, double z_y){
+  Matrix<4,4> shearing(const double x_y, const double x_z, 
+                       const double y_x, const double y_z,
+                       const double z_x, const double z_y) noexcept{
     auto shearingMatrix = Matrix<4,4>::identity();
 
     shearingMatrix.at(0,1) =  x_y;
@@ -66,7 +66,7 @@ namespace transformations{
     return shearingMatrix;
   }
 
-  Matrix<4,4> view_transform(const Tuple& from, const Tuple& to, const Tuple& up){
+  Matrix<4,4> view_transform(const Tuple& from, const Tuple& to, const Tuple& up) noexcept{
     // https://learnopengl.com/Getting-started/Camera has a nice explanation of the code
 
     const auto forwardVector = (to - from).normalize();

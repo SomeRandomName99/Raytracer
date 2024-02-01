@@ -11,20 +11,20 @@ namespace raytracer {
 
 class Canvas{
 public:
-  Canvas(size_t width_, size_t height_);
+  Canvas(size_t width_, size_t height_) noexcept;
 
-  size_t pixelIndex(size_t x, size_t y) const; // helper to turn 2d index into 1d
-  const utility::Color& pixelAt(size_t x, size_t y) const;
-  void pixelWrite(const utility::Color& color, size_t x, size_t y);
+  size_t pixelIndex(size_t x, size_t y) const noexcept; // helper to turn 2d index into 1d
+  const utility::Color& pixelAt(size_t x, size_t y) const noexcept;
+  void pixelWrite(const utility::Color& color, size_t x, size_t y) noexcept;
 
-  void canvasToPPM(std::ostream& outputStream) const;
+  void canvasToPPM(std::ostream& outputStream) const noexcept;
 private:
-  void PPMHeader(std::ostream& outputStream) const;
-  void PPMData(std::ostream& outputStream) const;
-  inline unsigned int convertColor(const double& colorComponent) const;
-  size_t ColorComponentToPPM(const double& colorComponent, std::ostream& outputStream, size_t rowLineLen) const;
-  size_t pixelToPPM(utility::Color const& pixel, std::ostream& outputStream, size_t rowLineLen) const;
-  std::string rowToPPM(size_t rowIdx) const;
+  void PPMHeader(std::ostream& outputStream) const noexcept;
+  void PPMData(std::ostream& outputStream) const noexcept;
+  inline unsigned int convertColor(const double& colorComponent) const noexcept;
+  size_t ColorComponentToPPM(const double& colorComponent, std::ostream& outputStream, size_t rowLineLen) const noexcept;
+  size_t pixelToPPM(utility::Color const& pixel, std::ostream& outputStream, size_t rowLineLen) const noexcept;
+  std::string rowToPPM(size_t rowIdx) const noexcept;
 
 public:
   size_t width;

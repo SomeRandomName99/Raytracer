@@ -6,7 +6,7 @@ namespace raytracer {
 namespace scene {
 
 utility::Color lighting(const material::Material& material, const PointLight& light, const utility::Tuple& point, 
-                        const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow){
+                        const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow) noexcept{
   // combine the surface color with the light's color/intensity
   const auto effectiveColor = material.surfaceColor_ * light.intensity_;
 

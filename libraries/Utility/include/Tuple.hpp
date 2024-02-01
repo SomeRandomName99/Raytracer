@@ -9,41 +9,41 @@ namespace utility {
 
 class Tuple {
 public:
-    explicit Tuple(double x, double y, double z, double w): data{x,y,z,w}{};
-    Tuple() = default;
+    explicit Tuple(const double x, const double y, const double z, double w) noexcept: data{x,y,z,w}{};
+    Tuple() noexcept = default;
 
-    bool isVector() const;
-    bool isPoint() const;
+    bool isVector() const noexcept;
+    bool isPoint() const noexcept;
 
-    bool operator==(const Tuple& rhs)  const;
-    Tuple operator+(const Tuple& rhs)  const;
-    Tuple operator-(const Tuple& rhs)  const;
-    Tuple operator*(const double& rhs) const;
-    Tuple operator/(const double& rhs) const;
-    Tuple operator-() const;
+    bool operator==(const Tuple& rhs) const noexcept;
+    Tuple operator+(const Tuple& rhs) const noexcept;
+    Tuple operator-(const Tuple& rhs) const noexcept;
+    Tuple operator*(const double& rhs) const noexcept;
+    Tuple operator/(const double& rhs) const noexcept;
+    Tuple operator-() const noexcept;
 
-    double magnitude() const;
-    Tuple normalize() const;
+    double magnitude() const noexcept;
+    Tuple normalize() const noexcept;
 
-    double dot(const Tuple& rhs) const;
-    Tuple cross(const Tuple& rhs) const;
-    Tuple reflect(const Tuple& reflect) const;
+    double dot(const Tuple& rhs) const noexcept;
+    Tuple cross(const Tuple& rhs) const noexcept;
+    Tuple reflect(const Tuple& reflect) const noexcept;
+
+    const double& x() const noexcept;
+    double& x() noexcept;
+    const double& y() const noexcept;
+    double& y() noexcept;
+    const double& z() const noexcept;
+    double& z() noexcept;
+    const double& w() const noexcept;
+    double& w() noexcept;
     
-    const double& x() const;
-    double& x();
-    const double& y() const;
-    double& y();
-    const double& z() const;
-    double& z();
-    const double& w() const;
-    double& w();
-
     std::array<double, 4> data;
 };
-Tuple Point(double x,double y, double z);
-Tuple Vector(double x,double y, double z);
+Tuple Point(const double x, const double y, const double z) noexcept;
+Tuple Vector(const double x, const double y, const double z) noexcept;
 
-std::ostream& operator<<(std::ostream& os, const Tuple& rhs);
+std::ostream& operator<<(std::ostream& os, const Tuple& rhs) noexcept;
 
 } // namespace utility
 } // namespace raytracer

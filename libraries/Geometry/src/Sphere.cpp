@@ -7,15 +7,15 @@ namespace geometry {
 
 std::atomic<size_t> Sphere::ID = 0;
 
-bool Sphere::operator==(const Sphere& other) const{
+bool Sphere::operator==(const Sphere& other) const noexcept{
   return this->id_ == other.id_;
 }
 
-void Sphere::setTransform(const utility::Matrix<4,4> &transformation){
+void Sphere::setTransform(const utility::Matrix<4,4> &transformation) noexcept{
   this->transformation_ = transformation;
 }
 
-std::vector<Intersection> Sphere::intersect(const utility::Ray& ray) const {
+std::vector<Intersection> Sphere::intersect(const utility::Ray& ray) const noexcept{
   // For now we assume that the sphere is always at the origin
   const auto transformedRay    = utility::transform(ray, inverse(this->transformation_));
   const auto SphereCenterToRay = transformedRay.origin_ - utility::Point(0, 0, 0);
@@ -35,7 +35,7 @@ std::vector<Intersection> Sphere::intersect(const utility::Ray& ray) const {
                                    Intersection{dist2, std::make_shared<Sphere>(*this)}};
 }
 
-utility::Tuple Sphere::normalAt(const utility::Tuple &worldPoint) const{
+utility::Tuple Sphere::normalAt(const utility::Tuple &worldPoint) const noexcept{
   utility::Tuple objectPoint  = inverse(this->transformation_) * worldPoint;
   utility::Tuple objectNormal = objectPoint - utility::Point(0, 0, 0);
   // This is needed because the normal utility::Vector is a linear form, see below:

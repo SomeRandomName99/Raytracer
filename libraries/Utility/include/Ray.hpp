@@ -9,17 +9,17 @@ namespace utility {
 
 class Ray {
 public: 
-  Ray(Tuple origin, Tuple direction)
+  Ray(Tuple origin, Tuple direction) noexcept
       : origin_{origin}, direction_{direction} {}
 
-  Tuple position(const double time) const;
+  Tuple position(const double time) const noexcept;
 
   Tuple origin_;
   Tuple direction_;
 };
 
 
-Ray transform(const Ray &ray, const Matrix<4,4> &transformation);
+Ray transform(const Ray &ray, const Matrix<4,4> &transformation) noexcept;
 
 } // namespace utility
 } // namespace raytracer

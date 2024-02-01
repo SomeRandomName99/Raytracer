@@ -20,40 +20,40 @@ private:
   std::array<double, rows*cols> elements;
 public:
   template<typename... T>
-  explicit Matrix(T... data): elements{data...}{};
+  explicit Matrix(T... data) noexcept: elements{data...}{};
 
-  bool operator==(const Matrix& rhs) const;
+  bool operator==(const Matrix& rhs) const noexcept;
 
-  const double& at(const std::size_t& row, const std::size_t& column) const;
-  double& at(const std::size_t& row, const std::size_t& column);
+  const double& at(const std::size_t& row, const std::size_t& column) const noexcept;
+  double& at(const std::size_t& row, const std::size_t& column) noexcept;
 
-  static Matrix<rows, cols> identity();
+  static Matrix<rows, cols> identity() noexcept;
 
-  Matrix<rows, cols>& operator*=(const Matrix<rows, cols>& rhs);
-  Matrix<rows, cols> transpose() const;
-  double determinant() const;
-  bool invertible() const;
+  Matrix<rows, cols>& operator*=(const Matrix<rows, cols>& rhs) noexcept;
+  Matrix<rows, cols> transpose() const noexcept;
+  double determinant() const noexcept;
+  bool invertible() const noexcept;
 };
 
 template <uint8_t rows, uint8_t cols>
-const double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column) const{
+const double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column) const noexcept{
   return elements.at(row*cols+column);
 }
 
 template <uint8_t rows, uint8_t cols> 
-double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column){
+double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column) noexcept{
   return const_cast<double&>(const_cast<const Matrix*>(this)->at(row, column));
 }
 
 template <uint8_t rows, uint8_t cols> 
-bool Matrix<rows, cols>::operator==(const Matrix& rhs) const{
+bool Matrix<rows, cols>::operator==(const Matrix& rhs) const noexcept{
   return std::equal(this->elements.cbegin(), this->elements.cend(),
                     rhs.elements.cbegin()  , rhs.elements.cend(), 
                     floatNearlyEqual<double>);
 }
 
 template <uint8_t rows, uint8_t cols> 
-  Matrix<rows, cols>& Matrix<rows, cols>::operator*=(const Matrix<rows, cols>& rhs){
+  Matrix<rows, cols>& Matrix<rows, cols>::operator*=(const Matrix<rows, cols>& rhs) noexcept{
     Matrix<rows,cols>results{};
 
     for(std::size_t rowIndex{0}; rowIndex < rows; rowIndex++){
@@ -68,7 +68,7 @@ template <uint8_t rows, uint8_t cols>
   }
 
 template <uint8_t rows, uint8_t cols> 
-inline Matrix<rows, cols> operator*(Matrix<rows, cols> lhs, const Matrix<rows, cols>& rhs)
+inline Matrix<rows, cols> operator*(Matrix<rows, cols> lhs, const Matrix<rows, cols>& rhs) noexcept
 {
   lhs *= rhs;
   return lhs;
@@ -76,7 +76,7 @@ inline Matrix<rows, cols> operator*(Matrix<rows, cols> lhs, const Matrix<rows, c
 
 template <uint8_t rows, uint8_t cols>
 typename std::enable_if<rows==4, Tuple>::type
-operator*(const Matrix<rows, cols>& lhs, const Tuple& rhs){
+operator*(const Matrix<rows, cols>& lhs, const Tuple& rhs) noexcept{
   Tuple result{
     Tuple{lhs.at(0, 0), lhs.at(0, 1), lhs.at(0, 2), lhs.at(0, 3)}.dot(rhs),
     Tuple{lhs.at(1, 0), lhs.at(1, 1), lhs.at(1, 2), lhs.at(1, 3)}.dot(rhs),
@@ -88,7 +88,7 @@ operator*(const Matrix<rows, cols>& lhs, const Tuple& rhs){
 }
 
 template <uint8_t rows, uint8_t cols> 
-std::ostream& operator<<(std::ostream& os, const Matrix<rows, cols>& rhs) {
+std::ostream& operator<<(std::ostream& os, const Matrix<rows, cols>& rhs) noexcept {
   for(std::size_t rowIndex{0}; rowIndex < rows; rowIndex++){
     for(std::size_t colIndex{0}; colIndex < cols; colIndex++){
       std::cout << ' ' << rhs.at(rowIndex, colIndex) << ' ';
@@ -100,7 +100,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix<rows, cols>& rhs) {
 }
 
 template<>
-inline Matrix<4,4> Matrix<4,4>::identity(){
+inline Matrix<4,4> Matrix<4,4>::identity() noexcept{
   return Matrix<4, 4>{
         1., 0., 0., 0. ,
         0., 1., 0., 0. ,
@@ -109,7 +109,7 @@ inline Matrix<4,4> Matrix<4,4>::identity(){
 }
 
 template <uint8_t rows, uint8_t cols>
-Matrix<rows, cols> Matrix<rows, cols>::transpose() const{
+Matrix<rows, cols> Matrix<rows, cols>::transpose() const noexcept{
   Matrix<rows, cols> result{};
 
   for(std::size_t rowIndex{0}; rowIndex < rows; rowIndex++){
@@ -122,21 +122,21 @@ Matrix<rows, cols> Matrix<rows, cols>::transpose() const{
 }
 
 template<>
-inline double Matrix<1,1>::determinant() const{
+inline double Matrix<1,1>::determinant() const noexcept{
   auto determinant = this->at(0,0);
 
   return determinant;
 }
 
 template<>
-inline double Matrix<2,2>::determinant() const{
+inline double Matrix<2,2>::determinant() const noexcept{
   auto determinant = this->at(0,0)*this->at(1,1) - this->at(0,1)*this->at(1,0);
 
   return determinant;
 }
 
 template <uint8_t rows, uint8_t cols>
-double Matrix<rows,cols>::determinant() const{
+double Matrix<rows,cols>::determinant() const noexcept{
   double determinant{};
 
   for(std::size_t colIndex{0}; colIndex < cols; colIndex++){
@@ -148,7 +148,7 @@ double Matrix<rows,cols>::determinant() const{
 
 template <uint8_t rows, uint8_t cols>
 typename std::enable_if<(rows>2 && cols>2), Matrix<rows-1, cols-1>>::type
-submatrix(const Matrix<rows, cols>& matrix, const std::size_t& skipRow, const std::size_t& skipColumn) {
+submatrix(const Matrix<rows, cols>& matrix, const std::size_t& skipRow, const std::size_t& skipColumn) noexcept {
   Matrix<rows-1, cols-1> result{};
 
   std::size_t resultRowIndex{};
@@ -167,27 +167,27 @@ submatrix(const Matrix<rows, cols>& matrix, const std::size_t& skipRow, const st
 }
 
 template<uint8_t rows, uint8_t cols>
-double minor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column){
+double minor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column) noexcept{
     auto subMatrix =  submatrix(matrix, row, column);
     return subMatrix.determinant();  
 }
 
 template<uint8_t rows, uint8_t cols>
-inline double cofactor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column){
+inline double cofactor(const Matrix<rows, cols>& matrix, const std::size_t& row, const std::size_t& column) noexcept{
   double cofactor = (row+column)%2 ? -1*minor(matrix, row, column) : minor(matrix, row, column);
 
   return cofactor;
 }
 
 template<uint8_t rows, uint8_t cols>
-bool Matrix<rows, cols>::invertible() const{
+bool Matrix<rows, cols>::invertible() const noexcept{
   if(this->determinant() != 0){return true;}
   else{return false;}
 }
 
 template<uint8_t rows, uint8_t cols>
 typename std::enable_if<(rows>=2 && cols>=2), Matrix<rows, cols>>::type
-inverse(const Matrix<rows, cols>& matrix){
+inverse(const Matrix<rows, cols>& matrix) noexcept{
   Matrix<rows, cols> result{};
   auto determinant = matrix.determinant();
 

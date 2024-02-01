@@ -9,7 +9,7 @@ namespace scene {
 class Camera {
 public:
 
-Camera(unsigned int numHorPixels, unsigned int numVerPixels, double fov)
+Camera(unsigned int numHorPixels, unsigned int numVerPixels, double fov) noexcept
     : numHorPixels_{numHorPixels}, numVerPixels_{numVerPixels}, fov_{fov}, transform_{utility::Matrix<4,4>::identity()} {
       // Imagine a triangle made from the camera to the canvas(1 unit away), the angle of which it the fov.
       // We calculate the half width because we can make a right angle triangle with adjacent = 1 and angle = fov/2.
@@ -36,7 +36,7 @@ Camera(unsigned int numHorPixels, unsigned int numVerPixels, double fov)
  * \param y The y-coordinate of the pixel.
  * \return The ray corresponding to the given pixel.
  */
-utility::Ray rayForPixel(const unsigned int x, const unsigned int y) const;
+utility::Ray rayForPixel(const unsigned int x, const unsigned int y) const noexcept;
 
 /**
  * Renders the scene using the specified camera and world.
@@ -44,7 +44,7 @@ utility::Ray rayForPixel(const unsigned int x, const unsigned int y) const;
  * @param world The world containing the objects and lights in the scene.
  * @return The rendered image as a Canvas object.
  */
-Canvas render(const World& world);
+Canvas render(const World& world) noexcept;
 
 unsigned int numHorPixels_;
 unsigned int numVerPixels_;

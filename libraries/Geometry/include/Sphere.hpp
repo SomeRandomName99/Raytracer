@@ -19,9 +19,9 @@ class Intersection;
 class Sphere
 {
 public:
-Sphere(): id_{ID++}, transformation_{utility::Matrix<4,4>::identity()}{}
-bool operator==(Sphere const& other) const;
-void setTransform(const utility::Matrix<4,4> &transformation);
+Sphere() noexcept: id_{ID++}, transformation_{utility::Matrix<4,4>::identity()}{}
+bool operator==(Sphere const& other) const noexcept;
+void setTransform(const utility::Matrix<4,4> &transformation) noexcept;
 
 /**
  * Calculates the normal vector at a given point on the sphere.
@@ -29,7 +29,7 @@ void setTransform(const utility::Matrix<4,4> &transformation);
  * @param point The point on the sphere.
  * @return The normal vector at the given point.
  */
-utility::Tuple normalAt(const utility::Tuple &point) const;
+utility::Tuple normalAt(const utility::Tuple &point) const noexcept;
 
 /**
  * @brief Function to calculate the intersections between a ray and a sphere.
@@ -37,7 +37,7 @@ utility::Tuple normalAt(const utility::Tuple &point) const;
  * @param ray The ray to intersect with the sphere.
  * @return A vector of Intersection objects representing the intersections between the ray and the sphere.
  */
-std::vector<Intersection> intersect(const utility::Ray& ray) const;
+std::vector<Intersection> intersect(const utility::Ray& ray) const noexcept;
 
 std::size_t id_;
 double radius_;

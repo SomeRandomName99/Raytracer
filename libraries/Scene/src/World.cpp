@@ -4,7 +4,7 @@
 namespace raytracer {
 namespace scene {
 
-std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) const{
+std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) const noexcept{
   std::vector<geometry::Intersection> intersections;
   for(const auto& object : objects_){
     const auto objectIntersections = object->intersect(ray);
@@ -14,7 +14,7 @@ std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) co
   return intersections;
 }
 
-utility::Color World::shadeHit(const geometry::Computations& comps) const{
+utility::Color World::shadeHit(const geometry::Computations& comps) const noexcept{
   auto color = utility::Color{0,0,0};
   for(const auto& light : this->lights_) {
     color += scene::lighting(comps.object->material_, light, comps.point, comps.eyeVector, 
@@ -23,14 +23,14 @@ utility::Color World::shadeHit(const geometry::Computations& comps) const{
   return color;
 }
 
-utility::Color World::colorAt(const utility::Ray& ray) const{
+utility::Color World::colorAt(const utility::Ray& ray) const noexcept{
   const auto intersections          = this->intersect(ray);
   if (intersections.empty()) return utility::Color{0,0,0};
   const auto intersect_computations = geometry::hit(intersections)->prepareComputations(ray);
   return this->shadeHit(intersect_computations);
 }
 
-bool World::isShadowed(const PointLight& light, const utility::Tuple& point) const{
+bool World::isShadowed(const PointLight& light, const utility::Tuple& point) const noexcept{
   const auto pointToLightVector = light.position_ - point;
   const auto pointToLightDistance = pointToLightVector.magnitude();
   const auto pointToLightDirection = pointToLightVector.normalize();
@@ -41,7 +41,7 @@ bool World::isShadowed(const PointLight& light, const utility::Tuple& point) con
   return hit && (hit->dist_ < pointToLightDistance);
 }
 
-World defaultWorld(){
+World defaultWorld() noexcept{
   World world;
 
   const auto light = scene::PointLight{utility::Color{1,1,1}, utility::Point(-10,10,-10)};
