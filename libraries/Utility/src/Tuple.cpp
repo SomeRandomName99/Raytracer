@@ -1,5 +1,8 @@
 #include <cmath>
 #include <ostream>
+#include <ranges>
+#include <numeric>
+#include <execution>
 
 #include "Tuple.hpp"
 #include "FloatAlmostEquals.hpp"
@@ -46,8 +49,8 @@ Tuple Tuple::operator-() const noexcept{
 }
 
 double Tuple::magnitude() const noexcept{
-  auto sumSquared = this->x()*this->x() + this->y()*this->y() +
-                    this->z()*this->z() + this->w()*this->w();
+  auto sumSquared = std::transform_reduce(std::execution::unseq, this->data.cbegin(), this->data.cend(), 
+                                          0.0, std::plus<>(), [](const auto& val){return val*val;});
   return std::sqrt(sumSquared);
 }
 
@@ -56,9 +59,8 @@ Tuple Tuple::normalize() const noexcept{
 }
 
 double Tuple::dot(const Tuple& rhs) const noexcept{
-  auto multAndACum = this->x()*rhs.x() + this->y()*rhs.y() +
-                     this->z()*rhs.z() + this->w()*rhs.w();
-  return multAndACum;
+  return std::transform_reduce(std::execution::unseq, this->data.cbegin(), this->data.cend(), 
+                               rhs.data.cbegin(), 0.0, std::plus<>(), std::multiplies<>());
 }
 
 Tuple Tuple::cross(const Tuple& rhs) const noexcept{

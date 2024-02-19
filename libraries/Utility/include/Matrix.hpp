@@ -37,7 +37,7 @@ public:
 
 template <uint8_t rows, uint8_t cols>
 inline const double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column) const noexcept{
-  return elements.at(row*cols+column);
+  return elements[row*cols+column];
 }
 
 template <uint8_t rows, uint8_t cols> 
