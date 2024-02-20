@@ -10,7 +10,7 @@ namespace utility {
 class Tuple {
 public:
     explicit Tuple(const double x, const double y, const double z, double w) noexcept: data{x,y,z,w}{};
-    Tuple() noexcept = default;
+    explicit Tuple() noexcept = default;
 
     bool isVector() const noexcept;
     bool isPoint() const noexcept;

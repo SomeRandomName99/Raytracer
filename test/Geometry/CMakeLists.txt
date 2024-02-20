@@ -3,4 +3,5 @@ target_sources(
   PRIVATE
     IntersectionsTests.cpp 
     SphereTests.cpp 
+    ShapeTests.cpp
 )

@@ -11,6 +11,7 @@ class Ray {
 public: 
   Ray(Tuple origin, Tuple direction) noexcept
       : origin_{origin}, direction_{direction} {}
+  explicit Ray() noexcept = default;
 
   Tuple position(const double time) const noexcept;
 
