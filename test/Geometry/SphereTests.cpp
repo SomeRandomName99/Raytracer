@@ -13,27 +13,27 @@ using namespace utility;
 /* =========== Intersection tests =========== */
 TEST(sphere_tests, raySphereInterSectionAtTwoPoints) {
   const auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  const auto s = geometry::Sphere();
+  auto s = geometry::Sphere();
   const auto xs = s.intersect(r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).dist_, 4.0);
-  EXPECT_FLOAT_EQ(xs.at(1).dist_, 6.0);
+  EXPECT_FLOAT_EQ(xs.at(0).dist, 4.0);
+  EXPECT_FLOAT_EQ(xs.at(1).dist, 6.0);
 }
 
 TEST(sphere_tests, raySphereInterSectionAtATangent) {
   const auto r = Ray(Point(0, 1, -5), Vector(0, 0, 1));
-  const auto s = geometry::Sphere();
+  auto s = geometry::Sphere();
   const auto xs = s.intersect(r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).dist_, 5.0);
-  EXPECT_FLOAT_EQ(xs.at(1).dist_, 5.0);
+  EXPECT_FLOAT_EQ(xs.at(0).dist, 5.0);
+  EXPECT_FLOAT_EQ(xs.at(1).dist, 5.0);
 }
 
 TEST(sphere_tests, rayMissesSphere) {
   const auto r = Ray(Point(0, 2, -5), Vector(0, 0, 1));
-  const auto s = geometry::Sphere();
+  auto s = geometry::Sphere();
   const auto xs = s.intersect(r);
 
   EXPECT_EQ(0, xs.size());
@@ -41,32 +41,32 @@ TEST(sphere_tests, rayMissesSphere) {
 
 TEST(sphere_tests, rayOriginatesInsideSphere) {
   const auto r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
-  const auto s = geometry::Sphere();
+  auto s = geometry::Sphere();
   const auto xs = s.intersect(r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).dist_, -1.0);
-  EXPECT_FLOAT_EQ(xs.at(1).dist_,  1.0);
+  EXPECT_FLOAT_EQ(xs.at(0).dist, -1.0);
+  EXPECT_FLOAT_EQ(xs.at(1).dist,  1.0);
 }
 
 TEST(sphere_tests, sphereBehindRay) {
   const auto r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
-  const auto s = geometry::Sphere();
+  auto s = geometry::Sphere();
   const auto xs = s.intersect(r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).dist_, -6.0);
-  EXPECT_FLOAT_EQ(xs.at(1).dist_, -4.0);
+  EXPECT_FLOAT_EQ(xs.at(0).dist, -6.0);
+  EXPECT_FLOAT_EQ(xs.at(1).dist, -4.0);
 }
 
-TEST(sphere_tests, setObjectOnIntersection) {
+TEST(sphere_tests, setMaterialOnIntersection) {
   const auto r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
-  const auto s = geometry::Sphere();
+  auto s = geometry::Sphere();
   const auto xs = s.intersect(r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_TRUE(*xs.at(0).object_ == s);
-  EXPECT_TRUE(*xs.at(1).object_ == s);
+  EXPECT_TRUE(*xs.at(0).material == s.material_);
+  EXPECT_TRUE(*xs.at(1).material == s.material_);
 }
 
 TEST(sphere_tests, IntersectingScaledSphereWithRay) {
@@ -76,8 +76,8 @@ TEST(sphere_tests, IntersectingScaledSphereWithRay) {
   const auto xs = s.intersect(r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_EQ(xs.at(0).dist_, 3);
-  EXPECT_EQ(xs.at(1).dist_, 7);
+  EXPECT_EQ(xs.at(0).dist, 3);
+  EXPECT_EQ(xs.at(1).dist, 7);
 }
 
 TEST(sphere_tests, IntersectingTranslatedSphereWithRay) {
