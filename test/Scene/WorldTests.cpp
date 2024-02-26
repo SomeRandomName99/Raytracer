@@ -30,8 +30,8 @@ protected:
     this->s2.radius_ = 0.5;
 
     this->world.lights_.push_back(this->light);
-    this->world.objects_.push_back(std::make_shared<geometry::Sphere>(this->s1));
-    this->world.objects_.push_back(std::make_shared<geometry::Sphere>(this->s2));
+    this->world.objects_.emplace_back(this->s1);
+    this->world.objects_.emplace_back(this->s2);
   }
 
   const scene::PointLight light{utility::Color(1,1,1), utility::Point(-10,10,-10)};
@@ -47,18 +47,18 @@ TEST_F(defaultWorldTests, intersectWorldWithRay){
 
   const auto xs = world.intersect(r);
   EXPECT_EQ(xs.size(), 4);
-  EXPECT_EQ(xs[0].dist_, 4);
-  EXPECT_EQ(xs[1].dist_, 4.5);
-  EXPECT_EQ(xs[2].dist_, 5.5);
-  EXPECT_EQ(xs[3].dist_, 6);
+  EXPECT_EQ(xs[0].dist, 4);
+  EXPECT_EQ(xs[1].dist, 4.5);
+  EXPECT_EQ(xs[2].dist, 5.5);
+  EXPECT_EQ(xs[3].dist, 6);
 }
 
 /* =========== Shading Tests =========== */
 TEST_F(defaultWorldTests, ShadingIntersection) {
   const auto r = utility::Ray(utility::Point(0,0,-5), utility::Vector(0,0,1));
   const auto shape = world.objects_.front();
-  const auto i = geometry::Intersection(4, shape);
-  const auto comps = i.prepareComputations(r);
+  const auto i = geometry::Intersection(shape.normalAt(r.position(4)), &shape.material(), 4);
+  const auto comps = prepareComputations(i, r);
   const auto c = world.shadeHit(comps);
 
   EXPECT_EQ(c, utility::Color(0.380661189, 0.475826486, 0.28549589));
@@ -68,8 +68,8 @@ TEST_F(defaultWorldTests, ShadingIntersectionInside) {
   world.lights_.at(0).position_ = utility::Point(0,0.25,0);
   const auto r = utility::Ray(utility::Point(0,0,0), utility::Vector(0,0,1));
   const auto shape = world.objects_.back();
-  const auto i = geometry::Intersection(0.5, shape);
-  const auto comps = i.prepareComputations(r);
+  const auto i = geometry::Intersection( shape.normalAt(r.position(0.5)), &shape.material(), 0.5);
+  const auto comps = prepareComputations(i, r);
   const auto c = world.shadeHit(comps);
 
   EXPECT_EQ(c, utility::Color(0.904984452, 0.904984452, 0.904984452));
@@ -90,14 +90,14 @@ TEST_F(defaultWorldTests, RayHits) {
 }
 
 TEST_F(defaultWorldTests, IntersectionBehindRay) {
-  const auto outer = world.objects_.front();
-  outer->material_.ambient_ = 1;
-  const auto inner = world.objects_.back();
-  inner->material_.ambient_ = 1;
+  auto &outer = world.objects_.front();
+  outer.material().ambient_ = 1;
+  auto &inner = world.objects_.back();
+  inner.material().ambient_ = 1;
   const auto r = utility::Ray(utility::Point(0,0,0.75), utility::Vector(0,0,-1));
   const auto c = world.colorAt(r);
 
-  EXPECT_EQ(c, inner->material_.surfaceColor_);
+  EXPECT_EQ(c, inner.material().surfaceColor_);
 }
 
 // =================== Shadow Tests ===================
@@ -133,13 +133,13 @@ TEST(world_shadow_tests, ShadeHitWithShadow){
   // World setup
   scene::World world{};
   world.lights_.emplace_back(scene::PointLight{utility::Color{1,1,1}, utility::Point(0,0,-10)});
-  world.objects_.emplace_back(std::make_shared<geometry::Sphere>());
-  world.objects_.emplace_back(std::make_shared<geometry::Sphere>());
-  world.objects_.at(1)->setTransform(utility::transformations::translation(0,0,10));
+  world.objects_.emplace_back(geometry::Sphere{});
+  world.objects_.emplace_back(geometry::Sphere{});
+  world.objects_.at(1).setTransform(utility::transformations::translation(0,0,10));
 
   utility::Ray ray{utility::Point(0,0,5), utility::Vector(0,0,1)};
-  const auto intersection = geometry::Intersection(4, world.objects_.at(1));
-  const auto computation  = intersection.prepareComputations(ray);
+  const auto intersection = geometry::Intersection( world.objects_.at(1).normalAt(ray.position(4)), &world.objects_.at(1).material(), 4);
+  const auto computation  = prepareComputations(intersection, ray);
 
   const auto color = world.shadeHit(computation);
   EXPECT_EQ(color, utility::Color(0.1,0.1,0.1));
@@ -147,10 +147,10 @@ TEST(world_shadow_tests, ShadeHitWithShadow){
 
 TEST(world_shadow_tests, hitOffsetsPointOfIntersection){
   const auto r = utility::Ray(utility::Point(0,0,-5), utility::Vector(0,0,1));
-  const auto shape = std::make_shared<geometry::Sphere>();
-  shape->setTransform(utility::transformations::translation(0,0,1));
-  const auto i = geometry::Intersection(5, shape);
-  const auto comps = i.prepareComputations(r);
+  auto shape = geometry::Sphere();
+  shape.setTransform(utility::transformations::translation(0,0,1));
+  const auto i = geometry::Intersection( shape.normalAt(r.position(5)), &shape.material(), 5);
+  const auto comps = prepareComputations(i, r);
 
   EXPECT_LT(comps.overPoint.z(), -SHADOW_OFFSET / 2);
   EXPECT_GT(comps.point.z(), comps.overPoint.z());

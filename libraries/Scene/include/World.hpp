@@ -5,8 +5,10 @@
 #include <memory>
 
 #include "Sphere.hpp"
+#include "Plane.hpp"
 #include "Intersections.hpp"
 #include "Light.hpp"
+#include "Shape.hpp"
 
 namespace raytracer {
 namespace scene {
@@ -62,7 +64,7 @@ public:
   bool isShadowed(const PointLight& light, const utility::Tuple& point) const noexcept;
 
   std::vector<PointLight> lights_;
-  std::vector<std::shared_ptr<geometry::Sphere>> objects_;
+  std::vector<geometry::Shape> objects_;
 };
 
 World defaultWorld() noexcept;

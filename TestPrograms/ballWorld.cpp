@@ -58,12 +58,12 @@ int main(){
 
   scene::World world;
   world.lights_.push_back(scene::PointLight(utility::Color(1, 1, 1), utility::Point(-10, 10, -10)));
-  world.objects_.push_back(std::make_shared<geometry::Sphere>(floor));
-  world.objects_.push_back(std::make_shared<geometry::Sphere>(leftWall));
-  world.objects_.push_back(std::make_shared<geometry::Sphere>(rightWall));
-  world.objects_.push_back(std::make_shared<geometry::Sphere>(middle));
-  world.objects_.push_back(std::make_shared<geometry::Sphere>(right));
-  world.objects_.push_back(std::make_shared<geometry::Sphere>(left));
+  world.objects_.emplace_back(floor);
+  world.objects_.emplace_back(leftWall);
+  world.objects_.emplace_back(rightWall);
+  world.objects_.emplace_back(middle);
+  world.objects_.emplace_back(right);
+  world.objects_.emplace_back(left);
 
 
   auto camera = scene::Camera(1920, 1080, std::numbers::pi / 3);

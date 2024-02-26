@@ -8,18 +8,18 @@ namespace scene {
 std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) const noexcept{
   std::vector<geometry::Intersection> intersections;
   for(const auto& object : objects_){
-    const auto objectIntersections = object->intersect(ray);
+    const auto objectIntersections = object.intersect(ray);
     intersections.insert(intersections.end(), objectIntersections.begin(), objectIntersections.end());
   }
-  std::ranges::sort(intersections, {}, [](const auto& intersection){ return intersection.dist_; });
+  std::ranges::sort(intersections, {}, [](const auto& intersection){ return intersection.dist; });
   return intersections;
 }
 
 bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) const noexcept{
   for(const auto& object : objects_){
-    const auto objectIntersections = object->intersect(ray);
+    const auto objectIntersections = object.intersect(ray);
     const auto hit = geometry::hit(objectIntersections);
-    if(hit && hit->dist_ > 0.0 && hit->dist_ < distanceToLight){return true;}
+    if(hit && hit->dist > 0.0 && hit->dist < distanceToLight){return true;}
   }
 
   return false;
@@ -29,8 +29,8 @@ bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) con
 utility::Color World::shadeHit(const geometry::Computations& comps) const noexcept{
   auto color = utility::Color{0,0,0};
   for(const auto& light : this->lights_) {
-    color += scene::lighting(comps.object->material_, light, comps.point, comps.eyeVector, 
-                             comps.normalVector, this->isShadowed(light, comps.overPoint));
+    color += scene::lighting(*comps.intersection.material, light, comps.point, comps.eyeVector, 
+                             comps.intersection.normalVector, this->isShadowed(light, comps.overPoint));
   }
   return color;
 }
@@ -38,7 +38,7 @@ utility::Color World::shadeHit(const geometry::Computations& comps) const noexce
 utility::Color World::colorAt(const utility::Ray& ray) const noexcept{
   const auto intersections          = this->intersect(ray);
   if (intersections.empty()) return utility::Color{0,0,0};
-  const auto intersect_computations = geometry::hit(intersections)->prepareComputations(ray);
+  const auto intersect_computations = geometry::prepareComputations(*geometry::hit(intersections), ray);
   return this->shadeHit(intersect_computations);
 }
 
@@ -61,8 +61,8 @@ World defaultWorld() noexcept{
   s1.material_ = material::Material(utility::Color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2);
   auto s2 = geometry::Sphere{};
   s2.setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));
-  world.objects_.push_back(std::make_shared<geometry::Sphere>(s1));
-  world.objects_.push_back(std::make_shared<geometry::Sphere>(s2));
+  world.objects_.emplace_back(s1);
+  world.objects_.emplace_back(s2);
 
   return world;
 }
