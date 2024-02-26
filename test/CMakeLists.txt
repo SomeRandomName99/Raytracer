@@ -3,6 +3,7 @@ set(This Tests)
 add_executable(${This} "")
 target_link_libraries(${This} PUBLIC
   GTest::gtest_main
+  GTest::gmock_main
   Canvas
   Geometry
   Utility
