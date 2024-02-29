@@ -4,4 +4,5 @@ target_sources(
     IntersectionsTests.cpp 
     SphereTests.cpp 
     ShapeTests.cpp
+    PlaneTests.cpp
 )
