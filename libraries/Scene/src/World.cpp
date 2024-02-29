@@ -36,9 +36,9 @@ utility::Color World::shadeHit(const geometry::Computations& comps) const noexce
 }
 
 utility::Color World::colorAt(const utility::Ray& ray) const noexcept{
-  const auto intersections          = this->intersect(ray);
-  if (intersections.empty()) return utility::Color{0,0,0};
-  const auto intersect_computations = geometry::prepareComputations(*geometry::hit(intersections), ray);
+  const auto hit                    = geometry::hit(this->intersect(ray));
+  if (!hit.has_value()) return utility::Color{0,0,0};
+  const auto intersect_computations = geometry::prepareComputations(*hit, ray);
   return this->shadeHit(intersect_computations);
 }
 
