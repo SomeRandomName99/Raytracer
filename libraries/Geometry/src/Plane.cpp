@@ -9,7 +9,7 @@ std::vector<Intersection> Plane::localIntersect(const utility::Ray &transformedR
   }
 
   double t = -transformedRay.origin_.y() / transformedRay.direction_.y();
-  return std::vector<Intersection>{Intersection(localNormalAt(transformedRay.position(t)), &this->material_, t)};
+  return std::vector<Intersection>{Intersection(normalAt(transformedRay.position(t)), &this->material_, t)};
 }
 
 utility::Tuple Plane::localNormalAt([[maybe_unused]]const utility::Tuple &objectPoint) const noexcept {
