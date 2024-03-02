@@ -23,7 +23,7 @@ TEST(world_tests, Creation){
 class defaultWorldTests : public ::testing::Test {
 protected:
   void SetUp() override {
-    this->s1.material_ = material::Material(utility::Color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2);
+    this->s1.material_ = material::Material(utility::Color(0.8, 1.0, 0.6), std::nullopt, 0.1, 0.7, 0.2);
     this->s1.radius_ = 1;
 
     this->s2.setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));

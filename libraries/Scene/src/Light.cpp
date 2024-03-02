@@ -7,8 +7,14 @@ namespace scene {
 
 utility::Color lighting(const material::Material& material, const PointLight& light, const utility::Tuple& point, 
                         const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow) noexcept{
+  utility::Color color;
+  if (material.pattern_.has_value()) {
+    color = stripe_at(material.pattern_.value(), point);
+  } else {
+    color = material.surfaceColor_;
+  }
   // combine the surface color with the light's color/intensity
-  const auto effectiveColor = material.surfaceColor_ * light.intensity_;
+  const auto effectiveColor = color * light.intensity_;
 
   // find the direction to the light source
   const auto lightVector = (light.position_ - point).normalize();

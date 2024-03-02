@@ -4,6 +4,7 @@
 #include "Color.hpp"
 #include "Tuple.hpp"
 #include "Material.hpp"
+#include "Pattern.hpp"
 
 namespace raytracer {
 namespace scene {
