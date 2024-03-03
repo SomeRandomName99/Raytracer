@@ -3,11 +3,12 @@
 
 #include "Color.hpp"
 #include "Tuple.hpp"
-#include "Material.hpp"
-#include "Pattern.hpp"
 
 namespace raytracer {
 namespace scene {
+
+class Shape;
+class Material;
 
 class PointLight{
 public:
@@ -17,7 +18,7 @@ public:
   utility::Tuple position_;
 };
 
-utility::Color lighting(const material::Material& material, const PointLight& light, const utility::Tuple& position, 
+utility::Color lighting(const Material& material, const Shape& object, const PointLight& light, const utility::Tuple& position, 
                         const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow) noexcept;
 
 } // namespace raytracer

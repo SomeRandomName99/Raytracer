@@ -7,8 +7,8 @@
 #include "Sphere.hpp"
 #include "Plane.hpp"
 #include "Intersections.hpp"
-#include "Light.hpp"
 #include "Shape.hpp"
+#include "Light.hpp"
 
 namespace raytracer {
 namespace scene {

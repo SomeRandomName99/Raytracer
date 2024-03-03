@@ -8,13 +8,13 @@
 
 #include "Tuple.hpp"
 #include "Ray.hpp"
-#include "Material.hpp"
 
 constexpr double SHADOW_OFFSET = 1e-6;
 
 namespace raytracer {
 namespace geometry {
-using namespace material;
+
+class Material;
 
 
 /**

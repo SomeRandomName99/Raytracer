@@ -1,11 +1,14 @@
+#include "Pattern.hpp"
 #include "Light.hpp"
+#include "Shape.hpp"
+#include "Material.hpp"
 
 #include <cmath>
 
 namespace raytracer {
 namespace scene {
 
-utility::Color lighting(const material::Material& material, const PointLight& light, const utility::Tuple& point, 
+utility::Color lighting(const material::Material& material, const Shape& object, const PointLight& light, const utility::Tuple& point, 
                         const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow) noexcept{
   utility::Color color;
   if (material.pattern_.has_value()) {

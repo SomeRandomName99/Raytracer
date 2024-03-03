@@ -8,13 +8,14 @@
 #include "Ray.hpp"
 #include "Tuple.hpp"
 #include "Matrix.hpp"
+#include "Plane.hpp"
+#include "Sphere.hpp"
 
 namespace raytracer {
 namespace geometry {
 
 struct Intersection;
-class Plane;
-class Sphere;
+class Material;
 
 /* This class serves as a wrapper around a variant of all the available shapes we have. It serves the purpose of 
    enabling compile time polymorphism by visiting all the shape interface functions. */
