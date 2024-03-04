@@ -7,7 +7,6 @@
 
 #include "Intersections.hpp"
 #include "FloatAlmostEquals.hpp"
-#include "Sphere.hpp"
 
 namespace raytracer {
 namespace geometry {
