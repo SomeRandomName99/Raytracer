@@ -6,6 +6,7 @@
 #include "Color.hpp"
 #include "Matrix.hpp"
 #include "StripePattern.hpp"
+#include "GradientPattern.hpp"
 
 namespace raytracer {
 namespace material {
@@ -14,7 +15,7 @@ namespace material {
    enabling compile time polymorphism by visiting all the pattern interface functions. */
 class Pattern {
 public:
-    using PatternVariant = std::variant<StripePattern>;
+    using PatternVariant = std::variant<StripePattern, GradientPattern>;
 
     Pattern(PatternVariant pattern) noexcept: pattern_{std::move(pattern)} {}
     template <typename PatternType>

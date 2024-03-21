@@ -2,7 +2,8 @@
 #include <gmock/gmock.h>
 
 #include "PatternT.hpp"
-#include "Pattern.hpp"
+#include "StripePattern.hpp"
+#include "GradientPattern.hpp"
 #include "Matrix.hpp"
 #include "Tuple.hpp"
 #include "Transformations.hpp"
@@ -83,4 +84,13 @@ TEST(stripe_pattern_test, stripe_pattern_alternates_in_x) {
   EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(-0.1, 0, 0)));
   EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(-1, 0, 0)));
   EXPECT_EQ(pattern.a, pattern.localPattern_at(Point(-1.1, 0, 0)));
+}
+
+/* =========== Gradient Pattern Tests =========== */
+TEST(gradient_pattern_test, linear_gradient_pattern) {
+  const auto pattern = material::GradientPattern(white, black);
+  EXPECT_EQ(pattern.a, pattern.localPattern_at(Point(0, 0, 0)));
+  EXPECT_EQ(Color(0.75, 0.75, 0.75), pattern.localPattern_at(Point(0.25, 0, 0)));
+  EXPECT_EQ(Color(0.5, 0.5, 0.5), pattern.localPattern_at(Point(0.5, 0, 0)));
+  EXPECT_EQ(Color(0.25, 0.25, 0.25), pattern.localPattern_at(Point(0.75, 0, 0)));
 }
