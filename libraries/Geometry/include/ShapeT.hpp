@@ -39,12 +39,12 @@ public:
     return id_;
   }
 
-  const Material& material() const noexcept {
+  const material::Material& material() const noexcept {
     return material_;
   }
 
-  Material& material() noexcept {
-    return const_cast<Material&>(const_cast<const ShapeT*>(this)->material());
+  material::Material& material() noexcept {
+    return const_cast<material::Material&>(const_cast<const ShapeT*>(this)->material());
   }
 
   /**

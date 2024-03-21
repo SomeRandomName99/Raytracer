@@ -1,20 +1,19 @@
 #include "Pattern.hpp"
 #include "Light.hpp"
-#include "Shape.hpp"
-#include "Material.hpp"
 
 #include <cmath>
 
 namespace raytracer {
 namespace scene {
 
-utility::Color lighting(const material::Material& material, const Shape& object, const PointLight& light, const utility::Tuple& point, 
-                        const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow) noexcept{
+utility::Color lighting(const material::Material& material, const utility::Matrix<4,4>& objectInverseTransformation, 
+                        const PointLight& light, const utility::Tuple& point, const utility::Tuple& eyeVector, 
+                        const utility::Tuple& normalVector, const bool inShadow) noexcept{
   utility::Color color;
-  if (material.pattern_.has_value()) {
-    color = stripe_at(material.pattern_.value(), point);
+  if (material.pattern().has_value()) {
+    color = (*material.pattern()).pattern_at_object(objectInverseTransformation, point);
   } else {
-    color = material.surfaceColor_;
+    color = material.surfaceColor();
   }
   // combine the surface color with the light's color/intensity
   const auto effectiveColor = color * light.intensity_;
@@ -23,7 +22,7 @@ utility::Color lighting(const material::Material& material, const Shape& object,
   const auto lightVector = (light.position_ - point).normalize();
 
   // compute the ambient contribution
-  const auto ambient = effectiveColor * material.ambient_;
+  const auto ambient = effectiveColor * material.ambient();
 
   if (inShadow) {
     return ambient; // specular and diffuse lighting are not relevant if the point is in shadow
@@ -39,7 +38,7 @@ utility::Color lighting(const material::Material& material, const Shape& object,
     specular = utility::Color(0,0,0);
   } else {
     // compute the diffuse contribution
-    diffuse = effectiveColor * material.diffuse_ * lightDotNormal;
+    diffuse = effectiveColor * material.diffuse() * lightDotNormal;
 
     // reflectDotEye represents the cosine of the angle between the reflection vector and the eye vector. A negative number
     // means the light reflects away from the eye.
@@ -49,8 +48,8 @@ utility::Color lighting(const material::Material& material, const Shape& object,
       specular = utility::Color(0,0,0);
     } else {
       // compute the specular contribution
-      auto factor = std::pow(reflectDotEye, material.shininess_);
-      specular = light.intensity_ * material.specular_ * factor;
+      auto factor = std::pow(reflectDotEye, material.shininess());
+      specular = light.intensity_ * material.specular() * factor;
     }
   }
 

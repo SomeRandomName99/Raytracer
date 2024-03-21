@@ -1,23 +1,25 @@
 #include <cmath>
 
 #include "Pattern.hpp"
-#include "Shape.hpp"
 
 namespace raytracer {
 namespace material {
 
-utility::Color stripe_at_object(const StripePattern& pattern, const Shape& object, const utility::Tuple& worldPoint) noexcept{
-  const auto objectPoint  = object.inverseTransformation()* worldPoint;
-  const auto patternPoint = pattern.inverseTransformation()* objectPoint;
-  return stripe_at(pattern, patternPoint);
-}
-
-utility::Color stripe_at(const StripePattern& pattern, const utility::Tuple& point) noexcept{
-  if(static_cast<int>(std::floor(point.x())) % 2 == 0){
-    return pattern.a;
-  } else {
-    return pattern.b;
+struct patternEqualityVisitor {
+  template<typename T>
+  bool operator()(const T& lhs, const T& rhs) const noexcept {
+    return lhs == rhs;
   }
+
+  template<typename T, typename U>
+  bool operator()(const T&, const U&) const noexcept {
+    return false;
+  }
+};
+
+bool operator==(const Pattern& lhs, const Pattern& rhs) noexcept{
+    return lhs.transformation() == rhs.transformation() &&
+           std::visit(patternEqualityVisitor{}, lhs.pattern(), rhs.pattern());
 }
 
 } // namespace material

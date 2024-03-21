@@ -8,13 +8,13 @@
 
 #include "Tuple.hpp"
 #include "Ray.hpp"
+#include "Material.hpp"
+#include "Matrix.hpp"
 
 constexpr double SHADOW_OFFSET = 1e-6;
 
 namespace raytracer {
 namespace geometry {
-
-class Material;
 
 
 /**
@@ -24,7 +24,8 @@ class Material;
 struct Intersection
 {
   utility::Tuple normalVector; 
-  const Material* material;
+  const material::Material* material;
+  const utility::Matrix<4,4>* objectToWorld; ///< The transformation matrix from the object to the world.
   double dist; ///< Distance from the ray origin to the intersection point.
 };
 

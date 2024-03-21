@@ -45,7 +45,7 @@ TEST_F(TestShapeTests, DefaultMaterial) {
 
 TEST_F(TestShapeTests, AssignMaterial) {
   auto m = material::Material();
-  m.ambient_ = 1;
+  m.setAmbient(1);
   s.material_ = m;
 
   EXPECT_TRUE(s.material_ == m);

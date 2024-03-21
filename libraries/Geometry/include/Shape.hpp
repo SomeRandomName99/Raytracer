@@ -39,12 +39,12 @@ public:
             shape_);
   } 
 
-  const Material& material() const noexcept {
+  const material::Material& material() const noexcept {
     return std::visit([](auto &s) -> auto const &
                       { return s.material(); }, 
             shape_);
   }
-  Material& material() noexcept {
+  material::Material& material() noexcept {
     return std::visit([](auto &s)  -> auto &
                       { return s.material(); }, 
                       shape_);

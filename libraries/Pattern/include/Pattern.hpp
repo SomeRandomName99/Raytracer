@@ -1,35 +1,56 @@
 #ifndef PATTERNS_HPP
 #define PATTERNS_HPP
 
+#include <variant>
+
 #include "Color.hpp"
 #include "Matrix.hpp"
+#include "StripePattern.hpp"
 
 namespace raytracer {
 namespace material {
 
-class Shape;
-
-class StripePattern{
+/* This class serves as a wrapper around a variant of all the available patterns we have. It serves the purpose of 
+   enabling compile time polymorphism by visiting all the pattern interface functions. */
+class Pattern {
 public:
-    StripePattern(utility::Color a, utility::Color b) : a{a}, b{b}, transformation{utility::Matrix<4,4>::identity()},
-                                                        inverseTransformation{utility::Matrix<4,4>::identity()}{}
-    const utility::Matrix<4, 4>& transform() const noexcept { return transformation; }
-    const utility::Matrix<4, 4>& inverseTransform() const noexcept { return inverseTransformation; }
-    void setTransform(const utility::Matrix<4, 4>& transform) noexcept {
-        transformation = transform;
-        inverseTransformation = inverse(transformation);
+    using PatternVariant = std::variant<StripePattern>;
+
+    Pattern(PatternVariant pattern) noexcept: pattern_{std::move(pattern)} {}
+    template <typename PatternType>
+    Pattern(const PatternType& pattern) noexcept: pattern_{PatternVariant{pattern}} {}
+    
+    void setTransform(const utility::Matrix<4,4> &transformation) noexcept {
+        std::visit([transformation](auto &p) { p.setTransform(transformation); }, pattern_);
+    }
+    
+    const utility::Matrix<4,4>& transformation() const noexcept {
+        return std::visit([&](auto &p) -> auto const &
+                        { return p.transformation(); },
+                pattern_);
+    }
+    
+    const utility::Matrix<4,4>& inverseTransform() const noexcept {
+        return std::visit([&](auto &p) -> auto const &
+                        { return p.inverseTransform(); },
+                pattern_);
+    } 
+
+    PatternVariant pattern() const noexcept {
+        return pattern_;
     }
 
-    utility::Color a;
-    utility::Color b;
-
+    utility::Color pattern_at_object(const utility::Matrix<4,4>& objectInverseTransformation, 
+                                    const utility::Tuple& worldPoint) const noexcept {
+        return std::visit([objectInverseTransformation, worldPoint](auto &p) 
+                            { return p.pattern_at_object(objectInverseTransformation, worldPoint); }, 
+                            pattern_);
+    }
 private:
-    utility::Matrix<4, 4> transformation;
-    utility::Matrix<4, 4> inverseTransformation;
+    PatternVariant pattern_;
 };
 
-utility::Color stripe_at_object(const StripePattern& pattern, const Shape& object, const utility::Tuple& worldPoint) noexcept;
-utility::Color stripe_at(const StripePattern& pattern, const utility::Tuple& point) noexcept;
+bool operator==(const Pattern& lhs, const Pattern& rhs) noexcept;
 
 } // namespace material
 } // namespace raytracer

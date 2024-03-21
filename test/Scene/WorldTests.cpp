@@ -57,7 +57,7 @@ TEST_F(defaultWorldTests, intersectWorldWithRay){
 TEST_F(defaultWorldTests, ShadingIntersection) {
   const auto r = utility::Ray(utility::Point(0,0,-5), utility::Vector(0,0,1));
   const auto shape = world.objects_.front();
-  const auto i = geometry::Intersection(shape.normalAt(r.position(4)), &shape.material(), 4);
+  const auto i = geometry::Intersection(shape.normalAt(r.position(4)),  &shape.material(), &shape.inverseTransform(),  4);
   const auto comps = prepareComputations(i, r);
   const auto c = world.shadeHit(comps);
 
@@ -68,7 +68,7 @@ TEST_F(defaultWorldTests, ShadingIntersectionInside) {
   world.lights_.at(0).position_ = utility::Point(0,0.25,0);
   const auto r = utility::Ray(utility::Point(0,0,0), utility::Vector(0,0,1));
   const auto shape = world.objects_.back();
-  const auto i = geometry::Intersection( shape.normalAt(r.position(0.5)), &shape.material(), 0.5);
+  const auto i = geometry::Intersection(shape.normalAt(r.position(0.5)),  &shape.material(), &shape.inverseTransform(),  0.5);
   const auto comps = prepareComputations(i, r);
   const auto c = world.shadeHit(comps);
 
@@ -91,13 +91,13 @@ TEST_F(defaultWorldTests, RayHits) {
 
 TEST_F(defaultWorldTests, IntersectionBehindRay) {
   auto &outer = world.objects_.front();
-  outer.material().ambient_ = 1;
+  outer.material().setAmbient(1);
   auto &inner = world.objects_.back();
-  inner.material().ambient_ = 1;
+  inner.material().setAmbient(1);
   const auto r = utility::Ray(utility::Point(0,0,0.75), utility::Vector(0,0,-1));
   const auto c = world.colorAt(r);
 
-  EXPECT_EQ(c, inner.material().surfaceColor_);
+  EXPECT_EQ(c, inner.material().surfaceColor());
 }
 
 // =================== Shadow Tests ===================
@@ -138,7 +138,7 @@ TEST(world_shadow_tests, ShadeHitWithShadow){
   world.objects_.at(1).setTransform(utility::transformations::translation(0,0,10));
 
   utility::Ray ray{utility::Point(0,0,5), utility::Vector(0,0,1)};
-  const auto intersection = geometry::Intersection( world.objects_.at(1).normalAt(ray.position(4)), &world.objects_.at(1).material(), 4);
+  const auto intersection = geometry::Intersection(world.objects_.at(1).normalAt(ray.position(4)), &world.objects_.at(1).material(), &world.objects_.at(1).inverseTransform(),  4);
   const auto computation  = prepareComputations(intersection, ray);
 
   const auto color = world.shadeHit(computation);
@@ -149,7 +149,7 @@ TEST(world_shadow_tests, hitOffsetsPointOfIntersection){
   const auto r = utility::Ray(utility::Point(0,0,-5), utility::Vector(0,0,1));
   auto shape = geometry::Sphere();
   shape.setTransform(utility::transformations::translation(0,0,1));
-  const auto i = geometry::Intersection( shape.normalAt(r.position(5)), &shape.material(), 5);
+  const auto i = geometry::Intersection( shape.normalAt(r.position(5)),  &shape.material(), &shape.inverseTransform(),  5);
   const auto comps = prepareComputations(i, r);
 
   EXPECT_LT(comps.overPoint.z(), -SHADOW_OFFSET / 2);

@@ -29,7 +29,7 @@ bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) con
 utility::Color World::shadeHit(const geometry::Computations& comps) const noexcept{
   auto color = utility::Color{0,0,0};
   for(const auto& light : this->lights_) {
-    color += scene::lighting(*comps.intersection.material, light, comps.point, comps.eyeVector, 
+    color += scene::lighting(*comps.intersection.material, *comps.intersection.objectToWorld, light, comps.point, comps.eyeVector, 
                              comps.intersection.normalVector, this->isShadowed(light, comps.overPoint));
   }
   return color;
