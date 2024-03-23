@@ -4,6 +4,7 @@
 #include "PatternT.hpp"
 #include "StripePattern.hpp"
 #include "GradientPattern.hpp"
+#include "RingPattern.hpp"
 #include "Matrix.hpp"
 #include "Tuple.hpp"
 #include "Transformations.hpp"
@@ -93,4 +94,13 @@ TEST(gradient_pattern_test, linear_gradient_pattern) {
   EXPECT_EQ(Color(0.75, 0.75, 0.75), pattern.localPattern_at(Point(0.25, 0, 0)));
   EXPECT_EQ(Color(0.5, 0.5, 0.5), pattern.localPattern_at(Point(0.5, 0, 0)));
   EXPECT_EQ(Color(0.25, 0.25, 0.25), pattern.localPattern_at(Point(0.75, 0, 0)));
+}
+
+/* =========== Ring Pattern Tests =========== */
+TEST(ring_pattern_test, ring_pattern_should_extend_in_both_x_and_z) {
+  const auto pattern = material::RingPattern(white, black);
+  EXPECT_EQ(pattern.a, pattern.localPattern_at(Point(0, 0, 0)));
+  EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(1, 0, 0)));
+  EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(0, 0, 1)));
+  EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(0.708, 0, 0.708)));
 }
