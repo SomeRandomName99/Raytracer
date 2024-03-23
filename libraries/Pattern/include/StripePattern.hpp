@@ -1,6 +1,6 @@
 
-#ifndef STRIPEPATTERNS_HPP
-#define STRIPEPATTERNS_HPP
+#ifndef STRIPEPATTERN_HPP
+#define STRIPEPATTERN_HPP
 
 #include <cmath>
 
@@ -30,4 +30,4 @@ bool operator==(const StripePattern& lhs, const StripePattern& rhs) noexcept;
 } // namespace material
 } // namespace raytracer
 
-#endif //STRIPEPATTERNS_HPP
+#endif //STRIPEPATTERN_HPP

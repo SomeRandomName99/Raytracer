@@ -1,5 +1,5 @@
-#ifndef GRADIENTPATTERNS_HPP
-#define GRADIENTPATTERNS_HPP
+#ifndef GRADIENTPATTERN_HPP
+#define GRADIENTPATTERN_HPP
 
 #include <cmath>
 
@@ -27,4 +27,4 @@ bool operator==(const GradientPattern& lhs, const GradientPattern& rhs) noexcept
 } // namespace material
 } // namespace raytracer
 
-#endif //GRADIENTPATTERNS_HPP
+#endif //GRADIENTPATTERN_HPP
