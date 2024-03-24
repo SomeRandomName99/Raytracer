@@ -8,7 +8,6 @@
 namespace raytracer {
 namespace material {
 
-// write a localPattern_at visitor for an std::variant
 struct localPatternAtVisitor {
     const utility::Tuple& point;
 
@@ -17,7 +16,6 @@ struct localPatternAtVisitor {
         return pattern.localPattern_at(point);
     }
 };
-
 
 utility::Color PerturbedPattern::localPattern_at(const utility::Tuple& point) const noexcept {
     auto noise = stb_perlin_noise3(point.x(), point.y(), point.z(), 0, 0, 0);
