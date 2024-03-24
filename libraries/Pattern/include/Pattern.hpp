@@ -8,6 +8,8 @@
 #include "StripePattern.hpp"
 #include "GradientPattern.hpp"
 #include "RingPattern.hpp"
+#include "CheckerPattern.hpp"
+#include "PerturbedPattern.hpp"
 
 namespace raytracer {
 namespace material {
@@ -16,7 +18,7 @@ namespace material {
    enabling compile time polymorphism by visiting all the pattern interface functions. */
 class Pattern {
 public:
-    using PatternVariant = std::variant<StripePattern, GradientPattern, RingPattern>;
+    using PatternVariant = std::variant<StripePattern, GradientPattern, RingPattern, CheckerPattern, PerturbedPattern>;
 
     Pattern(PatternVariant pattern) noexcept: pattern_{std::move(pattern)} {}
     template <typename PatternType>
@@ -43,7 +45,7 @@ public:
     }
 
     utility::Color pattern_at_object(const utility::Matrix<4,4>& objectInverseTransformation, 
-                                    const utility::Tuple& worldPoint) const noexcept {
+                                     const utility::Tuple& worldPoint) const noexcept {
         return std::visit([objectInverseTransformation, worldPoint](auto &p) 
                             { return p.pattern_at_object(objectInverseTransformation, worldPoint); }, 
                             pattern_);

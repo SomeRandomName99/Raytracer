@@ -31,14 +31,18 @@ int main(){
   auto middle = geometry::Sphere();
   middle.setTransform(utility::transformations::translation(-0.5, 1, 0.5)*
                       utility::transformations::rotation_z(std::numbers::pi / 3));
-  middle.material_.setPattern(material::StripePattern(utility::Color(1, 0.9, 0.9), utility::Color(0.9, 1, 0.9)));
+  middle.material_.setPattern(material::PerturbedPattern(material::RingPattern(utility::Color(1,1,1), utility::Color(1,0,0))));
+  middle.material_.pattern().value().setTransform(utility::transformations::scaling(0.1, 0.1, 0.1) *
+                                                  utility::transformations::rotation_x(std::numbers::pi / 2));
   middle.material_.setDiffuse(0.7);
   middle.material_.setSpecular(0.3);
 
   auto right = geometry::Sphere();
   right.setTransform(utility::transformations::translation(1.5, 0.5, -0.5) * 
                      utility::transformations::scaling(0.5, 0.5, 0.5));
-  right.material_.setSurfaceColor(utility::Color(0.5, 1, 0.1));
+  right.material_.setPattern(material::GradientPattern(utility::Color(1,0,0), utility::Color(0,1,0)));
+  right.material_.pattern().value().setTransform(utility::transformations::scaling(4, 4, 4) *
+                                                 utility::transformations::translation(0.5, 0, 0));
   right.material_.setDiffuse(0.7);
   right.material_.setSpecular(0.3);
 

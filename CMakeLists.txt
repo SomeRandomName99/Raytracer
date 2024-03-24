@@ -26,6 +26,6 @@ enable_testing()
 add_subdirectory(test)
 add_subdirectory(libraries)
 add_subdirectory(TestPrograms)
-
+add_subdirectory(3rdParty)
 
 

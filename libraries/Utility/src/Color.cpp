@@ -1,4 +1,7 @@
+#include <cstdint>
+
 #include "Color.hpp"
+
 
 namespace raytracer {
 namespace utility {
@@ -57,6 +60,13 @@ const double& Color::blue() const noexcept{
 void Color::blue(const double& val) noexcept {
   _color.z() = val;
 }
+
+Color hexColor(unsigned int hex) noexcept{
+ const auto red = (hex >> 16) & 0xFF;
+  const auto green = (hex >> 8) & 0xFF;
+  const auto blue = hex & 0xFF;
+  return Color(red/255.0, green/255.0, blue/255.0);
+} 
 
 } // namespace utility
 } // namespace raytracer

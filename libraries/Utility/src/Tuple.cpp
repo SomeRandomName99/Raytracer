@@ -31,6 +31,10 @@ Tuple Tuple::operator+(const Tuple& rhs) const noexcept {
   return Tuple(this->x()+rhs.x(), this->y()+rhs.y(), 
                this->z()+rhs.z(), this->w()+rhs.w());
 }
+Tuple Tuple::operator+(const double& rhs) const noexcept {
+  return Tuple(this->x()+rhs, this->y()+rhs, 
+               this->z()+rhs, this->w()+rhs);
+}
 
 Tuple Tuple::operator-(const Tuple& rhs) const noexcept{
   return Tuple(this->x()-rhs.x(), this->y()-rhs.y(), 

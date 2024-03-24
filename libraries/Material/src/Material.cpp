@@ -19,6 +19,9 @@ const utility::Color& Material::surfaceColor() const noexcept {
   return surfaceColor_;
 }
 
+std::optional<Pattern>& Material::pattern() noexcept {
+  return pattern_;
+}
 const std::optional<Pattern>& Material::pattern() const noexcept {
   return pattern_;
 }

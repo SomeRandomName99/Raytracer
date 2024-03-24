@@ -17,6 +17,7 @@ public:
 
     bool operator==(const Tuple& rhs) const noexcept;
     Tuple operator+(const Tuple& rhs) const noexcept;
+    Tuple operator+(const double& rhs) const noexcept;
     Tuple operator-(const Tuple& rhs) const noexcept;
     Tuple operator*(const double& rhs) const noexcept;
     Tuple operator/(const double& rhs) const noexcept;

@@ -5,6 +5,7 @@
 #include "StripePattern.hpp"
 #include "GradientPattern.hpp"
 #include "RingPattern.hpp"
+#include "CheckerPattern.hpp"
 #include "Matrix.hpp"
 #include "Tuple.hpp"
 #include "Transformations.hpp"
@@ -103,4 +104,26 @@ TEST(ring_pattern_test, ring_pattern_should_extend_in_both_x_and_z) {
   EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(1, 0, 0)));
   EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(0, 0, 1)));
   EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(0.708, 0, 0.708)));
+}
+
+/* =========== Checker Pattern Tests =========== */
+TEST(checker_pattern_test, checker_pattern_should_repeat_in_x) {
+  const auto pattern = material::CheckerPattern(white, black);
+  EXPECT_EQ(pattern.a, pattern.localPattern_at(Point(0, 0, 0)));
+  EXPECT_EQ(pattern.a, pattern.localPattern_at(Point(0.99, 0, 0)));
+  EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(1.01, 0, 0)));
+}
+
+TEST(checker_pattern_test, checker_pattern_should_repeat_in_y) {
+  const auto pattern = material::CheckerPattern(white, black);
+  EXPECT_EQ(pattern.a, pattern.localPattern_at(Point(0, 0, 0)));
+  EXPECT_EQ(pattern.a, pattern.localPattern_at(Point(0, 0.99, 0)));
+  EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(0, 1.01, 0)));
+}
+
+TEST(checker_pattern_test, checker_pattern_should_repeat_in_z) {
+  const auto pattern = material::CheckerPattern(white, black);
+  EXPECT_EQ(pattern.a, pattern.localPattern_at(Point(0, 0, 0)));
+  EXPECT_EQ(pattern.a, pattern.localPattern_at(Point(0, 0, 0.99)));
+  EXPECT_EQ(pattern.b, pattern.localPattern_at(Point(0, 0, 1.01)));
 }

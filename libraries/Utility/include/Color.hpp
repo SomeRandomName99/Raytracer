@@ -32,6 +32,8 @@ public:
   utility::Tuple  _color;
 };
 
+utility::Color hexColor(unsigned int hex) noexcept;
+
 } // namespace utility
 } // namespace raytracer  
 

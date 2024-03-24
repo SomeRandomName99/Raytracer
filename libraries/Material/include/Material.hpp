@@ -25,7 +25,9 @@ public:
   void setPattern(const PatternType& pattern) noexcept{
     pattern_ = pattern;
   }
+
   const std::optional<Pattern>& pattern() const noexcept;
+  std::optional<Pattern>& pattern() noexcept;
 
   void setAmbient(double ambient) noexcept;
   double ambient() const noexcept;
