@@ -16,15 +16,18 @@
 using namespace raytracer;
 
 int main(){
-  auto wallMaterial = material::Material();
-  wallMaterial.setPattern(material::StripePattern(utility::Color(1, 0.9, 0.9), utility::Color(0.9, 1, 0.9)));
-  wallMaterial.setSpecular(0);
+  auto backWallMaterial = material::Material();
+  backWallMaterial.setPattern(material::CheckerPattern(utility::Color(1,1,1), utility::Color(0,0,0)));
+
+  auto floorMaterial = material::Material();
+  floorMaterial.setPattern(material::StripePattern(utility::Color(1, 0.9, 0.9), utility::Color(0.9, 1, 0.9)));
+  floorMaterial.setSpecular(0);
 
   auto floor = geometry::Plane();
-  floor.material_ = wallMaterial;
+  floor.material_ = floorMaterial;
 
   auto wall = geometry::Plane();
-  wall.material_ = wallMaterial;
+  wall.material_ = backWallMaterial;
   wall.setTransform(utility::transformations::translation(0, 0, 6) * 
                     utility::transformations::rotation_x(std::numbers::pi / 2));
 
