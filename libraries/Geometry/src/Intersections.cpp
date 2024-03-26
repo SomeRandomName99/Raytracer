@@ -32,6 +32,7 @@ Computations prepareComputations(Intersection intersection, const utility::Ray& 
     computations.inside = false;
   }
 
+  computations.reflectVector = ray.direction_.reflect(intersection.normalVector);
   computations.overPoint = computations.point + computations.intersection.normalVector * SHADOW_OFFSET;
   return computations;
 }

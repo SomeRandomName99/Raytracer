@@ -5,6 +5,7 @@
 #include "World.hpp"
 #include "Light.hpp"
 #include "Sphere.hpp"
+#include "Plane.hpp"
 #include "Material.hpp"
 #include "Transformations.hpp"
 #include "Intersections.hpp"
@@ -154,4 +155,77 @@ TEST(world_shadow_tests, hitOffsetsPointOfIntersection){
 
   EXPECT_LT(comps.overPoint.z(), -SHADOW_OFFSET / 2);
   EXPECT_GT(comps.point.z(), comps.overPoint.z());
+}
+
+// =================== Reflection Tests ===================
+TEST_F(defaultWorldTests, ReflectedColorForNonReflectiveMaterial){
+  const auto r = utility::Ray(utility::Point(0,0,0), utility::Vector(0,0,1));
+  auto shape = world.objects_.at(1);
+  shape.material().setAmbient(1);
+  const auto i = geometry::Intersection(shape.normalAt(r.position(1)),  &shape.material(), &shape.inverseTransform(),  1);
+  const auto comps = prepareComputations(i, r);
+  const auto color = world.reflectedColor(comps);
+
+  EXPECT_EQ(color, utility::Color(0,0,0));
+}
+
+TEST_F(defaultWorldTests, ReflectedColorForReflectiveMaterial){
+  auto shape = geometry::Plane();
+  shape.material().setReflectance(0.5);
+  shape.setTransform(utility::transformations::translation(0,-1,0));
+  world.objects_.emplace_back(shape);
+
+  const auto r = utility::Ray(utility::Point(0,0,-3), utility::Vector(0,-sqrt(2)/2,sqrt(2)/2));
+  const auto i = geometry::Intersection(shape.normalAt(r.position(sqrt(2))),  &shape.material(), &shape.inverseTransform(),  sqrt(2));
+  const auto comps = prepareComputations(i, r);
+  const auto color = world.reflectedColor(comps);
+
+  EXPECT_EQ(color, utility::Color(0.190330, 0.237914, 0.1427480));
+}
+
+TEST_F(defaultWorldTests, ShadeHitWithReflectiveMaterial){
+  auto shape = geometry::Plane();
+  shape.material().setReflectance(0.5);
+  shape.setTransform(utility::transformations::translation(0,-1,0));
+  world.objects_.emplace_back(shape);
+
+  const auto r = utility::Ray(utility::Point(0,0,-3), utility::Vector(0,-sqrt(2)/2,sqrt(2)/2));
+  const auto i = geometry::Intersection(shape.normalAt(r.position(sqrt(2))),  &shape.material(), &shape.inverseTransform(),  sqrt(2));
+  const auto comps = prepareComputations(i, r);
+  const auto color = world.shadeHit(comps);
+
+  EXPECT_EQ(color, utility::Color(0.8767562, 0.9243389, 0.8291734));
+}
+
+TEST_F(defaultWorldTests, colorAtWithMutuallyReflectiveSurfaces){
+  auto testWorld = scene::World();
+
+  auto lower = geometry::Plane();
+  lower.material().setReflectance(1);
+  lower.setTransform(utility::transformations::translation(0,-1,0));
+
+  auto upper = geometry::Plane();
+  upper.material().setReflectance(1);
+  upper.setTransform(utility::transformations::translation(0,1,0));
+
+  testWorld.lights_.emplace_back(scene::PointLight{utility::Color{1,1,1}, utility::Point(0,0,0)});
+  testWorld.objects_.emplace_back(lower);
+  testWorld.objects_.emplace_back(upper);
+
+  const auto r = utility::Ray(utility::Point(0,0,0), utility::Vector(0,1,0));
+  const auto color = testWorld.colorAt(r); // should terminate without raising exceptions
+}
+
+TEST_F(defaultWorldTests, reflectedColorAtMaximumRecursionDepth){
+  auto shape = geometry::Plane();
+  shape.material().setReflectance(0.5);
+  shape.setTransform(utility::transformations::translation(0,-1,0));
+  world.objects_.emplace_back(shape);
+
+  const auto r = utility::Ray(utility::Point(0,0,-3), utility::Vector(0,-sqrt(2)/2,sqrt(2)/2));
+  const auto i = geometry::Intersection(shape.normalAt(r.position(sqrt(2))),  &shape.material(), &shape.inverseTransform(),  sqrt(2));
+  const auto comps = prepareComputations(i, r);
+  const auto color = world.reflectedColor(comps, 0);
+
+  EXPECT_EQ(color, utility::Color(0,0,0));
 }

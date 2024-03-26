@@ -26,25 +26,22 @@ public:
   std::vector<geometry::Intersection> intersect(const utility::Ray& ray) const noexcept;
 
   /**
-   * Barebones implementation of a shadow intersection check.
-   * 
-   * @details Because this function is only used for calculating shadows, it will instantly returns if an intersection is found.
-   * As there is no need to find all of the intersections between the ray and the world, save them, and then sort them.
+   * @brief Checks if a ray intersects with any objects in the scene between a point and a light source.
    *
-   * @param ray The utility::Ray object representing the ray.
-   * @param distanceToLight The distance between the ray origin and the light source.
-   * @return True: if an intersection was found, False: otherwise.
+   * This function is typically used to determine if a point is in shadow or not. If the ray does intersect with an object,
+   * that means the point is in shadow. If the ray does not intersect with any objects, that means the point is lit by the light source.
    */
   bool intersectShadow(const utility::Ray& ray, double distanceToLight) const noexcept;
 
-  
   /**
    * Calculates the color of a shaded hit based on the given computation.
-   *
-   * @param computation The computation containing information about the hit.
-   * @return The color of the shaded hit.
    */
-  utility::Color shadeHit(const geometry::Computations& computation) const noexcept;
+  utility::Color shadeHit(const geometry::Computations& computation, size_t recursionLimit = 5) const noexcept;
+
+  /**
+   * Calculates the color of a reflected ray.
+   */
+  utility::Color reflectedColor(const geometry::Computations& computation, size_t recursionLimit = 5) const noexcept;
 
   /**
    * Calculates the color at a given ray intersection point in the world.
@@ -52,7 +49,7 @@ public:
    * @param ray The ray to calculate the color for.
    * @return The color at the ray intersection point.
    */
-  utility::Color colorAt(const utility::Ray& ray) const noexcept;
+  utility::Color colorAt(const utility::Ray& ray, size_t recursionLimit = 5) const noexcept;
 
   /**
    * Checks if a given point in the world is shadowed by a light source.

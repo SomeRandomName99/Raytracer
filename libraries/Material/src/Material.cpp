@@ -6,11 +6,12 @@ namespace material {
 
 Material::Material() noexcept
     : surfaceColor_{utility::Color(1.0, 1.0, 1.0)}, pattern_{}, ambient_{0.1}, diffuse_{0.9}, specular_{0.9}, 
-      shininess_{200.0} {}
+      shininess_{200.0}, reflectance_{0} {}
 
 Material::Material(utility::Color surfaceColor, std::optional<Pattern> pattern, double ambient, double diffuse, 
-                   double specular, double shininess) noexcept 
-    : surfaceColor_{surfaceColor}, pattern_{pattern}, ambient_{ambient}, diffuse_{diffuse}, specular_{specular}, shininess_{shininess} {}
+                   double specular, double shininess, double reflectance) noexcept 
+    : surfaceColor_{surfaceColor}, pattern_{pattern}, ambient_{ambient}, diffuse_{diffuse}, specular_{specular}, shininess_{shininess},
+      reflectance_{reflectance} {}
 
 void Material::setSurfaceColor(const utility::Color& surfaceColor) noexcept {
   surfaceColor_ = surfaceColor;
@@ -52,6 +53,13 @@ void Material::setShininess(double shininess) noexcept {
 }
 double Material::shininess() const noexcept {
   return shininess_;
+}
+
+void Material::setReflectance(double reflectance) noexcept {
+  reflectance_ = reflectance;
+}
+double Material::reflectance() const noexcept {
+  return reflectance_;
 }
 
 bool operator==(const raytracer::material::Material& lhs, const raytracer::material::Material& rhs) noexcept{

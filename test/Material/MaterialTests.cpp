@@ -12,10 +12,11 @@ using namespace utility;
 TEST(material_tests, default_material_creation) {
   const auto m = material::Material();
   EXPECT_TRUE(m.surfaceColor() == utility::Color(1.0, 1.0, 1.0));
-  EXPECT_EQ(m.ambient(), 0.1);
-  EXPECT_EQ(m.diffuse(), 0.9);
-  EXPECT_EQ(m.specular(), 0.9);
-  EXPECT_EQ(m.shininess(), 200.0);
+  EXPECT_FLOAT_EQ(m.ambient(), 0.1);
+  EXPECT_FLOAT_EQ(m.diffuse(), 0.9);
+  EXPECT_FLOAT_EQ(m.specular(), 0.9);
+  EXPECT_FLOAT_EQ(m.shininess(), 200.0);
+  EXPECT_FLOAT_EQ(m.reflectance(), 0);
 }
 
 TEST(material_tests, lightingWithAMaterialApplied){

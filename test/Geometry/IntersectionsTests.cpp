@@ -3,6 +3,7 @@
 
 #include "Intersections.hpp"
 #include "Sphere.hpp"
+#include "Plane.hpp"
 #include "Tuple.hpp"
 
 using namespace raytracer;
@@ -102,4 +103,13 @@ TEST(prepare_computations_tests, PrepareComputationsIntersectionInside){
   EXPECT_EQ(comps.eyeVector, Vector(0, 0, -1));
   EXPECT_TRUE(comps.inside);
   EXPECT_EQ(comps.intersection.normalVector, Vector(0, 0, -1));
+}
+
+TEST(prepare_computations_tests, PrepareComputationsReflectionVector){
+  const auto r = Ray(Point(0, 0, -1), Vector(0, -sqrt(2)/2, sqrt(2)/2));
+  const auto s = geometry::Plane();
+  const auto i = geometry::Intersection(s.normalAt(r.position(sqrt(2))),  &s.material_, &s.inverseTransform(),  sqrt(2));
+  const auto comps = geometry::prepareComputations(i,r);
+
+  EXPECT_EQ(comps.reflectVector, Vector(0, sqrt(2)/2, sqrt(2)/2));
 }

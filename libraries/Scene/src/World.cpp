@@ -26,20 +26,30 @@ bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) con
 }
 
 
-utility::Color World::shadeHit(const geometry::Computations& comps) const noexcept{
-  auto color = utility::Color{0,0,0};
+utility::Color World::shadeHit(const geometry::Computations& comps, size_t recursionLimit) const noexcept{
+  auto surfaceColor = utility::Color{0,0,0};
+  auto reflectedColor = utility::Color{0,0,0};
   for(const auto& light : this->lights_) {
-    color += scene::lighting(*comps.intersection.material, *comps.intersection.objectToWorld, light, comps.point, comps.eyeVector, 
-                             comps.intersection.normalVector, this->isShadowed(light, comps.overPoint));
+    surfaceColor += scene::lighting(*comps.intersection.material, *comps.intersection.objectToWorld, light, comps.point, comps.eyeVector, 
+                                    comps.intersection.normalVector, this->isShadowed(light, comps.overPoint));
+    reflectedColor += this->reflectedColor(comps, recursionLimit);
   }
-  return color;
+  return surfaceColor + reflectedColor;
 }
 
-utility::Color World::colorAt(const utility::Ray& ray) const noexcept{
+utility::Color World::reflectedColor(const geometry::Computations& comps, size_t recursionLimit) const noexcept{
+  if(comps.intersection.material->reflectance() == 0) return utility::Color{0,0,0};
+  else if (recursionLimit == 0) return utility::Color{0,0,0};
+
+  auto reflectiedRay = utility::Ray(comps.overPoint, comps.reflectVector);
+  return this->colorAt(reflectiedRay, recursionLimit - 1) * comps.intersection.material->reflectance();
+}
+
+utility::Color World::colorAt(const utility::Ray& ray, size_t recursionLimit) const noexcept{
   const auto hit                    = geometry::hit(this->intersect(ray));
   if (!hit.has_value()) return utility::Color{0,0,0};
   const auto intersect_computations = geometry::prepareComputations(*hit, ray);
-  return this->shadeHit(intersect_computations);
+  return this->shadeHit(intersect_computations, recursionLimit);
 }
 
 bool World::isShadowed(const PointLight& light, const utility::Tuple& point) const noexcept{

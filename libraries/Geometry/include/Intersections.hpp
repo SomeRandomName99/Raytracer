@@ -36,6 +36,7 @@ struct Computations{
   utility::Tuple point;
   utility::Tuple overPoint; // used for shadows
   utility::Tuple eyeVector;
+  utility::Tuple reflectVector;
   bool inside;
 };
 
