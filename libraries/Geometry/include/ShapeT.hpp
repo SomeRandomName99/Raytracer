@@ -60,6 +60,8 @@ public:
   utility::Tuple normalAt(const utility::Tuple &point) const noexcept {
     const auto localPoint  = inverseTransform() * point;
     const auto localNormal = as_underlying().localNormalAt(localPoint);
+    // This is needed because the normal utility::Vector is a linear form, see below:
+    // https://computergraphics.stackexchange.com/questions/1502/why-is-the-transposed-inverse-of-the-model-view-matrix-used-to-transform-the-nor
     auto worldNormal  = inverseTransform().transpose() * localNormal;
     worldNormal.w() = 0;
 

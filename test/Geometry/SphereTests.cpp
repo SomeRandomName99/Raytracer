@@ -6,6 +6,7 @@
 #include "Sphere.hpp"
 #include "Intersections.hpp"
 #include "Material.hpp"
+#include "Transformations.hpp"
 
 using namespace raytracer;
 using namespace utility;
@@ -120,4 +121,12 @@ TEST(sphere_tests, NormalOnSphereNormalized) {
   auto n = s.normalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
 
   EXPECT_EQ(n, n.normalize());
+}
+
+TEST(sphere_tests, NormalOnTransformedSphere){
+  auto s = geometry::Sphere();
+  s.setTransform(transformations::scaling(1, 0.5, 1) * transformations::rotation_z(std::numbers::pi/5));
+  const auto n = s.normalAt(Point(0, std::sqrt(2)/2, -std::sqrt(2)/2));
+
+  EXPECT_EQ(n, Vector(0, 0.9701425, -0.2425356));
 }

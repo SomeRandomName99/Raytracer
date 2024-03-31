@@ -30,10 +30,8 @@ std::vector<Intersection> Sphere::localIntersect(const utility::Ray& transformed
 
 utility::Tuple Sphere::localNormalAt(const utility::Tuple &objectPoint) const noexcept{
   utility::Tuple objectNormal = objectPoint - utility::Point(0, 0, 0);
-  // This is needed because the normal utility::Vector is a linear form, see below:
-  // https://computergraphics.stackexchange.com/questions/1502/why-is-the-transposed-inverse-of-the-model-view-matrix-used-to-transform-the-nor
-  utility::Tuple worldNormal  = inverseTransform().transpose() * objectNormal;
-  worldNormal.w() = 0;
+  return objectNormal;
+}
 
   return worldNormal.normalize();
 }
