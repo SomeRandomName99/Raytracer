@@ -2,6 +2,7 @@
 
 #include "Plane.hpp"
 #include "Intersections.hpp"
+#include "Shape.hpp"
 
 using namespace raytracer;
 using namespace utility;
@@ -40,7 +41,7 @@ TEST(plane_tests, intersectWithRayFromAbove) {
 
   EXPECT_EQ(1, xs.size());
   EXPECT_FLOAT_EQ(1, xs.at(0).dist);
-  EXPECT_TRUE(p.material() == *xs.at(0).material);
+  EXPECT_TRUE(p.material() == xs.at(0).object->material());
 }
 
 TEST(plane_tests, intersectWithRayFromBelow) {
@@ -50,5 +51,5 @@ TEST(plane_tests, intersectWithRayFromBelow) {
 
   EXPECT_EQ(1, xs.size());
   EXPECT_FLOAT_EQ(1, xs.at(0).dist);
-  EXPECT_TRUE(p.material() == *xs.at(0).material);
+  EXPECT_TRUE(p.material() == xs.at(0).object->material());
 }

@@ -1,5 +1,7 @@
+#include <memory>
+
 #include "Sphere.hpp"
-#include "FloatAlmostEquals.hpp"
+#include "Shape.hpp"
 #include "Intersections.hpp"
 
 namespace raytracer {
@@ -24,8 +26,8 @@ std::vector<Intersection> Sphere::localIntersect(const utility::Ray& transformed
 
   const auto dist1 = (-b - std::sqrt(discriminant)) / (2*a);
   const auto dist2 = (-b + std::sqrt(discriminant)) / (2*a);
-  return std::vector<Intersection>{Intersection{localNormalAt(transformedRay.position(dist1)), &this->material_, &inverseTransform(), dist1}, 
-                                   Intersection{localNormalAt(transformedRay.position(dist2)), &this->material_, &inverseTransform(), dist2}};
+  return std::vector<Intersection>{Intersection{std::make_shared<Shape>(*this), dist1},
+                                   Intersection{std::make_shared<Shape>(*this), dist2}};
 }
 
 utility::Tuple Sphere::localNormalAt(const utility::Tuple &objectPoint) const noexcept{

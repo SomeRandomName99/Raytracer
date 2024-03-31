@@ -6,6 +6,7 @@
 #include "Sphere.hpp"
 #include "Intersections.hpp"
 #include "Material.hpp"
+#include "Shape.hpp"
 #include "Transformations.hpp"
 
 using namespace raytracer;
@@ -66,8 +67,8 @@ TEST(sphere_tests, setMaterialOnIntersection) {
   const auto xs = s.intersect(r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_TRUE(*xs.at(0).material == s.material_);
-  EXPECT_TRUE(*xs.at(1).material == s.material_);
+  EXPECT_TRUE(xs.at(0).object->material() == s.material_);
+  EXPECT_TRUE(xs.at(1).object->material() == s.material_);
 }
 
 TEST(sphere_tests, IntersectingScaledSphereWithRay) {

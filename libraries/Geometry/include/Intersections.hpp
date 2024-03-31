@@ -15,17 +15,23 @@ constexpr double SHADOW_OFFSET = 1e-6;
 
 namespace raytracer {
 namespace geometry {
+class Shape;
 
 
 /**
  * \class Intersection
  * \brief Save information about an intersection between a ray and a geometry object.
  */
+/*
+ * TODO:
+ * Performance has dropped after using the shared_ptr due to the heap allocation 
+ * everytime an Intersection is created. I might try to always contstruct shapes 
+ * as shared pointers and then use weakpointers to store them here by useing
+ * shared_from_this() in the Shape class.
+*/
 struct Intersection
 {
-  utility::Tuple normalVector; 
-  const material::Material* material;
-  const utility::Matrix<4,4>* objectToWorld; ///< The transformation matrix from the object to the world.
+  std::shared_ptr<Shape> object;
   double dist; ///< Distance from the ray origin to the intersection point.
 };
 
@@ -33,6 +39,7 @@ bool operator==(Intersection const& lhs, Intersection const& rhs) noexcept;
 
 struct Computations{
   Intersection intersection;
+  utility::Tuple normalVector; 
   utility::Tuple point;
   utility::Tuple overPoint; // used for shadows
   utility::Tuple eyeVector;
@@ -41,7 +48,8 @@ struct Computations{
 };
 
 
-Computations prepareComputations(Intersection intersection, const utility::Ray& ray);
+Computations prepareComputations(Intersection intersection, const utility::Ray& ray, 
+                                 const std::vector<Intersection>& intersections = std::vector<Intersection>()) noexcept;
 
 /**
  * @brief Creates a vector of intersections from the given arguments.

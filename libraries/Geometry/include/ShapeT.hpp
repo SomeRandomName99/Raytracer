@@ -42,9 +42,12 @@ public:
   const material::Material& material() const noexcept {
     return material_;
   }
-
   material::Material& material() noexcept {
     return const_cast<material::Material&>(const_cast<const ShapeT*>(this)->material());
+  }
+
+  void setMaterial(const material::Material& material) noexcept {
+    material_ = material;
   }
 
   /**

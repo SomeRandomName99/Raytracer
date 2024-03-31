@@ -7,13 +7,13 @@
 
 #include "Intersections.hpp"
 #include "FloatAlmostEquals.hpp"
+#include "Shape.hpp"
 
 namespace raytracer {
 namespace geometry {
 
 bool operator==(Intersection const& lhs, Intersection const& rhs) noexcept{
-  return utility::floatNearlyEqual(lhs.dist, rhs.dist) && lhs.material == rhs.material
-         && lhs.normalVector == rhs.normalVector;
+  return utility::floatNearlyEqual(lhs.dist, rhs.dist) && lhs.object == rhs.object;
 }
 
 Computations prepareComputations(Intersection intersection, const utility::Ray& ray){
@@ -22,18 +22,19 @@ Computations prepareComputations(Intersection intersection, const utility::Ray& 
   // copy values for ease of accessibility
   computations.intersection = intersection;
   computations.point = ray.position(intersection.dist);
-
+  computations.normalVector = intersection.object->normalAt(computations.point);
+  computations.reflectVector = ray.direction_.reflect(computations.normalVector);
   computations.eyeVector = -ray.direction_;
-  if(intersection.normalVector.dot(computations.eyeVector) < 0){
+  
+  if(computations.normalVector.dot(computations.eyeVector) < 0){
     computations.inside = true;
-    computations.intersection.normalVector = -computations.intersection.normalVector;
+    computations.normalVector = -computations.normalVector;
   }
   else{
     computations.inside = false;
   }
 
-  computations.reflectVector = ray.direction_.reflect(intersection.normalVector);
-  computations.overPoint = computations.point + computations.intersection.normalVector * SHADOW_OFFSET;
+  computations.overPoint = computations.point + computations.normalVector * SHADOW_OFFSET;
   return computations;
 }
 

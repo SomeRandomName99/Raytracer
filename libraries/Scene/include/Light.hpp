@@ -1,14 +1,15 @@
 #ifndef LIGHT_HPP
 #define LIGHT_HPP
 
+#include <memory>
+
 #include "Color.hpp"
 #include "Tuple.hpp"
 #include "Material.hpp"
+#include "Shape.hpp"
 
 namespace raytracer {
 namespace scene {
-
-class Shape;
 
 class PointLight{
 public:
@@ -18,9 +19,8 @@ public:
   utility::Tuple position_;
 };
 
-utility::Color lighting(const material::Material& material, const utility::Matrix<4,4>& objectInverseTransformation, 
-                        const PointLight& light, const utility::Tuple& point, const utility::Tuple& eyeVector, 
-                        const utility::Tuple& normalVector, const bool inShadow) noexcept;
+utility::Color lighting(std::shared_ptr<geometry::Shape> object, const PointLight& light, const utility::Tuple& point, 
+                        const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow) noexcept;
 } // namespace raytracer
 } // namespace scene
 
