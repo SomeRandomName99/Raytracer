@@ -21,7 +21,9 @@ class Material;
    enabling compile time polymorphism by visiting all the shape interface functions. */
 class Shape {
 public:
-  Shape(std::variant<Plane, Sphere> shape) noexcept: shape_{std::move(shape)} {}
+  using ShapeVariant = std::variant<Plane, Sphere>;
+
+  Shape(ShapeVariant shape) noexcept: shape_{std::move(shape)} {}
 
   void setTransform(const utility::Matrix<4,4> &transformation) noexcept {
     std::visit([transformation](auto &s) { s.setTransform(transformation); }, shape_);
@@ -50,6 +52,10 @@ public:
                       shape_);
   }
 
+  void setMaterial(const material::Material& material) noexcept {
+    std::visit([material](auto &s) { s.setMaterial(material); }, shape_);
+  }
+
   std::size_t id() const noexcept {
     return std::visit([](auto &s) { return s.id(); }, shape_);
   }
@@ -62,7 +68,7 @@ public:
     return std::visit([point](auto &s) { return s.normalAt(point); }, shape_);
   }
 
-  std::variant<Plane, Sphere> shape_;
+  ShapeVariant shape_;
 };
 
 
