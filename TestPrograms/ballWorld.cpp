@@ -23,40 +23,40 @@ int main(){
   floorMaterial.setPattern(material::StripePattern(utility::Color(1, 0.9, 0.9), utility::Color(0.9, 1, 0.9)));
   floorMaterial.setSpecular(0);
 
-  auto floor = geometry::Plane();
-  floor.material_ = floorMaterial;
+  auto floor = geometry::normalPlane();
+  floor->setMaterial(floorMaterial);
 
-  auto wall = geometry::Plane();
-  wall.material_ = backWallMaterial;
-  wall.setTransform(utility::transformations::translation(0, 0, 6) * 
+  auto wall = geometry::normalPlane();
+  wall->setMaterial(backWallMaterial);
+  wall->setTransform(utility::transformations::translation(0, 0, 6) * 
                     utility::transformations::rotation_x(std::numbers::pi / 2));
 
-  auto middle = geometry::Sphere();
-  middle.setTransform(utility::transformations::translation(-0.5, 1, 0.5)*
+  auto middle = geometry::normalSphere();
+  middle->setTransform(utility::transformations::translation(-0.5, 1, 0.5)*
                       utility::transformations::rotation_z(std::numbers::pi / 3));
-  middle.material_.setPattern(material::PerturbedPattern(material::RingPattern(utility::Color(1,1,1), utility::Color(1,0,0))));
-  middle.material_.pattern().value().setTransform(utility::transformations::scaling(0.1, 0.1, 0.1) *
+  middle->material().setPattern(material::PerturbedPattern(material::RingPattern(utility::Color(1,1,1), utility::Color(1,0,0))));
+  middle->material().pattern().value().setTransform(utility::transformations::scaling(0.1, 0.1, 0.1) *
                                                   utility::transformations::rotation_x(std::numbers::pi / 2));
-  middle.material_.setDiffuse(0.7);
-  middle.material_.setSpecular(0.3);
-  middle.material_.setReflectance(0.05);
+  middle->material().setDiffuse(0.7);
+  middle->material().setSpecular(0.3);
+  middle->material().setReflectance(0.05);
 
-  auto right = geometry::Sphere();
-  right.setTransform(utility::transformations::translation(1.5, 0.5, -0.5) * 
+  auto right = geometry::normalSphere();
+  right->setTransform(utility::transformations::translation(1.5, 0.5, -0.5) * 
                      utility::transformations::scaling(0.5, 0.5, 0.5));
-  right.material_.setPattern(material::GradientPattern(utility::Color(1,0,0), utility::Color(0,1,0)));
-  right.material_.pattern().value().setTransform(utility::transformations::scaling(4, 4, 4) *
+  right->material().setPattern(material::GradientPattern(utility::Color(1,0,0), utility::Color(0,1,0)));
+  right->material().pattern().value().setTransform(utility::transformations::scaling(4, 4, 4) *
                                                  utility::transformations::translation(0.5, 0, 0));
-  right.material_.setDiffuse(0.7);
-  right.material_.setSpecular(0.3);
-  right.material_.setReflectance(0.1);
+  right->material().setDiffuse(0.7);
+  right->material().setSpecular(0.3);
+  right->material().setReflectance(0.1);
 
-  auto left = geometry::Sphere();
-  left.setTransform(utility::transformations::translation(-1.5, 0.33, -0.75) * 
+  auto left = geometry::normalSphere();
+  left->setTransform(utility::transformations::translation(-1.5, 0.33, -0.75) * 
                     utility::transformations::scaling(0.33, 0.33, 0.33));
-  left.material_.setSurfaceColor(utility::Color(1, 0.8, 0.1));
-  left.material_.setDiffuse(0.7);
-  left.material_.setSpecular(0.3);
+  left->material().setSurfaceColor(utility::Color(1, 0.8, 0.1));
+  left->material().setDiffuse(0.7);
+  left->material().setSpecular(0.3);
 
   scene::World world;
   world.lights_.push_back(scene::PointLight(utility::Color(1, 1, 1), utility::Point(-10, 10, -10)));
