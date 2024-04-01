@@ -8,6 +8,7 @@
 #include "Intersections.hpp"
 #include "FloatAlmostEquals.hpp"
 #include "Shape.hpp"
+#include "Transformations.hpp"
 
 namespace raytracer {
 namespace geometry {
@@ -16,7 +17,8 @@ bool operator==(Intersection const& lhs, Intersection const& rhs) noexcept{
   return utility::floatNearlyEqual(lhs.dist, rhs.dist) && lhs.object == rhs.object;
 }
 
-Computations prepareComputations(Intersection intersection, const utility::Ray& ray){
+Computations prepareComputations(Intersection intersection, const utility::Ray& ray, 
+                                 const std::vector<Intersection>& intersections) noexcept{
   Computations computations;
 
   // copy values for ease of accessibility

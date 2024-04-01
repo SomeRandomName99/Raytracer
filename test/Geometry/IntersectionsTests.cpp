@@ -14,18 +14,18 @@ using namespace utility;
 Tuple testVector = Vector(0, 0, 0);
 /* =========== Creation Test =========== */
 TEST(intersection_tests, encapsulateTAndObject){
-  const auto s = std::make_shared<geometry::Shape>(geometry::Sphere());
-  const auto i = geometry::Intersection(s, 3.5);
+  const auto s = geometry::Sphere();
+  const auto i = geometry::Intersection(&s, 3.5);
 
   EXPECT_FLOAT_EQ(i.dist, 3.5);
-  EXPECT_EQ(i.object, s);
+  EXPECT_EQ(i.object, &s);
 }
 
 /* =========== Aggregation Test =========== */
 TEST(intersection_tests, AggregationOfIntersections){
   const auto s = geometry::Sphere();
-  const auto i1 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   1);
-  const auto i2 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   2);
+  const auto i1 = geometry::Intersection(&s, 1);
+  const auto i2 = geometry::Intersection(&s, 2);
   const auto xs = geometry::intersections(i1, i2);
 
   EXPECT_EQ(xs.size(), 2);
@@ -36,8 +36,8 @@ TEST(intersection_tests, AggregationOfIntersections){
 /* =========== Hit Test =========== */
 TEST(hit_tests, AllIntersectionsPositiveT){
   const auto s = geometry::Sphere();
-  const auto i1 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   1);
-  const auto i2 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   2);
+  const auto i1 = geometry::Intersection(&s, 1);
+  const auto i2 = geometry::Intersection(&s, 2);
   const auto xs = geometry::intersections(i1, i2);
 
   EXPECT_EQ(*hit(xs), i1);
@@ -45,8 +45,8 @@ TEST(hit_tests, AllIntersectionsPositiveT){
 
 TEST(hit_tests, SomeIntersectionsNegativeT){
   const auto s = geometry::Sphere();
-  const auto i1 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   -1);
-  const auto i2 = geometry::Intersection(std::make_shared<geometry::Shape>(s),    1);
+  const auto i1 = geometry::Intersection(&s, -1);
+  const auto i2 = geometry::Intersection(&s,  1);
   const auto xs = geometry::intersections(i1, i2);
 
   EXPECT_EQ(*hit(xs), i2);
@@ -54,8 +54,8 @@ TEST(hit_tests, SomeIntersectionsNegativeT){
 
 TEST(hit_tests, AllIntersectionsNegativeT){
   const auto s = geometry::Sphere();
-  const auto i1 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   -2);
-  const auto i2 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   -1);
+  const auto i1 = geometry::Intersection(&s, -2);
+  const auto i2 = geometry::Intersection(&s, -1);
   const auto xs = geometry::intersections(i1, i2);
 
   EXPECT_EQ(hit(xs), std::nullopt);
@@ -63,10 +63,10 @@ TEST(hit_tests, AllIntersectionsNegativeT){
 
 TEST(hit_tests, ReturnLowestNonNegativeT){
   const auto s = geometry::Sphere();
-  const auto i1 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   5);
-  const auto i2 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   7);
-  const auto i3 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   -3);
-  const auto i4 = geometry::Intersection(std::make_shared<geometry::Shape>(s),   2);
+  const auto i1 = geometry::Intersection(&s, 5);
+  const auto i2 = geometry::Intersection(&s, 7);
+  const auto i3 = geometry::Intersection(&s, -3);
+  const auto i4 = geometry::Intersection(&s, 2);
   const auto xs = geometry::intersections(i1, i2, i3, i4);
 
   EXPECT_EQ(*hit(xs), i4);
@@ -76,7 +76,7 @@ TEST(hit_tests, ReturnLowestNonNegativeT){
 TEST(prepare_computations_tests, PrepareComputations){
   const auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   const auto s = geometry::Sphere();
-  const auto i = geometry::Intersection(std::make_shared<geometry::Shape>(s),   4);
+  const auto i = geometry::Intersection(&s,   4);
   const auto comps = geometry::prepareComputations(i,r);
 
   EXPECT_EQ(comps.intersection.dist, i.dist);
@@ -98,7 +98,7 @@ TEST(prepare_computations_tests, PrepareComputationsIntersectionOutside){
 TEST(prepare_computations_tests, PrepareComputationsIntersectionInside){
   const auto r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
   const auto s = geometry::Sphere();
-  const auto i = geometry::Intersection(std::make_shared<geometry::Shape>(s),   1);
+  const auto i = geometry::Intersection(&s,   1);
   const auto comps = geometry::prepareComputations(i,r);
 
   EXPECT_EQ(comps.point, Point(0, 0, 1));
@@ -110,7 +110,7 @@ TEST(prepare_computations_tests, PrepareComputationsIntersectionInside){
 TEST(prepare_computations_tests, PrepareComputationsReflectionVector){
   const auto r = Ray(Point(0, 0, -1), Vector(0, -sqrt(2)/2, sqrt(2)/2));
   const auto s = geometry::Plane();
-  const auto i = geometry::Intersection(std::make_shared<geometry::Shape>(s),   sqrt(2));
+  const auto i = geometry::Intersection(&s,   sqrt(2));
   const auto comps = geometry::prepareComputations(i,r);
 
   EXPECT_EQ(comps.reflectVector, Vector(0, sqrt(2)/2, sqrt(2)/2));

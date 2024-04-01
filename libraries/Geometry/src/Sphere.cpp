@@ -1,7 +1,6 @@
 #include <memory>
 
 #include "Sphere.hpp"
-#include "Shape.hpp"
 #include "Intersections.hpp"
 
 namespace raytracer {
@@ -26,8 +25,8 @@ std::vector<Intersection> Sphere::localIntersect(const utility::Ray& transformed
 
   const auto dist1 = (-b - std::sqrt(discriminant)) / (2*a);
   const auto dist2 = (-b + std::sqrt(discriminant)) / (2*a);
-  return std::vector<Intersection>{Intersection{std::make_shared<Shape>(*this), dist1},
-                                   Intersection{std::make_shared<Shape>(*this), dist2}};
+  return std::vector<Intersection>{Intersection{this, dist1},
+                                   Intersection{this, dist2}};
 }
 
 utility::Tuple Sphere::localNormalAt(const utility::Tuple &objectPoint) const noexcept{
@@ -35,6 +34,8 @@ utility::Tuple Sphere::localNormalAt(const utility::Tuple &objectPoint) const no
   return objectNormal;
 }
 
+std::shared_ptr<Sphere> normalSphere() noexcept{
+  return std::make_shared<Sphere>();
   return worldNormal.normalize();
 }
 

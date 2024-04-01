@@ -1,78 +1,90 @@
-#ifndef SHAPE_HPP
-#define SHAPE_HPP
+#ifndef SHAPET_HPP
+#define SHAPET_HPP
 
 #include <variant>
-#include <vector>
-#include <concepts>
+#include <atomic>
+#include <memory>
 
-#include "Ray.hpp"
 #include "Tuple.hpp"
+#include "Ray.hpp"
+#include "Transformations.hpp"
 #include "Matrix.hpp"
-#include "Plane.hpp"
-#include "Sphere.hpp"
+#include "Material.hpp"
+#include "Intersections.hpp"
 
 namespace raytracer {
 namespace geometry {
 
-struct Intersection;
-class Material;
-
-/* This class serves as a wrapper around a variant of all the available shapes we have. It serves the purpose of 
-   enabling compile time polymorphism by visiting all the shape interface functions. */
-class Shape {
+class ShapeBase {
 public:
-  using ShapeVariant = std::variant<Plane, Sphere>;
+  ShapeBase() noexcept: id_{ID++}, transformation_{utility::Matrix<4,4>::identity()},
+                    inverseTransformation_{utility::Matrix<4,4>::identity()}{}
 
-  Shape(ShapeVariant shape) noexcept: shape_{std::move(shape)} {}
+  virtual ~ShapeBase() {}
 
   void setTransform(const utility::Matrix<4,4> &transformation) noexcept {
-    std::visit([transformation](auto &s) { s.setTransform(transformation); }, shape_);
+    transformation_ = transformation;
+    inverseTransformation_ = inverse(transformation_);
   }
 
   const utility::Matrix<4,4>& transformation() const noexcept {
-    return std::visit([&](auto &s) -> auto const &
-                      { return s.transformation(); },
-            shape_);
+    return transformation_;
   }
 
   const utility::Matrix<4,4>& inverseTransform() const noexcept {
-    return std::visit([&](auto &s) -> auto const &
-                      { return s.inverseTransform(); },
-            shape_);
-  } 
-
-  const material::Material& material() const noexcept {
-    return std::visit([](auto &s) -> auto const &
-                      { return s.material(); }, 
-            shape_);
-  }
-  material::Material& material() noexcept {
-    return std::visit([](auto &s)  -> auto &
-                      { return s.material(); }, 
-                      shape_);
-  }
-
-  void setMaterial(const material::Material& material) noexcept {
-    std::visit([material](auto &s) { s.setMaterial(material); }, shape_);
+    return inverseTransformation_;
   }
 
   std::size_t id() const noexcept {
-    return std::visit([](auto &s) { return s.id(); }, shape_);
+    return id_;
   }
 
+  const material::Material& material() const noexcept {
+    return material_;
+  }
+  material::Material& material() noexcept {
+    return const_cast<material::Material&>(const_cast<const ShapeBase*>(this)->material());
+  }
+
+  void setMaterial(const material::Material& material) noexcept {
+    material_ = material;
+  }
+
+  /**
+   * @brief Function to calculate the intersections between a ray and a sphere.
+   */
   std::vector<Intersection> intersect(const utility::Ray& ray) const noexcept {
-    return std::visit([ray](auto &s) { return s.intersect(ray); }, shape_);
+    return localIntersect(utility::transform(ray, inverseTransform()));
   }
 
+  /**
+   * @brief Calculates the normal vector at a given point on the shape.
+   */
   utility::Tuple normalAt(const utility::Tuple &point) const noexcept {
-    return std::visit([point](auto &s) { return s.normalAt(point); }, shape_);
+    const auto localPoint  = inverseTransform() * point;
+    const auto localNormal = localNormalAt(localPoint);
+    // This is needed because the normal utility::Vector is a linear form, see below:
+    // https://computergraphics.stackexchange.com/questions/1502/why-is-the-transposed-inverse-of-the-model-view-matrix-used-to-transform-the-nor
+    auto worldNormal  = inverseTransform().transpose() * localNormal;
+    worldNormal.w() = 0;
+
+    return worldNormal.normalize();
   }
 
-  ShapeVariant shape_;
-};
+  utility::Tuple origin_;
+  material::Material material_;
+protected:
+  virtual std::vector<Intersection> localIntersect(const utility::Ray& transformedRay) const noexcept = 0;
+  virtual utility::Tuple localNormalAt(const utility::Tuple &objectPoint) const noexcept = 0;
+private:
+  std::size_t id_;
+  utility::Matrix<4,4> transformation_;
+  utility::Matrix<4,4> inverseTransformation_;
 
+  static inline std::atomic<size_t> ID{};
+};
 
 } // namespace geometry
 } // namespace raytracer
 
-#endif // SHAPE_HPP
+#endif // SHAPET_HPP

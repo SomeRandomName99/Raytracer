@@ -61,7 +61,7 @@ public:
   bool isShadowed(const PointLight& light, const utility::Tuple& point) const noexcept;
 
   std::vector<PointLight> lights_;
-  std::vector<geometry::Shape> objects_;
+  std::vector<std::shared_ptr<geometry::ShapeBase>> objects_;
 };
 
 World defaultWorld() noexcept;

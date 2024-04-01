@@ -1,7 +1,6 @@
 #include <memory>
 
 #include "Plane.hpp"
-#include "Shape.hpp"
 #include "Intersections.hpp"
 
 namespace raytracer {
@@ -13,11 +12,15 @@ std::vector<Intersection> Plane::localIntersect(const utility::Ray &transformedR
   }
 
   double t = -transformedRay.origin_.y() / transformedRay.direction_.y();
-  return std::vector<Intersection>{Intersection(std::make_shared<Shape>(*this), t)};
+  return std::vector<Intersection>{Intersection(this, t)};
 }
 
 utility::Tuple Plane::localNormalAt([[maybe_unused]]const utility::Tuple &objectPoint) const noexcept {
   return utility::Vector(0, 1, 0);
+}
+
+std::shared_ptr<Plane> normalPlane() noexcept {
+  return std::make_shared<Plane>();
 }
 
 } // namespace geometry

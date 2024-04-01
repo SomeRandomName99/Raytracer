@@ -3,17 +3,19 @@
 
 #include <vector>
 #include <atomic>
+#include <memory>
 
 #include "Tuple.hpp"
 #include "Ray.hpp"
-#include "ShapeT.hpp"
+#include "Shape.hpp"
 
 namespace raytracer {
 namespace geometry {
 
 struct Intersection;
+class Shape;
 
-class Sphere : public ShapeT<Sphere>
+class Sphere final : public ShapeBase
 {
 public:
 Sphere() noexcept {}
@@ -32,6 +34,9 @@ std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) con
 double radius_;
 utility::Tuple origin_;
 };
+
+std::shared_ptr<Sphere> normalSphere() noexcept;
+std::shared_ptr<Sphere> glassSphere() noexcept;
 
 } // namespace geometry
 } // namespace raytracer

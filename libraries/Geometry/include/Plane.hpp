@@ -6,12 +6,12 @@
 
 #include "Tuple.hpp"
 #include "Ray.hpp"
-#include "ShapeT.hpp"
+#include "Shape.hpp"
 
 namespace raytracer {
 namespace geometry {
 
-class Plane : public ShapeT<Plane>
+class Plane final : public ShapeBase
 {
 public:
   Plane() noexcept {}
@@ -20,13 +20,15 @@ public:
   /**
    * Calculates the normal vector at a given point on the plane.
    */
-  utility::Tuple localNormalAt(const utility::Tuple &objectPoint) const noexcept;
+  utility::Tuple localNormalAt(const utility::Tuple &objectPoint) const noexcept override;
 
   /**
    * Function to calculate the intersections between a ray and a plane.
    */
-  std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept;
+  std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept override;
 };
+
+std::shared_ptr<Plane> normalPlane() noexcept;
 
 } // namespace geometry
 } // namespace raytracer

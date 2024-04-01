@@ -19,7 +19,7 @@ public:
   utility::Tuple position_;
 };
 
-utility::Color lighting(std::shared_ptr<geometry::Shape> object, const PointLight& light, const utility::Tuple& point, 
+utility::Color lighting(const geometry::ShapeBase* object, const PointLight& light, const utility::Tuple& point, 
                         const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow) noexcept;
 } // namespace raytracer
 } // namespace scene

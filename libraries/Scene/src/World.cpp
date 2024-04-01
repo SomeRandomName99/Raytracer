@@ -8,7 +8,7 @@ namespace scene {
 std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) const noexcept{
   std::vector<geometry::Intersection> intersections;
   for(const auto& object : objects_){
-    const auto objectIntersections = object.intersect(ray);
+    const auto objectIntersections = object->intersect(ray);
     intersections.insert(intersections.end(), objectIntersections.begin(), objectIntersections.end());
   }
   std::ranges::sort(intersections, {}, [](const auto& intersection){ return intersection.dist; });
@@ -17,7 +17,7 @@ std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) co
 
 bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) const noexcept{
   for(const auto& object : objects_){
-    const auto objectIntersections = object.intersect(ray);
+    const auto objectIntersections = object->intersect(ray);
     const auto hit = geometry::hit(objectIntersections);
     if(hit && hit->dist > 0.0 && hit->dist < distanceToLight){return true;}
   }
@@ -67,10 +67,10 @@ World defaultWorld() noexcept{
   const auto light = scene::PointLight{utility::Color{1,1,1}, utility::Point(-10,10,-10)};
   world.lights_.push_back(light);
 
-  auto s1 = geometry::Sphere{};
-  s1.material_ = material::Material(utility::Color(0.8, 1.0, 0.6), std::nullopt, 0.1, 0.7, 0.2);
-  auto s2 = geometry::Sphere{};
-  s2.setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));
+  auto s1 = geometry::normalSphere();
+  s1->setMaterial(material::Material(utility::Color(0.8, 1.0, 0.6), std::nullopt, 0.1, 0.7, 0.2));
+  auto s2 = geometry::normalSphere();
+  s2->setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));
   world.objects_.emplace_back(s1);
   world.objects_.emplace_back(s2);
 

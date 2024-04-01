@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include <vector>
 
-#include "ShapeT.hpp"
+#include "Shape.hpp"
 #include "Material.hpp"
 #include "Intersections.hpp"
 #include "Ray.hpp"
@@ -10,7 +10,7 @@
 using namespace raytracer;
 using namespace utility;
 
-class MockTestShape : public geometry::ShapeT<MockTestShape> {
+class MockTestShape : public geometry::ShapeBase {
 public:
   MOCK_METHOD(std::vector<geometry::Intersection>, localIntersect, (const utility::Ray& ray), (const, noexcept));
   MOCK_METHOD(utility::Tuple, localNormalAt, (const utility::Tuple &point), (const, noexcept));

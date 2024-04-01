@@ -4,6 +4,7 @@
 #include "Pattern.hpp"
 #include "StripePattern.hpp"
 #include "Light.hpp"
+#include "Sphere.hpp"
 
 using namespace raytracer;
 using namespace utility;
@@ -26,14 +27,14 @@ TEST(material_tests, lightingWithAMaterialApplied){
   m.setDiffuse(0);
   m.setSpecular(0);
 
-  auto s = std::make_shared<geometry::Shape>(geometry::Sphere());
-  s->setMaterial(m);
+  auto spherePtr = geometry::normalSphere();
+  spherePtr->setMaterial(m);
 
   const auto eyeVector = utility::Vector(0, 0, -1);
   const auto normalVector = utility::Vector(0, 0, -1);
   const auto light = scene::PointLight(utility::Color(1, 1, 1), utility::Point(0, 0, -10));
 
-  EXPECT_EQ(scene::lighting(s, light, utility::Point(0.9, 0, 0), eyeVector, normalVector, false), utility::Color(1, 1, 1));
-  EXPECT_EQ(scene::lighting(s, light, utility::Point(1.1, 0, 0), eyeVector, normalVector, false), utility::Color(0, 0, 0));
+  EXPECT_EQ(scene::lighting(spherePtr.get(), light, utility::Point(0.9, 0, 0), eyeVector, normalVector, false), utility::Color(1, 1, 1));
+  EXPECT_EQ(scene::lighting(spherePtr.get(), light, utility::Point(1.1, 0, 0), eyeVector, normalVector, false), utility::Color(0, 0, 0));
 }
 
