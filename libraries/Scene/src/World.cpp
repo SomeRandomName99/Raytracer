@@ -45,10 +45,25 @@ utility::Color World::reflectedColor(const geometry::Computations& comps, size_t
   return this->colorAt(reflectiedRay, recursionLimit - 1) * comps.intersection.object->material().reflectance();
 }
 
+utility::Color World::refractedColor(const geometry::Computations& comps, size_t recursionLimit) const noexcept{
+  if(comps.intersection.object->material().transparency() == 0) return utility::Color{0,0,0};
+  if(recursionLimit == 0) return utility::Color{0,0,0};
+
+  auto nRatio = comps.n1 / comps.n2;
+  auto cosI = comps.eyeVector.dot(comps.normalVector);
+  auto sin2T = nRatio * nRatio * (1 - cosI * cosI); // basically solving snell's law
+
+  // Total internal reflection
+  if(sin2T > 1) return utility::Color{0,0,0};
+
+  return utility::Color{1,1,1};
+}
+
 utility::Color World::colorAt(const utility::Ray& ray, size_t recursionLimit) const noexcept{
-  const auto hit                    = geometry::hit(this->intersect(ray));
+  const auto intersections          = this->intersect(ray);
+  const auto hit                    = geometry::hit(intersections);
   if (!hit.has_value()) return utility::Color{0,0,0};
-  const auto intersect_computations = geometry::prepareComputations(*hit, ray);
+  const auto intersect_computations = geometry::prepareComputations(*hit, ray, intersections);
   return this->shadeHit(intersect_computations, recursionLimit);
 }
 

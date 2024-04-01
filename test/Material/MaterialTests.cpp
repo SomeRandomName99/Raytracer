@@ -38,3 +38,9 @@ TEST(material_tests, lightingWithAMaterialApplied){
   EXPECT_EQ(scene::lighting(spherePtr.get(), light, utility::Point(1.1, 0, 0), eyeVector, normalVector, false), utility::Color(0, 0, 0));
 }
 
+/* =========== Refractions Tests =========== */
+TEST(material_tests, transparencyAndRefractiveIndexForTheDefaultMaterial){
+  const auto m = material::Material();
+  EXPECT_FLOAT_EQ(m.transparency(), 0.0);
+  EXPECT_FLOAT_EQ(m.refractiveIndex(), 1.0);
+}

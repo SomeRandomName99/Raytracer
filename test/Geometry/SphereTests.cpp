@@ -6,6 +6,7 @@
 #include "Sphere.hpp"
 #include "Intersections.hpp"
 #include "Material.hpp"
+#include "Matrix.hpp"
 #include "Shape.hpp"
 #include "Transformations.hpp"
 
@@ -130,4 +131,13 @@ TEST(sphere_tests, NormalOnTransformedSphere){
   const auto n = s.normalAt(Point(0, std::sqrt(2)/2, -std::sqrt(2)/2));
 
   EXPECT_EQ(n, Vector(0, 0.9701425, -0.2425356));
+}
+
+/* =========== Glass sphere tests =========== */
+TEST(sphere_tests, GlassSphereDefaultTransform) {
+  auto s = geometry::glassSphere();
+
+  EXPECT_EQ(s->transformation(), (Matrix<4,4>::identity()));
+  EXPECT_FLOAT_EQ(s->material().transparency(), 1.0);
+  EXPECT_FLOAT_EQ(s->material().refractiveIndex(), 1.5);
 }

@@ -36,7 +36,14 @@ utility::Tuple Sphere::localNormalAt(const utility::Tuple &objectPoint) const no
 
 std::shared_ptr<Sphere> normalSphere() noexcept{
   return std::make_shared<Sphere>();
-  return worldNormal.normalize();
+}
+
+std::shared_ptr<Sphere> glassSphere() noexcept{
+  auto glassSphere = normalSphere();
+  glassSphere->material().setTransparency(1.0);
+  glassSphere->material().setRefractiveIndex(1.5); 
+
+  return glassSphere;
 }
 
 } // namespace geometry

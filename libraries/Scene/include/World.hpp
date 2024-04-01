@@ -38,10 +38,8 @@ public:
    */
   utility::Color shadeHit(const geometry::Computations& computation, size_t recursionLimit = 5) const noexcept;
 
-  /**
-   * Calculates the color of a reflected ray.
-   */
   utility::Color reflectedColor(const geometry::Computations& computation, size_t recursionLimit = 5) const noexcept;
+  utility::Color refractedColor(const geometry::Computations& computation, size_t recursionLimit = 5) const noexcept;
 
   /**
    * Calculates the color at a given ray intersection point in the world.

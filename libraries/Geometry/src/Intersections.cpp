@@ -20,6 +20,25 @@ bool operator==(Intersection const& lhs, Intersection const& rhs) noexcept{
 Computations prepareComputations(Intersection intersection, const utility::Ray& ray, 
                                  const std::vector<Intersection>& intersections) noexcept{
   Computations computations;
+  std::vector<const geometry::ShapeBase*> unexitedShapes;
+
+  for(const auto& i: intersections){
+    if(i == intersection){
+      computations.n1 = unexitedShapes.empty() ? 1.0 : unexitedShapes.back()->material().refractiveIndex();
+    }
+
+    auto found = std::find(unexitedShapes.begin(), unexitedShapes.end(), i.object);
+    if(found != unexitedShapes.end()){
+      unexitedShapes.erase(found);
+    } else {
+      unexitedShapes.push_back(i.object);
+    }
+
+    if(i == intersection){
+      computations.n2 = unexitedShapes.empty() ? 1.0 : unexitedShapes.back()->material().refractiveIndex();
+      break;
+    }
+  }
 
   // copy values for ease of accessibility
   computations.intersection = intersection;
@@ -36,7 +55,8 @@ Computations prepareComputations(Intersection intersection, const utility::Ray& 
     computations.inside = false;
   }
 
-  computations.overPoint = computations.point + computations.normalVector * SHADOW_OFFSET;
+  computations.overPoint  = computations.point + computations.normalVector * SHADOW_OFFSET;
+  computations.underPoint = computations.point - computations.normalVector * SHADOW_OFFSET;
   return computations;
 }
 

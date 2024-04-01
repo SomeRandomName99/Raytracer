@@ -34,6 +34,7 @@ struct Computations{
   utility::Tuple normalVector; 
   utility::Tuple point;
   utility::Tuple overPoint; // used for shadows
+  utility::Tuple underPoint; // used for refractions
   utility::Tuple eyeVector;
   utility::Tuple reflectVector;
   double n1; // refractive indices
@@ -43,7 +44,7 @@ struct Computations{
 
 
 Computations prepareComputations(Intersection intersection, const utility::Ray& ray, 
-                                 const std::vector<Intersection>& intersections = std::vector<Intersection>()) noexcept;
+                                 const std::vector<Intersection>& intersections = {}) noexcept;
 
 /**
  * @brief Creates a vector of intersections from the given arguments.

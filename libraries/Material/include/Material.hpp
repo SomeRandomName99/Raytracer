@@ -14,7 +14,8 @@ class Material {
 public:
   Material() noexcept;
   Material(utility::Color surfaceColor, std::optional<Pattern> pattern = std::nullopt, double ambient = 0.1, double diffuse = 0.9, 
-           double specular = 0.9, double shininess = 200, double reflectance = 0) noexcept;
+           double specular = 0.9, double shininess = 200, double reflectance = 0, double transparency = 0, 
+           double refractiveIndex = 1) noexcept;
 
 
 // write setters and getters for all the private fields
@@ -44,6 +45,12 @@ public:
   void setReflectance(double reflectance) noexcept;
   double reflectance() const noexcept;
 
+  void setTransparency(double transparency) noexcept;
+  double transparency() const noexcept;
+
+  void setRefractiveIndex(double refractiveIndex) noexcept;
+  double refractiveIndex() const noexcept;
+
 private:
   utility::Color surfaceColor_;
   std::optional<Pattern> pattern_;
@@ -52,6 +59,8 @@ private:
   double specular_;
   double shininess_;
   double reflectance_;
+  double transparency_;
+  double refractiveIndex_;
 };
 
 bool operator==(const raytracer::material::Material& lhs, const raytracer::material::Material& rhs) noexcept;

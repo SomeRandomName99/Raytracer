@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include <memory>
 #include <limits>
 
@@ -10,6 +11,7 @@
 #include "Material.hpp"
 #include "Transformations.hpp"
 #include "Intersections.hpp"
+#include "PatternT.hpp"
 
 using namespace raytracer;
 using namespace utility;
@@ -227,6 +229,41 @@ TEST_F(defaultWorldTests, reflectedColorAtMaximumRecursionDepth){
   const auto i = geometry::Intersection(&shape, sqrt(2));
   const auto comps = prepareComputations(i, r);
   const auto color = world.reflectedColor(comps, 0);
+
+  EXPECT_EQ(color, utility::Color(0,0,0));
+}
+
+// =================== Refraction Tests ===================
+TEST_F(defaultWorldTests, RefractedColorWithOpaqueSurface){
+  const auto r = utility::Ray(utility::Point(0,0,-5), utility::Vector(0,0,1));
+  auto shape = world.objects_.at(0);
+  const auto xs = geometry::intersections(geometry::Intersection(shape.get(), 4), geometry::Intersection(shape.get(), 6));
+  const auto comps = prepareComputations(xs[0], r);
+  const auto color = world.refractedColor(comps, 5);
+
+  EXPECT_EQ(color, utility::Color(0,0,0));
+}
+
+TEST_F(defaultWorldTests, RefractedColorAtMaximumRecursionDepth){
+  auto shape = world.objects_.at(0);
+  shape->material().setTransparency(1.0);
+  shape->material().setRefractiveIndex(1.5);
+  const auto r = utility::Ray(utility::Point(0,0,-5), utility::Vector(0,0,1));
+  const auto xs = geometry::intersections(geometry::Intersection(shape.get(), 4), geometry::Intersection(shape.get(), 6));
+  const auto comps = prepareComputations(xs[0], r);
+  const auto color = world.refractedColor(comps, 0);
+
+  EXPECT_EQ(color, utility::Color(0,0,0));
+}
+
+TEST_F(defaultWorldTests, RefractedColorUnderTotalInternalReflection){
+  auto shape = world.objects_.at(0);
+  shape->material().setTransparency(1.0);
+  shape->material().setRefractiveIndex(1.5);
+  const auto r = utility::Ray(utility::Point(0,0,sqrt(2)/2), utility::Vector(0,1,0));
+  const auto xs = geometry::intersections(geometry::Intersection(shape.get(), -sqrt(2)/2), geometry::Intersection(shape.get(), sqrt(2)/2));
+  const auto comps = prepareComputations(xs[1], r, xs);
+  const auto color = world.refractedColor(comps);
 
   EXPECT_EQ(color, utility::Color(0,0,0));
 }
