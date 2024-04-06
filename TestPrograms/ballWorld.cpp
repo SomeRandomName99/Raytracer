@@ -12,15 +12,21 @@
 #include "World.hpp"
 #include "Camera.hpp"
 #include "Plane.hpp"
+#include "Pattern.hpp"
+#include "CheckerPattern.hpp"
+#include "StripePattern.hpp"
+#include "PerturbedPattern.hpp"
+#include "RingPattern.hpp"
+#include "GradientPattern.hpp"
 
 using namespace raytracer;
 
 int main(){
   auto backWallMaterial = material::Material();
-  backWallMaterial.setPattern(material::CheckerPattern(utility::Color(1,1,1), utility::Color(0,0,0)));
+  backWallMaterial.setPattern(material::Pattern(material::CheckerPattern(utility::Color(1,1,1), utility::Color(0,0,0))));
 
   auto floorMaterial = material::Material();
-  floorMaterial.setPattern(material::StripePattern(utility::Color(1, 0.9, 0.9), utility::Color(0.9, 1, 0.9)));
+  floorMaterial.setPattern(material::Pattern(material::StripePattern(utility::Color(1, 0.9, 0.9), utility::Color(0.9, 1, 0.9))));
   floorMaterial.setSpecular(0);
 
   auto floor = geometry::normalPlane();
@@ -29,14 +35,16 @@ int main(){
   auto wall = geometry::normalPlane();
   wall->setMaterial(backWallMaterial);
   wall->setTransform(utility::transformations::translation(0, 0, 6) * 
-                    utility::transformations::rotation_x(std::numbers::pi / 2));
+                     utility::transformations::rotation_x(std::numbers::pi / 2));
 
   auto middle = geometry::normalSphere();
   middle->setTransform(utility::transformations::translation(-0.5, 1, 0.5)*
                       utility::transformations::rotation_z(std::numbers::pi / 3));
-  middle->material().setPattern(material::PerturbedPattern(material::RingPattern(utility::Color(1,1,1), utility::Color(1,0,0))));
-  middle->material().pattern().value().setTransform(utility::transformations::scaling(0.1, 0.1, 0.1) *
-                                                  utility::transformations::rotation_x(std::numbers::pi / 2));
+  auto middlePattern = material::Pattern(material::Perturb(material::RingPattern(utility::Color(1,1,1), utility::Color(1,0,0))));
+  middlePattern.setTransform(utility::transformations::scaling(0.1, 0.1, 0.1) * 
+                              utility::transformations::rotation_x(std::numbers::pi / 2));
+                              utility::transformations::rotation_x(std::numbers::pi / 2);
+  middle->material().setPattern(middlePattern);
   middle->material().setDiffuse(0.7);
   middle->material().setSpecular(0.3);
   middle->material().setReflectance(0.05);
@@ -44,16 +52,16 @@ int main(){
   auto right = geometry::normalSphere();
   right->setTransform(utility::transformations::translation(1.5, 0.5, -0.5) * 
                      utility::transformations::scaling(0.5, 0.5, 0.5));
-  right->material().setPattern(material::GradientPattern(utility::Color(1,0,0), utility::Color(0,1,0)));
-  right->material().pattern().value().setTransform(utility::transformations::scaling(4, 4, 4) *
-                                                 utility::transformations::translation(0.5, 0, 0));
+  auto rightPattern = material::Pattern(material::GradientPattern(utility::Color(1,0,0), utility::Color(0,1,0)));
+  rightPattern.setTransform(utility::transformations::scaling(4, 4, 4) * utility::transformations::translation(0.5, 0, 0));
+  right->material().setPattern(rightPattern);
   right->material().setDiffuse(0.7);
   right->material().setSpecular(0.3);
   right->material().setReflectance(0.1);
 
   auto left = geometry::normalSphere();
   left->setTransform(utility::transformations::translation(-1.5, 0.33, -0.75) * 
-                    utility::transformations::scaling(0.33, 0.33, 0.33));
+                     utility::transformations::scaling(0.33, 0.33, 0.33));
   left->material().setSurfaceColor(utility::Color(1, 0.8, 0.1));
   left->material().setDiffuse(0.7);
   left->material().setSpecular(0.3);

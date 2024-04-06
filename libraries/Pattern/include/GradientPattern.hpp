@@ -3,17 +3,17 @@
 
 #include <cmath>
 
-#include "PatternT.hpp"
+#include "Pattern.hpp"
 #include "Color.hpp"
 
 namespace raytracer {
 namespace material {
 
-class GradientPattern: public PatternT<GradientPattern>{
+class GradientPattern {
 public:
     GradientPattern(utility::Color a, utility::Color b) : a{a}, b{b}{}
 
-    utility::Color localPattern_at(const utility::Tuple& point) const noexcept {
+    utility::Color drawPatternAt(const utility::Tuple& point) const noexcept {
       auto distance = b - a;
       auto fraction = point.x() - std::floor(point.x());
       return a + distance * fraction;

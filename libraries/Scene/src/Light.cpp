@@ -11,7 +11,7 @@ utility::Color lighting(const geometry::ShapeBase* object, const PointLight& lig
                         const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow) noexcept{
   utility::Color color;
   if (object->material().pattern().has_value()) {
-    color = (*object->material().pattern()).pattern_at_object(object->inverseTransform(), point);
+    color = (*object->material().pattern()).drawPatternAt(object->inverseTransform(), point);
   } else {
     color = object->material().surfaceColor();
   }

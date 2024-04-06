@@ -1,3 +1,5 @@
+#include <optional>
+
 #include "World.hpp"
 #include "Material.hpp"
 #include "FloatAlmostEquals.hpp"

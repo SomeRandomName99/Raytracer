@@ -3,7 +3,6 @@ add_library(Pattern STATIC "")
 target_sources(
   Pattern
   PRIVATE
-    src/Pattern.cpp
     src/StripePattern.cpp
     src/GradientPattern.cpp
     src/RingPattern.cpp
@@ -11,7 +10,6 @@ target_sources(
     src/PerturbedPattern.cpp
   PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/include/Pattern.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/PatternT.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/StripePattern.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/GradientPattern.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/RingPattern.hpp

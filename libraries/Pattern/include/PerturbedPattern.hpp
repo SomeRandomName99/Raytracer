@@ -4,30 +4,32 @@
 #include <memory>
 
 #include "Color.hpp"
-#include "PatternT.hpp"
+#include "Matrix.hpp"
+#include "Pattern.hpp"
+
+#define STB_PERLIN_IMPLEMENTATION
+#include "stb_perlin.h"
 
 namespace raytracer {
 namespace material {
 
-class Pattern;
-
-template <typename T>
-concept NotSharedPattern = !std::is_same_v<std::shared_ptr<Pattern>, T>;
-
-
-class PerturbedPattern: public PatternT<PerturbedPattern>{
+template <typename PatternT>
+class Perturb  {
 public:
-  PerturbedPattern(std::shared_ptr<Pattern> pattern) : pattern_{pattern}{}
+  Perturb(PatternT pattern) noexcept : pattern_{std::move(pattern)} {}
 
-  template <NotSharedPattern T>
-  PerturbedPattern(const T& pattern) : pattern_{std::make_shared<Pattern>(pattern)} {}
+  utility::Color drawPatternAt(const utility::Tuple& point) const noexcept{
+    auto noise = stb_perlin_noise3(point.x(), point.y(), point.z(), 0, 0, 0);
+    auto perturbedPoint = point + noise;
+    return pattern_.drawPatternAt(perturbedPoint);
+  }
 
-  utility::Color localPattern_at(const utility::Tuple& point) const noexcept; 
-
-  std::shared_ptr<Pattern> pattern_;
+private:
+friend bool operator==(const Perturb<PatternT>& lhs, const Perturb<PatternT>& rhs) noexcept {
+  return lhs.pattern_ == rhs.pattern_;
+}
+PatternT pattern_;
 };
-
-bool operator==(const PerturbedPattern& lhs, const PerturbedPattern& rhs) noexcept;
 
 } // namespace material
 } // namespace raytracer

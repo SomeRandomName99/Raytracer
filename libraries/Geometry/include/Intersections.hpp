@@ -21,6 +21,9 @@ class ShapeBase;
  * \class Intersection
  * \brief Save information about an intersection between a ray and a geometry object.
  */
+/*
+ * TODO: Use a reference wrapper instead of a pointer in order to make sure that the pointer is never null.
+*/
 struct Intersection
 {
   const ShapeBase *object;

@@ -4,17 +4,17 @@
 
 #include <cmath>
 
-#include "PatternT.hpp"
+#include "Pattern.hpp"
 #include "Color.hpp"
 
 namespace raytracer {
 namespace material {
 
-class StripePattern: public PatternT<StripePattern>{
+class StripePattern  {
 public:
     StripePattern(utility::Color a, utility::Color b) : a{a}, b{b}{}
 
-    utility::Color localPattern_at(const utility::Tuple& point) const noexcept {
+    utility::Color drawPatternAt(const utility::Tuple& point) const noexcept {
       if(static_cast<int>(std::floor(point.x())) % 2 == 0){
         return a;
       } else {

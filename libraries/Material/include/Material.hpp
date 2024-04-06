@@ -1,6 +1,7 @@
 #ifndef MATERIAL_HPP
 #define MATERIAL_HPP
 
+#include <memory>
 #include <optional>
 
 #include "Color.hpp"
@@ -13,22 +14,23 @@ namespace material {
 class Material {
 public:
   Material() noexcept;
-  Material(utility::Color surfaceColor, std::optional<Pattern> pattern = std::nullopt, double ambient = 0.1, double diffuse = 0.9, 
-           double specular = 0.9, double shininess = 200, double reflectance = 0, double transparency = 0, 
-           double refractiveIndex = 1) noexcept;
+  Material(utility::Color surfaceColor, std::optional<Pattern> pattern = std::nullopt, 
+           double ambient = 1.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200,
+           double reflectance = 0, double transparency = 0, double refractiveIndex = 1) noexcept;
 
+  ~Material() = default;
 
-// write setters and getters for all the private fields
+  Material(const Material& other) = delete;
+  Material& operator=(const Material& other) = delete;
+
+  Material(Material &&other) noexcept = default;
+  Material& operator=(Material&& other) noexcept = default;
+
   void setSurfaceColor(const utility::Color& surfaceColor) noexcept;
   const utility::Color& surfaceColor() const noexcept;
 
-  template <typename PatternType>
-  void setPattern(const PatternType& pattern) noexcept{
-    pattern_ = pattern;
-  }
-
+  void setPattern(const Pattern& pattern);
   const std::optional<Pattern>& pattern() const noexcept;
-  std::optional<Pattern>& pattern() noexcept;
 
   void setAmbient(double ambient) noexcept;
   double ambient() const noexcept;

@@ -46,8 +46,11 @@ public:
     return const_cast<material::Material&>(const_cast<const ShapeBase*>(this)->material());
   }
 
-  void setMaterial(const material::Material& material) noexcept {
-    material_ = material;
+  void setMaterial(material::Material& material) noexcept {
+    material_ = std::move(material);
+  }
+  void setMaterial(material::Material&& material) noexcept {
+    material_ = std::move(material);
   }
 
   /**

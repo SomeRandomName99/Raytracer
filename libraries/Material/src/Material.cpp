@@ -10,7 +10,7 @@ Material::Material() noexcept
 
 Material::Material(utility::Color surfaceColor, std::optional<Pattern> pattern, double ambient, double diffuse, 
                    double specular, double shininess, double reflectance, double transparency, double refractiveIndex) noexcept 
-    : surfaceColor_{surfaceColor}, pattern_{pattern}, ambient_{ambient}, diffuse_{diffuse}, specular_{specular}, shininess_{shininess},
+    : surfaceColor_{surfaceColor}, pattern_{std::move(pattern)}, ambient_{ambient}, diffuse_{diffuse}, specular_{specular}, shininess_{shininess},
       reflectance_{reflectance}, transparency_{transparency}, refractiveIndex_{refractiveIndex} {}
 
 void Material::setSurfaceColor(const utility::Color& surfaceColor) noexcept {
@@ -20,10 +20,10 @@ const utility::Color& Material::surfaceColor() const noexcept {
   return surfaceColor_;
 }
 
-std::optional<Pattern>& Material::pattern() noexcept {
-  return pattern_;
+void Material::setPattern(const Pattern& pattern) {
+  pattern_ = pattern;
 }
-const std::optional<Pattern>& Material::pattern() const noexcept {
+const std::optional<Pattern>& Material::pattern() const noexcept{
   return pattern_;
 }
 

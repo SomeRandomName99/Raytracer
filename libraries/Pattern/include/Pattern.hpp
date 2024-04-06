@@ -1,62 +1,124 @@
-#ifndef PATTERNS_HPP
-#define PATTERNS_HPP
+#ifndef PATTERNT_HPP
+#define PATTERNT_HPP
 
-#include <variant>
+#include <memory>
 
-#include "Color.hpp"
 #include "Matrix.hpp"
-#include "StripePattern.hpp"
-#include "GradientPattern.hpp"
-#include "RingPattern.hpp"
-#include "CheckerPattern.hpp"
-#include "PerturbedPattern.hpp"
+#include "Color.hpp"
 
 namespace raytracer {
 namespace material {
 
-/* This class serves as a wrapper around a variant of all the available patterns we have. It serves the purpose of 
-   enabling compile time polymorphism by visiting all the pattern interface functions. */
-class Pattern {
+namespace details {
+class PatternConcept {
 public:
-    using PatternVariant = std::variant<StripePattern, GradientPattern, RingPattern, CheckerPattern, PerturbedPattern>;
-
-    Pattern(PatternVariant pattern) noexcept: pattern_{std::move(pattern)} {}
-    template <typename PatternType>
-    Pattern(const PatternType& pattern) noexcept: pattern_{PatternVariant{pattern}} {}
-    
-    void setTransform(const utility::Matrix<4,4> &transformation) noexcept {
-        std::visit([transformation](auto &p) { p.setTransform(transformation); }, pattern_);
-    }
-    
-    const utility::Matrix<4,4>& transformation() const noexcept {
-        return std::visit([&](auto &p) -> auto const &
-                        { return p.transformation(); },
-                pattern_);
-    }
-    
-    const utility::Matrix<4,4>& inverseTransform() const noexcept {
-        return std::visit([&](auto &p) -> auto const &
-                        { return p.inverseTransform(); },
-                pattern_);
-    } 
-
-    PatternVariant pattern() const noexcept {
-        return pattern_;
-    }
-
-    utility::Color pattern_at_object(const utility::Matrix<4,4>& objectInverseTransformation, 
-                                     const utility::Tuple& worldPoint) const noexcept {
-        return std::visit([objectInverseTransformation, worldPoint](auto &p) 
-                            { return p.pattern_at_object(objectInverseTransformation, worldPoint); }, 
-                            pattern_);
-    }
-private:
-    PatternVariant pattern_;
+  virtual ~PatternConcept() {}
+  virtual utility::Color drawPatternAt(const utility::Matrix<4,4>& objectInverseTransformation, const utility::Tuple& worldPoint) const noexcept = 0;
+  virtual void setTransform(const utility::Matrix<4,4> &transformation) noexcept = 0;
+  virtual const utility::Matrix<4,4>& transform() const noexcept = 0;
+  virtual const utility::Matrix<4,4>& inverseTransform() const noexcept = 0;
+  virtual std::unique_ptr<PatternConcept> clone() const = 0;
+  virtual bool isEquals(const PatternConcept& other) const noexcept = 0;
 };
 
-bool operator==(const Pattern& lhs, const Pattern& rhs) noexcept;
+template <typename PatternT>
+class OwningPatternModel : public PatternConcept {
+public:
+  OwningPatternModel(PatternT pattern) noexcept : pattern_{std::move(pattern)} {}
+  OwningPatternModel(PatternT pattern, const utility::Matrix<4,4>& transformation)
+    : transformation_{transformation},
+      inverseTransformation_{inverse(transformation)},
+      pattern_{pattern} {}
+      
+  std::unique_ptr<PatternConcept> clone() const override {
+    return std::make_unique<OwningPatternModel<PatternT>>(pattern_, transformation_);
+  }
+
+  utility::Color drawPatternAt(const utility::Matrix<4,4>& objectInverseTransformation, const utility::Tuple& worldPoint) const noexcept override {
+    const auto objectPoint  = objectInverseTransformation * worldPoint;
+    const auto patternPoint = this->inverseTransform() * objectPoint;
+    return pattern_.drawPatternAt(patternPoint);
+  }
+
+  void swap(OwningPatternModel& other) noexcept {
+    std::swap(pattern_, other.pattern_);
+  }
+
+  bool isEquals(const PatternConcept& other) const noexcept override {
+    using Model = OwningPatternModel<PatternT>;
+    const auto * model = dynamic_cast<const Model*>(&other);
+    return (model && pattern_ == model->pattern_);
+  }
+
+  void setTransform(const utility::Matrix<4,4> &transformation) noexcept override {
+    transformation_ = transformation;
+    inverseTransformation_ = inverse(transformation_);
+  }
+
+  const utility::Matrix<4,4>& transform() const noexcept override {
+    return transformation_;
+  }
+
+  const utility::Matrix<4,4>& inverseTransform() const noexcept override {
+    return inverseTransformation_;
+  }
+
+private:
+  utility::Matrix<4,4> transformation_{utility::Matrix<4,4>::identity()};
+  utility::Matrix<4,4> inverseTransformation_{utility::Matrix<4,4>::identity()};
+  PatternT pattern_;
+};
+
+} // namespace details
+
+using namespace details;
+class Pattern {
+public:
+  template <typename PatternT>
+  Pattern(PatternT pattern) noexcept {
+    pimpl_ = std::make_unique<OwningPatternModel<PatternT>>(std::move(pattern));
+  }
+
+  Pattern(const Pattern& other) noexcept: pimpl_{other.pimpl_->clone()} {}
+
+  Pattern& operator=(const Pattern& other) noexcept {
+    Pattern tmp{other};
+    pimpl_.swap(tmp.pimpl_);
+    return *this;
+  }
+
+  utility::Color drawPatternAt(const utility::Matrix<4,4>& objectInverseTransformation, const utility::Tuple& worldPoint) const noexcept {
+    return pimpl_->drawPatternAt(objectInverseTransformation, worldPoint);
+  }
+
+  void setTransform(const utility::Matrix<4,4> &transformation) noexcept {
+    pimpl_->setTransform(transformation);
+  }
+
+  const utility::Matrix<4,4>& transform() const noexcept {
+    return pimpl_->transform();
+  }
+
+  const utility::Matrix<4,4>& inverseTransform() const noexcept {
+    return pimpl_->inverseTransform();
+  }
+
+  ~Pattern() = default;
+  Pattern(Pattern&&) = default;
+  Pattern& operator=(Pattern&&) = default;
+
+private:
+  friend bool operator==(const Pattern& lhs, const Pattern& rhs) noexcept{
+    return lhs.pimpl_->isEquals(*rhs.pimpl_);
+  }
+  friend bool operator!=(const Pattern& lhs, const Pattern& rhs) noexcept{
+    return !(lhs == rhs);
+  }
+
+  std::unique_ptr<PatternConcept> pimpl_;
+};
 
 } // namespace material
 } // namespace raytracer
 
-#endif // PATTERNS_HPP
+#endif // PATTERNT_HPP
