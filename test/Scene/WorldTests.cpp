@@ -321,3 +321,27 @@ TEST_F(defaultWorldTests, shadeHitWithTransparentMaterial){
 
   EXPECT_EQ(color, utility::Color(0.936425, 0.686425, 0.686425));
 }
+
+TEST_F(defaultWorldTests, shadeHitWithReflectiveTransparentMaterial){
+  auto r = utility::Ray(utility::Point(0,0,-3), utility::Vector(0,-sqrt(2)/2,sqrt(2)/2));
+
+  auto floor = geometry::normalPlane();
+  floor->setTransform(utility::transformations::translation(0,-1,0));
+  floor->material().setReflectance(0.5);
+  floor->material().setTransparency(0.5);
+  floor->material().setRefractiveIndex(1.5);
+
+  auto ball = geometry::normalSphere();
+  ball->setTransform(utility::transformations::translation(0,-3.5,-0.5));
+  ball->material().setAmbient(0.5);
+  ball->material().setSurfaceColor(utility::Color(1,0,0));
+
+  world.objects_.emplace_back(floor);
+  world.objects_.emplace_back(ball);
+
+  const auto xs = geometry::intersections(geometry::Intersection(floor.get(), sqrt(2)));
+  const auto comps = prepareComputations(xs[0], r, xs);
+  const auto color = world.shadeHit(comps);
+
+  EXPECT_EQ(color, utility::Color(0.9339151, 0.6964342, 0.6924307));
+}

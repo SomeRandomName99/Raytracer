@@ -37,7 +37,12 @@ utility::Color World::shadeHit(const geometry::Computations& comps, size_t recur
     reflectedColor += this->reflectedColor(comps, recursionLimit);
     refractedColor += this->refractedColor(comps, recursionLimit);
   }
-  return surfaceColor + reflectedColor + refractedColor;
+  if(comps.intersection.object->material().reflectance() > 0 && comps.intersection.object->material().transparency() > 0){
+    auto reflectance = geometry::schlick(comps);
+    return surfaceColor + reflectedColor * reflectance + refractedColor * (1 - reflectance);
+  } else {
+    return surfaceColor + reflectedColor + refractedColor;
+  }
 }
 
 utility::Color World::reflectedColor(const geometry::Computations& comps, size_t recursionLimit) const noexcept{

@@ -64,6 +64,20 @@ auto intersections(const Arg&... arg) noexcept{
  */
 std::optional<Intersection> hit(const std::vector<Intersection>& intersections) noexcept;
 
+/**
+ * @brief Computes the Schlick approximation for the Fresnel effect.
+ *
+ * The Schlick approximation is used to model the amount of reflection and refraction 
+ * at the surface of a transparent material based on the angle of incidence. It is 
+ * a parameter in the calculation of the Fresnel effect, which describes how the 
+ * amount of reflection and refraction varies depending on the angle at which light 
+ * hits the surface.
+ *
+ * @param comps The pre-computed state of a ray-object intersection.
+ * @return The reflectance factor, a value between 0 and 1.
+ */
+double schlick(const Computations& comps) noexcept;
+
 } // namespace geometry
 } // namespace raytracer
 

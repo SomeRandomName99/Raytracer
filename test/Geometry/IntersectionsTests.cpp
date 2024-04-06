@@ -156,3 +156,36 @@ TEST(prepare_computations_tests, UnderPointOffset){
   EXPECT_TRUE(comps.underPoint.z() > SHADOW_OFFSET/2);
   EXPECT_TRUE(comps.point.z() < comps.underPoint.z());
 }
+
+// =========== Schlick Approximation Test ===========
+TEST(schlick_tests, SchlickTotalInternalReflection){
+  const auto s = geometry::glassSphere();
+  const auto r = Ray(Point(0, 0, sqrt(2)/2), Vector(0, 1, 0));
+  const auto xs = geometry::intersections(geometry::Intersection(s.get(), -sqrt(2)/2),
+                                          geometry::Intersection(s.get(), sqrt(2)/2));
+  const auto comps = geometry::prepareComputations(xs[1], r, xs);
+
+  const auto reflectance = geometry::schlick(comps);
+  EXPECT_FLOAT_EQ(reflectance, 1.0);
+}
+
+TEST(schlick_tests, SchlickPerpendicularViewingAngle){
+  const auto s = geometry::glassSphere();
+  const auto r = Ray(Point(0, 0, 0), Vector(0, 1, 0));
+  const auto xs = geometry::intersections(geometry::Intersection(s.get(), -1),
+                                          geometry::Intersection(s.get(), 1));
+  const auto comps = geometry::prepareComputations(xs[1], r, xs);
+
+  const auto reflectance = geometry::schlick(comps);
+  EXPECT_FLOAT_EQ(reflectance, 0.04);
+}
+
+TEST(schlick_tests, SchlickSmallAngleAndN2GreaterThanN1){
+  const auto s = geometry::glassSphere();
+  const auto r = Ray(Point(0, 0.99, -2), Vector(0, 0, 1));
+  const auto xs = geometry::intersections(geometry::Intersection(s.get(), 1.8589));
+  const auto comps = geometry::prepareComputations(xs[0], r, xs);
+
+  const auto reflectance = geometry::schlick(comps);
+  EXPECT_FLOAT_EQ(reflectance, 0.4887308);
+}
