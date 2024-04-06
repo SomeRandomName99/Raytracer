@@ -268,3 +268,56 @@ TEST_F(defaultWorldTests, RefractedColorUnderTotalInternalReflection){
 
   EXPECT_EQ(color, utility::Color(0,0,0));
 }
+class MockTestPattern {
+public:
+  MockTestPattern() = default;
+  utility::Color drawPatternAt(const utility::Tuple& point) const noexcept {
+    return utility::Color(point.x(), point.y(), point.z());
+  }
+};
+static bool operator==([[maybe_unused]]const MockTestPattern& lhs, [[maybe_unused]]const MockTestPattern& rhs) noexcept{
+  return true;
+}
+TEST_F(defaultWorldTests, RefractedColorWithARefractedRay){
+  auto defaultPattern = material::Pattern(MockTestPattern{});
+  
+  auto a = world.objects_.at(0);
+  a->material().setAmbient(1);
+  a->material().setPattern(defaultPattern);
+
+  auto b = world.objects_.at(1);
+  b->material().setTransparency(1.0);
+  b->material().setRefractiveIndex(1.5);
+
+  const auto r = utility::Ray(utility::Point(0,0,0.1), utility::Vector(0,1,0));
+  const auto xs = geometry::intersections(geometry::Intersection(a.get(), -0.9899), 
+                                          geometry::Intersection(b.get(), -0.4899), 
+                                          geometry::Intersection(b.get(), 0.4899), 
+                                          geometry::Intersection(a.get(), 0.9899));
+  const auto comps = prepareComputations(xs[2], r, xs);
+  const auto color = world.refractedColor(comps);
+
+  EXPECT_EQ(color, utility::Color(0,0.998885,0.047217));
+}
+
+TEST_F(defaultWorldTests, shadeHitWithTransparentMaterial){
+  auto floor = geometry::normalPlane();
+  floor->setTransform(utility::transformations::translation(0,-1,0));
+  floor->material().setTransparency(0.5);
+  floor->material().setRefractiveIndex(1.5);
+
+  auto ball = geometry::normalSphere();
+  ball->setTransform(utility::transformations::translation(0,-3.5,-0.5));
+  ball->material().setAmbient(0.5);
+  ball->material().setSurfaceColor(utility::Color(1,0,0));
+
+  world.objects_.emplace_back(floor);
+  world.objects_.emplace_back(ball);
+
+  const auto r = utility::Ray(utility::Point(0,0,-3), utility::Vector(0,-sqrt(2)/2,sqrt(2)/2));
+  const auto xs = geometry::intersections(geometry::Intersection(floor.get(), sqrt(2)));
+  const auto comps = prepareComputations(xs[0], r, xs);
+  const auto color = world.shadeHit(comps);
+
+  EXPECT_EQ(color, utility::Color(0.936425, 0.686425, 0.686425));
+}

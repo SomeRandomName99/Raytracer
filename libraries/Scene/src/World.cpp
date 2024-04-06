@@ -27,16 +27,17 @@ bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) con
   return false;
 }
 
-
 utility::Color World::shadeHit(const geometry::Computations& comps, size_t recursionLimit) const noexcept{
-  auto surfaceColor = utility::Color{0,0,0};
+  auto surfaceColor   = utility::Color{0,0,0};
   auto reflectedColor = utility::Color{0,0,0};
+  auto refractedColor = utility::Color{0,0,0};
   for(const auto& light : this->lights_) {
     surfaceColor += scene::lighting(comps.intersection.object, light, comps.point, comps.eyeVector, 
                                     comps.normalVector, this->isShadowed(light, comps.overPoint));
     reflectedColor += this->reflectedColor(comps, recursionLimit);
+    refractedColor += this->refractedColor(comps, recursionLimit);
   }
-  return surfaceColor + reflectedColor;
+  return surfaceColor + reflectedColor + refractedColor;
 }
 
 utility::Color World::reflectedColor(const geometry::Computations& comps, size_t recursionLimit) const noexcept{
@@ -58,7 +59,12 @@ utility::Color World::refractedColor(const geometry::Computations& comps, size_t
   // Total internal reflection
   if(sin2T > 1) return utility::Color{0,0,0};
 
-  return utility::Color{1,1,1};
+  // Calculate refracted ray then its color
+  auto cosT = std::sqrt(1.0 - sin2T);
+  auto direction = comps.normalVector * (nRatio * cosI - cosT) - comps.eyeVector * nRatio;
+  auto refractedRay = utility::Ray(comps.underPoint, direction);
+
+  return this->colorAt(refractedRay, recursionLimit - 1) * comps.intersection.object->material().transparency();
 }
 
 utility::Color World::colorAt(const utility::Ray& ray, size_t recursionLimit) const noexcept{
