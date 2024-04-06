@@ -9,3 +9,6 @@ target_link_libraries(ballProjection Utility Geometry Canvas Material Scene)
 
 add_executable(ballWorld ballWorld.cpp)
 target_link_libraries(ballWorld Utility Geometry Canvas Material Scene)
+
+add_executable(ConcentricGlassSpheres ConcentricGlassSpheres.cpp)
+target_link_libraries(ConcentricGlassSpheres Utility Geometry Canvas Material Scene)
