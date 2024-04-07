@@ -1,5 +1,5 @@
-#ifndef PLANE_H
-#define PLANE_H
+#ifndef CUBE_H
+#define CUBE_H
 
 #include <memory>
 
@@ -10,11 +10,11 @@
 namespace raytracer {
 namespace geometry {
 
-class Plane final : public ShapeBase
+class Cube final : public ShapeBase
 {
 public:
-  Plane() noexcept {}
-  bool operator==(Plane const& other) const noexcept;
+  Cube() noexcept {}
+  bool operator==(Cube const& other) const noexcept;
 
   /**
    * Calculates the normal vector at a given point on the plane.
@@ -27,9 +27,9 @@ public:
   std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept override;
 };
 
-std::shared_ptr<Plane> normalPlane() noexcept;
+std::shared_ptr<Cube> normalCube() noexcept;
 
 } // namespace geometry
 } // namespace raytracer
 
-#endif // PLANE_H
+#endif // CUBE_H
