@@ -40,7 +40,7 @@ TEST_F(TestShapeTests, SetTransform) {
 
 /* =========== Material tests =========== */
 TEST_F(TestShapeTests, DefaultMaterial) {
-  EXPECT_TRUE(s.material_ == material::Material());
+  EXPECT_TRUE(s.material() == material::Material());
 }
 
 TEST_F(TestShapeTests, AssignMaterial) {
@@ -48,7 +48,7 @@ TEST_F(TestShapeTests, AssignMaterial) {
   m.setAmbient(1);
   s.setMaterial(m);
 
-  EXPECT_TRUE(s.material_ == m);
+  EXPECT_TRUE(s.material() == m);
 }
 
 /* =========== Intersect tests =========== */

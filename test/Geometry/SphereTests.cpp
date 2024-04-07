@@ -68,8 +68,8 @@ TEST(sphere_tests, setMaterialOnIntersection) {
   const auto xs = s.intersect(r);
 
   EXPECT_EQ(2, xs.size());
-  EXPECT_TRUE(xs.at(0).object->material() == s.material_);
-  EXPECT_TRUE(xs.at(1).object->material() == s.material_);
+  EXPECT_TRUE(xs.at(0).object->material() == s.material());
+  EXPECT_TRUE(xs.at(1).object->material() == s.material());
 }
 
 TEST(sphere_tests, IntersectingScaledSphereWithRay) {

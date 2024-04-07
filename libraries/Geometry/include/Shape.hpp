@@ -17,8 +17,9 @@ namespace geometry {
 
 class ShapeBase {
 public:
-  ShapeBase() noexcept: id_{ID++}, transformation_{utility::Matrix<4,4>::identity()},
-                    inverseTransformation_{utility::Matrix<4,4>::identity()}{}
+  ShapeBase() noexcept: transformation_{utility::Matrix<4,4>::identity()},
+                        inverseTransformation_{utility::Matrix<4,4>::identity()}, 
+                        material_{}, id_{ID++}, hasShadow_{true}{}
 
   virtual ~ShapeBase() {}
 
@@ -53,6 +54,13 @@ public:
     material_ = std::move(material);
   }
 
+  bool hasShadow() const noexcept {
+    return hasShadow_;
+  }
+  void setShadow(bool hasShadow) noexcept {
+    hasShadow_ = hasShadow;
+  }
+
   /**
    * @brief Function to calculate the intersections between a ray and a sphere.
    */
@@ -74,15 +82,15 @@ public:
     return worldNormal.normalize();
   }
 
-  utility::Tuple origin_;
-  material::Material material_;
 protected:
   virtual std::vector<Intersection> localIntersect(const utility::Ray& transformedRay) const noexcept = 0;
   virtual utility::Tuple localNormalAt(const utility::Tuple &objectPoint) const noexcept = 0;
 private:
-  std::size_t id_;
   utility::Matrix<4,4> transformation_;
   utility::Matrix<4,4> inverseTransformation_;
+  material::Material material_;
+  std::size_t id_;
+  bool hasShadow_;
 
   static inline std::atomic<size_t> ID{};
 };

@@ -23,7 +23,7 @@ bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) con
                              {
     const auto objectIntersections = object->intersect(ray);
     const auto hit = geometry::hit(objectIntersections);
-    return hit && hit->dist > 0.0 && hit->dist < distanceToLight; });
+    return hit && hit->object->hasShadow() && hit->dist > 0.0 && hit->dist < distanceToLight; });
 }
 
 utility::Color World::shadeHit(const geometry::Computations& comps, size_t recursionLimit) const noexcept{

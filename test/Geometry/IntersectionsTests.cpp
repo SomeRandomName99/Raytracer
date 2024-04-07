@@ -29,8 +29,8 @@ TEST(intersection_tests, AggregationOfIntersections){
   const auto xs = geometry::intersections(i1, i2);
 
   EXPECT_EQ(xs.size(), 2);
-  EXPECT_TRUE(xs[0].object->material() == s.material_);
-  EXPECT_TRUE(xs[1].object->material() == s.material_);
+  EXPECT_TRUE(xs[0].object->material() == s.material());
+  EXPECT_TRUE(xs[1].object->material() == s.material());
 }
 
 /* =========== Hit Test =========== */

@@ -28,7 +28,7 @@ TEST(world_tests, Creation){
 class defaultWorldTests : public ::testing::Test {
 protected:
   void SetUp() override {
-    s1->material_ = material::Material(utility::Color(0.8, 1.0, 0.6), std::nullopt, 0.1, 0.7, 0.2);
+    s1->setMaterial(material::Material(utility::Color(0.8, 1.0, 0.6), std::nullopt, 0.1, 0.7, 0.2));
     s1->radius_ = 1;
 
     s2->setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));
@@ -150,7 +150,7 @@ TEST_F(defaultWorldTests, ShadeHitWithShadow){
   EXPECT_EQ(color, utility::Color(0.1,0.1,0.1));
 }
 
-TEST(world_shadow_tests, hitOffsetsPointOfIntersection){
+TEST(world_shadow_tests, HitOffsetsPointOfIntersection){
   const auto r = utility::Ray(utility::Point(0,0,-5), utility::Vector(0,0,1));
   auto shape = geometry::Sphere();
   shape.setTransform(utility::transformations::translation(0,0,1));
@@ -159,6 +159,15 @@ TEST(world_shadow_tests, hitOffsetsPointOfIntersection){
 
   EXPECT_LT(comps.overPoint.z(), -SHADOW_OFFSET / 2);
   EXPECT_GT(comps.point.z(), comps.overPoint.z());
+}
+
+TEST(world_shadow_tests, NoSHadowWhenObjectHasNoShadowProperty){
+  const auto w = scene::defaultWorld();
+  const auto p = utility::Point(10,-10,10);
+
+  std::ranges::for_each(w.objects_, [](auto& obj){ obj->setShadow(false); });
+
+  EXPECT_FALSE(w.isShadowed(w.lights_.front(), p));
 }
 
 // =================== Reflection Tests ===================
