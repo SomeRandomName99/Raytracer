@@ -1,4 +1,5 @@
 #include <optional>
+#include <algorithm>
 
 #include "World.hpp"
 #include "Material.hpp"
@@ -18,13 +19,11 @@ std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) co
 }
 
 bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) const noexcept{
-  for(const auto& object : objects_){
+  return std::ranges::any_of(objects_, [&](const auto &object)
+                             {
     const auto objectIntersections = object->intersect(ray);
     const auto hit = geometry::hit(objectIntersections);
-    if(hit && hit->dist > 0.0 && hit->dist < distanceToLight){return true;}
-  }
-
-  return false;
+    return hit && hit->dist > 0.0 && hit->dist < distanceToLight; });
 }
 
 utility::Color World::shadeHit(const geometry::Computations& comps, size_t recursionLimit) const noexcept{
