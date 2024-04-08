@@ -8,35 +8,29 @@
 namespace raytracer {
 namespace geometry {
 
-static inline std::pair<double, double> checkAxis(double origin, double direction) {
-  double tmin_numerator = (-1 - origin);
-  double tmax_numerator = (1 - origin);
 
-  if (utility::floatNearlyEqual(direction, 0.0)) {
-    return {tmin_numerator * std::numeric_limits<double>::infinity(), 
-            tmax_numerator * std::numeric_limits<double>::infinity()};
-  }
-
-  double tmin = tmin_numerator / direction;
-  double tmax = tmax_numerator / direction;
-  if(tmin > tmax) { std::swap(tmin, tmax); }
-
-  return{tmin, tmax};
-}
-
+// using the optimized slab intersection method
+// https://tavianator.com/2015/ray_box_nan.html
 std::vector<Intersection> Cube::localIntersect(const utility::Ray &transformedRay) const noexcept {
-  auto [xtmin, xtmax] = checkAxis(transformedRay.origin_.x(), transformedRay.direction_.x());
-  auto [ytmin, ytmax] = checkAxis(transformedRay.origin_.y(), transformedRay.direction_.y());
-  auto [ztmin, ztmax] = checkAxis(transformedRay.origin_.z(), transformedRay.direction_.z());
+  double tx1 = (-1 - transformedRay.origin_.x()) / transformedRay.direction_.x();
+  double tx2 = (1 - transformedRay.origin_.x()) / transformedRay.direction_.x();
 
-  auto tmin = std::max({xtmin, ytmin, ztmin});
-  auto tmax = std::min({xtmax, ytmax, ztmax});
+  double tmin = std::min(tx1, tx2);
+  double tmax = std::max(tx1, tx2);
 
-  if (tmin > tmax) {
-    return std::vector<Intersection>();
-  }
+  double ty1 = (-1 - transformedRay.origin_.y()) / transformedRay.direction_.y();
+  double ty2 = (1 - transformedRay.origin_.y()) / transformedRay.direction_.y();
 
-  return std::vector<Intersection>{Intersection(this, tmin), Intersection(this, tmax)};
+  tmin = std::max(tmin, std::min(ty1, ty2));
+  tmax = std::min(tmax, std::max(ty1, ty2));
+
+  double tz1 = (-1 - transformedRay.origin_.z()) / transformedRay.direction_.z();
+  double tz2 = (1 - transformedRay.origin_.z()) / transformedRay.direction_.z();
+
+  tmin = std::max(tmin, std::min(tz1, tz2));
+  tmax = std::min(tmax, std::max(tz1, tz2));
+
+  return tmin > tmax ? std::vector<Intersection>() : std::vector<Intersection>{Intersection(this, tmin), Intersection(this, tmax)};
 }
 
 utility::Tuple Cube::localNormalAt(const utility::Tuple &objectPoint) const noexcept {
