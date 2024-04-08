@@ -21,11 +21,11 @@ public:
 std::shared_ptr<Cube> CubeFaceIntersectTest::c = normalCube();
 std::unordered_map<std::string, std::tuple<Ray, std::vector<Intersection>>> CubeFaceIntersectTest::testCases = {
   {"positiveXSide",     {Ray(Point(5, 0.5, 0), Vector(-1, 0, 0)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
-  {"negaitveXSide",     {Ray(Point(-5, 0.5, 0), Vector(1, 0, 0)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
+  {"negativeXSide",     {Ray(Point(-5, 0.5, 0), Vector(1, 0, 0)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
   {"positiveYSide",     {Ray(Point(0.5, 5, 0), Vector(0, -1, 0)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
-  {"negaitveYSide",     {Ray(Point(0.5, -5, 0), Vector(0, 1, 0)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
+  {"negativeYSide",     {Ray(Point(0.5, -5, 0), Vector(0, 1, 0)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
   {"positiveZSide",     {Ray(Point(0.5, 0, 5), Vector(0, 0, -1)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
-  {"negaitveZSide",     {Ray(Point(0.5, 0, -5), Vector(0, 0, 1)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
+  {"negativeZSide",     {Ray(Point(0.5, 0, -5), Vector(0, 0, 1)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
   {"inside",            {Ray(Point(0, 0.5, 0), Vector(0, 0, 1)), {Intersection(c.get(), -1), Intersection(c.get(), 1)}}},
 };
 
