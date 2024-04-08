@@ -49,14 +49,14 @@ TEST_P(CubeFaceIntersectTest, rayIntersectsCube)
 }
 
 // =================== Ray misses the cube ====================
-class cubeMissTest : public ::testing::TestWithParam<Ray> {
+class CubeMissTest : public ::testing::TestWithParam<Ray> {
 public:
   static std::shared_ptr<Cube> c;
   static std::vector<Ray> testCases;
 };
 
-std::shared_ptr<Cube> cubeMissTest::c = normalCube();
-std::vector<Ray> cubeMissTest:: testCases = {
+std::shared_ptr<Cube> CubeMissTest::c = normalCube();
+std::vector<Ray> CubeMissTest:: testCases = {
   Ray(Point(-2, 0, 0), Vector(0.2673, 0.5345, 0.8018)),
   Ray(Point(0, -2, 0), Vector(0.8018, 0.2673, 0.5345)),
   Ray(Point(0, 0, -2), Vector(0.5345, 0.8018, 0.2673)),
@@ -67,12 +67,45 @@ std::vector<Ray> cubeMissTest:: testCases = {
 
 INSTANTIATE_TEST_SUITE_P(
   CubeTests,
-  cubeMissTest,
-  ::testing::ValuesIn(cubeMissTest::testCases)
+  CubeMissTest,
+  ::testing::ValuesIn(CubeMissTest::testCases)
 );
 
-TEST_P(cubeMissTest, rayMissesCube)
+TEST_P(CubeMissTest, rayMissesCube)
 {
-  auto xs = cubeMissTest::c->intersect(GetParam());
+  auto xs = CubeMissTest::c->intersect(GetParam());
   ASSERT_EQ(0, xs.size());
+}
+
+
+// =================== Normal on the surface of the cube ====================
+class CubeNormalTest : public ::testing::TestWithParam<std::pair<Tuple, Tuple>> {
+public:
+  static std::shared_ptr<Cube> c;
+  static std::vector<std::pair<Tuple, Tuple>> testCases;
+};
+
+std::shared_ptr<Cube> CubeNormalTest::c = normalCube();
+std::vector<std::pair<Tuple, Tuple>> CubeNormalTest::testCases = {
+  {Point(1, 0.5, -0.8), Vector(1, 0, 0)},
+  {Point(-1, -0.2, 0.9), Vector(-1, 0, 0)},
+  {Point(-0.4, 1, -0.1), Vector(0, 1, 0)},
+  {Point(0.3, -1, -0.7), Vector(0, -1, 0)},
+  {Point(-0.6, 0.3, 1), Vector(0, 0, 1)},
+  {Point(0.4, 0.4, -1), Vector(0, 0, -1)},
+  {Point(1, 1, 1), Vector(1, 0, 0)},
+  {Point(-1, -1, -1), Vector(-1, 0, 0)},
+};
+
+INSTANTIATE_TEST_SUITE_P(
+  CubeTests,
+  CubeNormalTest,
+  ::testing::ValuesIn(CubeNormalTest::testCases)
+);
+
+TEST_P(CubeNormalTest, normalOnSurface)
+{
+  auto [point, expectedNormal] = GetParam();
+  auto normal = CubeNormalTest::c->normalAt(point);
+  EXPECT_TRUE(expectedNormal == normal);
 }

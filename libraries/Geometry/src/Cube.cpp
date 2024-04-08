@@ -40,7 +40,15 @@ std::vector<Intersection> Cube::localIntersect(const utility::Ray &transformedRa
 }
 
 utility::Tuple Cube::localNormalAt(const utility::Tuple &objectPoint) const noexcept {
-  return utility::Vector(0, 0, 0);
+  auto largestAbsComponent = std::max({std::abs(objectPoint.x()), std::abs(objectPoint.y()), std::abs(objectPoint.z())});
+
+  if (utility::floatNearlyEqual(largestAbsComponent, std::abs(objectPoint.x()))) {
+    return utility::Vector(objectPoint.x(), 0, 0);
+  } else if (utility::floatNearlyEqual(largestAbsComponent, std::abs(objectPoint.y()))) {
+    return utility::Vector(0, objectPoint.y(), 0);
+  } else {
+    return utility::Vector(0, 0, objectPoint.z());
+  }
 }
 
 std::shared_ptr<Cube> normalCube() noexcept {
