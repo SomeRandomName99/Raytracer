@@ -6,4 +6,5 @@ target_sources(
     ShapeTests.cpp
     PlaneTests.cpp
     CubeTests.cpp
+    CylinderTests.cpp
 )
