@@ -179,3 +179,33 @@ TEST_P(ClosedCylinderIntersectionTest, ClosedCylinder){
   auto xs = cylinder->intersect(ray);
   EXPECT_EQ(intersectionCount, xs.size());
 }
+
+// =================== Normal on the surface of the closed cylinder ====================
+class ClosedCylinderNormalTest : public ::testing::TestWithParam<std::pair<Tuple, Tuple>> {
+public:
+  static std::shared_ptr<Cylinder> c;
+  static std::vector<std::pair<Tuple, Tuple>> testCases;
+};
+
+std::shared_ptr<Cylinder> ClosedCylinderNormalTest::c = std::make_shared<Cylinder>(1, 2, true);
+std::vector<std::pair<Tuple, Tuple>> ClosedCylinderNormalTest::testCases = {
+  {Point(0, 1, 0),  Vector(0, -1, 0)},
+  {Point(0.5, 1, 0), Vector(0, -1, 0)},
+  {Point(0, 1, 0.5), Vector(0, -1, 0)},
+  {Point(0, 2, 0), Vector(0, 1, 0)},
+  {Point(0.5, 2, 0), Vector(0, 1, 0)},
+  {Point(0, 2, 0.5), Vector(0, 1, 0)},
+};
+
+INSTANTIATE_TEST_SUITE_P(
+  CylinderTests,
+  ClosedCylinderNormalTest,
+  ::testing::ValuesIn(ClosedCylinderNormalTest::testCases)
+);
+
+TEST_P(ClosedCylinderNormalTest, normalOnClosedCylinder)
+{
+  auto [point, normal] = GetParam();
+  auto n = c->normalAt(point);
+  EXPECT_EQ(normal, n);
+}

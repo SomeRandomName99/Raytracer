@@ -62,6 +62,9 @@ std::vector<Intersection> Cylinder::localIntersect(const utility::Ray &transform
 }
 
 utility::Tuple Cylinder::localNormalAt(const utility::Tuple &objectPoint) const noexcept {
+  auto distanceFromY = objectPoint.x() * objectPoint.x() + objectPoint.z() * objectPoint.z();
+  if (distanceFromY < 1 && objectPoint.y() >= maximum_ - utility::EPSILON<double>) { return utility::Vector(0, 1, 0); }
+  else if (distanceFromY < 1 && objectPoint.y() <= minimum_ + utility::EPSILON<double>) { return utility::Vector(0, -1, 0); }
   return utility::Vector(objectPoint.x(), 0, objectPoint.z());
 }
 
