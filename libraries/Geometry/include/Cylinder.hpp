@@ -14,6 +14,8 @@ class Cylinder final : public ShapeBase
 {
 public:
   Cylinder() noexcept {}
+  Cylinder(double minimum, double maximum, bool closed = false) noexcept : minimum_{minimum}, maximum_{maximum},
+                                                                   closed_{closed} {}
   bool operator==(Cylinder const& other) const noexcept;
 
   /**
@@ -25,6 +27,10 @@ public:
    * Function to calculate the intersections between a ray and a plane.
    */
   std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept override;
+
+  double minimum_{-std::numeric_limits<double>::infinity()};
+  double maximum_{std::numeric_limits<double>::infinity()};
+  bool closed_{false};
 };
 
 std::shared_ptr<Cylinder> normalCylinder() noexcept;

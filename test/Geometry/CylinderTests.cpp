@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <utility>
 #include <vector>
+#include <unordered_map>
 
 
 #include "Cylinder.hpp"
@@ -94,4 +95,87 @@ TEST_P(CylinderNormalTest, normalOnCylinder)
   auto [point, normal] = GetParam();
   auto n = c->normalAt(point);
   EXPECT_EQ(normal, n);
+}
+
+// =================== Truncated cylinder tests ====================
+TEST(CylinderTests, DefaultCylinderIsNotTruncated){
+  auto cylinder = normalCylinder();
+  EXPECT_FLOAT_EQ(-std::numeric_limits<double>::infinity(), cylinder->minimum_);
+  EXPECT_FLOAT_EQ(std::numeric_limits<double>::infinity(), cylinder->maximum_);
+}
+
+class CylinderWithTruncationIntersectionTest : public ::testing::TestWithParam<std::pair<const std::string, std::tuple<Tuple, Tuple, double>>>{
+public:
+  static std::shared_ptr<Cylinder> c;
+  static std::unordered_map<std::string, std::tuple<Tuple, Tuple, double>> testCases;
+};
+
+std::shared_ptr<Cylinder> CylinderWithTruncationIntersectionTest::c = std::make_shared<Cylinder>(1, 2);
+std::unordered_map<std::string, std::tuple<Tuple, Tuple, double>> CylinderWithTruncationIntersectionTest::testCases = {
+  {"RayFromInsideEscapesThroughTheTop", {Point(0, 1.5, 0), Vector(0.1, 1, 0), 0}},
+  {"RayPerpendicularToYAxisAboveCylinder", {Point(0, 3, -5), Vector(0, 0, 1), 0}},
+  {"RayPerpendicularToYAxisBelowCylinder", {Point(0, 0, -5), Vector(0, 0, 1), 0}},
+  {"PerpendicularToTopEdge", {Point(0, 2, -5), Vector(0, 0, 1), 0}},
+  {"PerpendicularToBottomEdge", {Point(0, 1, -5), Vector(0, 0, 1), 0}},
+  {"RayIntersectsThroughTheMiddle", {Point(0, 1.5, -2), Vector(0, 0, 1), 2}},
+};
+
+INSTANTIATE_TEST_SUITE_P(
+  CylinderTests,
+  CylinderWithTruncationIntersectionTest,
+  ::testing::ValuesIn(CylinderWithTruncationIntersectionTest::testCases),
+  [](const auto& info) { return info.param.first; }
+);
+
+TEST_P(CylinderWithTruncationIntersectionTest, CylinderWithTruncation){
+  auto [name, testData] = GetParam();
+  auto[origin, direction, intersectionCount] = testData;
+  auto cylinder = std::make_shared<Cylinder>(1, 2);
+  EXPECT_FLOAT_EQ(1, cylinder->minimum_);
+  EXPECT_FLOAT_EQ(2, cylinder->maximum_);
+
+  auto ray = Ray(origin, direction.normalize());
+  auto xs = cylinder->intersect(ray);
+  EXPECT_EQ(intersectionCount, xs.size());
+}
+
+// =================== Closed cylinder tests ====================
+TEST(CylinderTests, DefaultCylinderNotClosed){
+  auto cylinder = normalCylinder();
+  EXPECT_FALSE(cylinder->closed_);
+}
+
+class ClosedCylinderIntersectionTest : public ::testing::TestWithParam<std::pair<const std::string, std::tuple<Tuple, Tuple, double>>>{
+public:
+  static std::shared_ptr<Cylinder> c;
+  static std::unordered_map<std::string, std::tuple<Tuple, Tuple, double>> testCases;
+};
+
+std::shared_ptr<Cylinder> ClosedCylinderIntersectionTest::c = std::make_shared<Cylinder>(1, 2, true);
+std::unordered_map<std::string, std::tuple<Tuple, Tuple, double>> ClosedCylinderIntersectionTest::testCases = {
+  {"RayAboveTheCylinderGoesThroughCaps", {Point(0, 3, 0), Vector(0, -1, 0), 2}},
+  {"RayAboveTheCylinderAndGoesDiagonallyThrough", {Point(0, 3, -2), Vector(0, -1, 2), 2}},
+  {"RayBelowTheCylinderAndGoesDiagonallyThrough", {Point(0, 0, -2), Vector(0,  1, 2), 2}},
+  {"RayAboveCylinderExitThourghBottomCorner", {Point(0,  4, -2), Vector(0, -1, 1), 2}},
+  {"RayBelowCylinderExitThourghTopCorner",    {Point(0, -1, -2), Vector(0,  1, 1), 2}},
+};
+
+INSTANTIATE_TEST_SUITE_P(
+  CylinderTests,
+  ClosedCylinderIntersectionTest,
+  ::testing::ValuesIn(ClosedCylinderIntersectionTest::testCases),
+  [](const auto& info) { return info.param.first; }
+);
+
+TEST_P(ClosedCylinderIntersectionTest, ClosedCylinder){
+  auto [name, testData] = GetParam();
+  auto[origin, direction, intersectionCount] = testData;
+  auto cylinder = std::make_shared<Cylinder>(1, 2, true);
+  EXPECT_FLOAT_EQ(1, cylinder->minimum_);
+  EXPECT_FLOAT_EQ(2, cylinder->maximum_);
+  EXPECT_TRUE(cylinder->closed_);
+
+  auto ray = Ray(origin, direction.normalize());
+  auto xs = cylinder->intersect(ray);
+  EXPECT_EQ(intersectionCount, xs.size());
 }
