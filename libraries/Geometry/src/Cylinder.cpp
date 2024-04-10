@@ -15,7 +15,7 @@ static inline bool isIntersectionWithinRadius(const utility::Ray &ray, double t)
   return (x * x + z * z) <= 1; // radius is always considered to be 1
 }
 
-static inline std::vector<Intersection> intersecCaps(const Cylinder &cylinder, const utility::Ray &ray) {
+static inline std::vector<Intersection> intersectCaps(const Cylinder &cylinder, const utility::Ray &ray) {
   if (!cylinder.closed_ || utility::floatNearlyEqual(ray.direction_.y(), 0.0)) { return {}; }
 
   auto intersections = std::vector<Intersection>{};
@@ -31,7 +31,7 @@ static inline std::vector<Intersection> intersecCaps(const Cylinder &cylinder, c
 std::vector<Intersection> Cylinder::localIntersect(const utility::Ray &transformedRay) const noexcept {
   auto a = transformedRay.direction_.x() * transformedRay.direction_.x() + 
            transformedRay.direction_.z() * transformedRay.direction_.z();
-  if (utility::floatNearlyEqual(a, 0.0)) { return (closed_ ? intersecCaps(*this, transformedRay) : std::vector<Intersection>{}); }
+  if (utility::floatNearlyEqual(a, 0.0)) { return (closed_ ? intersectCaps(*this, transformedRay) : std::vector<Intersection>{}); }
 
   auto b = 2 * transformedRay.origin_.x() * transformedRay.direction_.x() + 
            2 * transformedRay.origin_.z() * transformedRay.direction_.z();
@@ -55,7 +55,7 @@ std::vector<Intersection> Cylinder::localIntersect(const utility::Ray &transform
   auto secondIntersectionY = transformedRay.origin_.y() + t1 * transformedRay.direction_.y();
   if (isBetweenMinAndMax(secondIntersectionY)){intersections.emplace_back(Intersection(this, t1));}
 
-  auto capIntersections = intersecCaps(*this, transformedRay);
+  auto capIntersections = intersectCaps(*this, transformedRay);
   intersections.insert(intersections.end(), capIntersections.begin(), capIntersections.end());
 
   return intersections;
