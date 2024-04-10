@@ -3,7 +3,7 @@
 
 #include "Cube.hpp"
 #include "Intersections.hpp"
-#include "FloatAlmostEquals.hpp"
+#include "FloatUtils.hpp"
 
 namespace raytracer {
 namespace geometry {

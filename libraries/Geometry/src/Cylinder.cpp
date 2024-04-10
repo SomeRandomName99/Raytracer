@@ -4,7 +4,7 @@
 
 #include "Cylinder.hpp"
 #include "Intersections.hpp"
-#include "FloatAlmostEquals.hpp"
+#include "FloatUtils.hpp"
 
 namespace raytracer {
 namespace geometry {
@@ -43,8 +43,8 @@ std::vector<Intersection> Cylinder::localIntersect(const utility::Ray &transform
   
   if (discriminant < 0) { return {}; }
 
-  auto t0 = (-b - std::sqrt(discriminant)) / (2 * a);
-  auto t1 = (-b + std::sqrt(discriminant)) / (2 * a);
+  auto t0 = (-b - utility::sqrt(discriminant)) / (2 * a);
+  auto t1 = (-b + utility::sqrt(discriminant)) / (2 * a);
 
   auto intersections = std::vector<Intersection>{};
   auto isBetweenMinAndMax = [this](double y) { return y > minimum_ && y < maximum_; };

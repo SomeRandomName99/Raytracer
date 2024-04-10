@@ -2,7 +2,7 @@ target_sources(
   Tests
   PRIVATE
     ColorTests.cpp 
-    FloatAlmostEqualsTests.cpp 
+    FloatUtilsTests.cpp 
     MatrixTests.cpp 
     RayTests.cpp 
     TransformationsTests.cpp 

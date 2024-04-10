@@ -23,8 +23,8 @@ std::vector<Intersection> Sphere::localIntersect(const utility::Ray& transformed
   if (discriminant < 0.)
     return std::vector<Intersection>{};
 
-  const auto dist1 = (-b - std::sqrt(discriminant)) / (2*a);
-  const auto dist2 = (-b + std::sqrt(discriminant)) / (2*a);
+  const auto dist1 = (-b - utility::sqrt(discriminant)) / (2*a);
+  const auto dist2 = (-b + utility::sqrt(discriminant)) / (2*a);
   return std::vector<Intersection>{Intersection{this, dist1},
                                    Intersection{this, dist2}};
 }

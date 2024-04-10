@@ -3,7 +3,7 @@
 
 #include "World.hpp"
 #include "Material.hpp"
-#include "FloatAlmostEquals.hpp"
+#include "FloatUtils.hpp"
 
 namespace raytracer {
 namespace scene {
