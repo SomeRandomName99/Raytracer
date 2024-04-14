@@ -7,4 +7,5 @@ target_sources(
     PlaneTests.cpp
     CubeTests.cpp
     CylinderTests.cpp
+    ConeTests.cpp
 )

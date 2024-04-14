@@ -8,6 +8,7 @@ target_sources(
     src/Plane.cpp
     src/Cube.cpp
     src/Cylinder.cpp
+    src/Cone.cpp
   PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/include/Sphere.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/Intersections.hpp
@@ -15,6 +16,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/include/Plane.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/Cube.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/Cylinder.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/Cone.hpp
 )
 
 target_include_directories(
