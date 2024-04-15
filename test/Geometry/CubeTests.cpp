@@ -18,7 +18,7 @@ public:
   static std::unordered_map<std::string, std::tuple<Ray, std::vector<Intersection>>> testCases; 
 };
 
-std::shared_ptr<Cube> CubeFaceIntersectTest::c = normalCube();
+std::shared_ptr<Cube> CubeFaceIntersectTest::c = makeCube();
 std::unordered_map<std::string, std::tuple<Ray, std::vector<Intersection>>> CubeFaceIntersectTest::testCases = {
   {"positiveXSide",     {Ray(Point(5, 0.5, 0), Vector(-1, 0, 0)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
   {"negativeXSide",     {Ray(Point(-5, 0.5, 0), Vector(1, 0, 0)), {Intersection(c.get(), 4), Intersection(c.get(), 6)}}},
@@ -55,7 +55,7 @@ public:
   static std::vector<Ray> testCases;
 };
 
-std::shared_ptr<Cube> CubeMissTest::c = normalCube();
+std::shared_ptr<Cube> CubeMissTest::c = makeCube();
 std::vector<Ray> CubeMissTest:: testCases = {
   Ray(Point(-2, 0, 0), Vector(0.2673, 0.5345, 0.8018)),
   Ray(Point(0, -2, 0), Vector(0.8018, 0.2673, 0.5345)),
@@ -85,7 +85,7 @@ public:
   static std::vector<std::pair<Tuple, Tuple>> testCases;
 };
 
-std::shared_ptr<Cube> CubeNormalTest::c = normalCube();
+std::shared_ptr<Cube> CubeNormalTest::c = makeCube();
 std::vector<std::pair<Tuple, Tuple>> CubeNormalTest::testCases = {
   {Point(1, 0.5, -0.8), Vector(1, 0, 0)},
   {Point(-1, -0.2, 0.9), Vector(-1, 0, 0)},

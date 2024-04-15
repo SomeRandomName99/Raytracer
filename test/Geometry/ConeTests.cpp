@@ -16,7 +16,7 @@ public:
   static std::vector<std::tuple<Tuple, Tuple, double, double>> testCases;
 };
 
-std::shared_ptr<Cone> ConeIntersectTest::c = normalCone();
+std::shared_ptr<Cone> ConeIntersectTest::c = makeCone();
 std::vector<std::tuple<Tuple, Tuple, double, double>> ConeIntersectTest::testCases = {
   {Point(0, 0, -5), Vector(0, 0, 1), 5, 5},
   {Point(0, 0, -5), Vector(1, 1, 1), 8.660254, 8.660254},
@@ -41,7 +41,7 @@ TEST_P(ConeIntersectTest, rayIntersectsCone)
 
 TEST(ConeTests, intersectingConeWithRayParallelToOneHalf)
 {
-  auto c = normalCone();
+  auto c = makeCone();
   auto ray = Ray(Point(0, 0, -1), Vector(0, 1, 1).normalize());
   auto xs = c->intersect(ray);
   EXPECT_EQ(1, xs.size());
@@ -82,7 +82,7 @@ public:
   static std::vector<std::pair<Tuple, Tuple>> testCases;
 };
 
-std::shared_ptr<Cone> ConeNormalTest::c = normalCone();
+std::shared_ptr<Cone> ConeNormalTest::c = makeCone();
 std::vector<std::pair<Tuple, Tuple>> ConeNormalTest::testCases = {
   {Point(0, 0, 0), Vector(0, 0, 0)},
   {Point(1, 1, 1), Vector(1, -sqrt(2), 1)},

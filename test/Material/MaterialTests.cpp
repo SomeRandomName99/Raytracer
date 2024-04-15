@@ -27,7 +27,7 @@ TEST(material_tests, lightingWithAMaterialApplied){
   m.setDiffuse(0);
   m.setSpecular(0);
 
-  auto spherePtr = geometry::normalSphere();
+  auto spherePtr = geometry::makeSphere();
   spherePtr->setMaterial(m);
 
   const auto eyeVector = utility::Vector(0, 0, -1);

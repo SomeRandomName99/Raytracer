@@ -25,7 +25,7 @@ public:
   bool closed_{false};
 };
 
-std::shared_ptr<Cone> normalCone() noexcept;
+std::shared_ptr<Cone> makeCone() noexcept;
 
 } // namespace geometry
 } // namespace raytracer

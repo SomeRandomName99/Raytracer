@@ -41,8 +41,8 @@ protected:
 
   const scene::PointLight light{utility::Color(1,1,1), utility::Point(-10,10,-10)};
 
- std::shared_ptr<geometry::Sphere> s1 = geometry::normalSphere();
- std::shared_ptr<geometry::Sphere> s2 = geometry::normalSphere();
+ std::shared_ptr<geometry::Sphere> s1 = geometry::makeSphere();
+ std::shared_ptr<geometry::Sphere> s2 = geometry::makeSphere();
 
   scene::World world{};
 };
@@ -138,8 +138,8 @@ TEST_F(defaultWorldTests, ShadeHitWithShadow){
   // World setup
   scene::World world{};
   world.lights_.emplace_back(scene::PointLight{utility::Color{1,1,1}, utility::Point(0,0,-10)});
-  world.objects_.emplace_back(geometry::normalSphere());
-  world.objects_.emplace_back(geometry::normalSphere());
+  world.objects_.emplace_back(geometry::makeSphere());
+  world.objects_.emplace_back(geometry::makeSphere());
   world.objects_.at(1)->setTransform(utility::transformations::translation(0,0,10));
 
   utility::Ray ray{utility::Point(0,0,5), utility::Vector(0,0,1)};
@@ -183,7 +183,7 @@ TEST_F(defaultWorldTests, ReflectedColorForNonReflectiveMaterial){
 }
 
 TEST_F(defaultWorldTests, ReflectedColorForReflectiveMaterial){
-  auto shape = geometry::normalPlane();
+  auto shape = geometry::makePlane();
   shape->material().setReflectance(0.5);
   shape->setTransform(utility::transformations::translation(0,-1,0));
   world.objects_.emplace_back(shape);
@@ -197,7 +197,7 @@ TEST_F(defaultWorldTests, ReflectedColorForReflectiveMaterial){
 }
 
 TEST_F(defaultWorldTests, ShadeHitWithReflectiveMaterial){
-  auto shape = geometry::normalPlane();
+  auto shape = geometry::makePlane();
   shape->material().setReflectance(0.5);
   shape->setTransform(utility::transformations::translation(0,-1,0));
   world.objects_.emplace_back(shape);
@@ -213,11 +213,11 @@ TEST_F(defaultWorldTests, ShadeHitWithReflectiveMaterial){
 TEST_F(defaultWorldTests, colorAtWithMutuallyReflectiveSurfaces){
   auto testWorld = scene::World();
 
-  auto lower = geometry::normalPlane();
+  auto lower = geometry::makePlane();
   lower->material().setReflectance(1);
   lower->setTransform(utility::transformations::translation(0,-1,0));
 
-  auto upper = geometry::normalPlane();
+  auto upper = geometry::makePlane();
   upper->material().setReflectance(1);
   upper->setTransform(utility::transformations::translation(0,1,0));
 
@@ -230,7 +230,7 @@ TEST_F(defaultWorldTests, colorAtWithMutuallyReflectiveSurfaces){
 }
 
 TEST_F(defaultWorldTests, reflectedColorAtMaximumRecursionDepth){
-  auto shape = geometry::normalPlane();
+  auto shape = geometry::makePlane();
   shape->material().setReflectance(0.5);
   shape->setTransform(utility::transformations::translation(0,-1,0));
   world.objects_.emplace_back(shape);
@@ -310,12 +310,12 @@ TEST_F(defaultWorldTests, RefractedColorWithARefractedRay){
 }
 
 TEST_F(defaultWorldTests, shadeHitWithTransparentMaterial){
-  auto floor = geometry::normalPlane();
+  auto floor = geometry::makePlane();
   floor->setTransform(utility::transformations::translation(0,-1,0));
   floor->material().setTransparency(0.5);
   floor->material().setRefractiveIndex(1.5);
 
-  auto ball = geometry::normalSphere();
+  auto ball = geometry::makeSphere();
   ball->setTransform(utility::transformations::translation(0,-3.5,-0.5));
   ball->material().setAmbient(0.5);
   ball->material().setSurfaceColor(utility::Color(1,0,0));
@@ -334,13 +334,13 @@ TEST_F(defaultWorldTests, shadeHitWithTransparentMaterial){
 TEST_F(defaultWorldTests, shadeHitWithReflectiveTransparentMaterial){
   auto r = utility::Ray(utility::Point(0,0,-3), utility::Vector(0,-sqrt(2)/2,sqrt(2)/2));
 
-  auto floor = geometry::normalPlane();
+  auto floor = geometry::makePlane();
   floor->setTransform(utility::transformations::translation(0,-1,0));
   floor->material().setReflectance(0.5);
   floor->material().setTransparency(0.5);
   floor->material().setRefractiveIndex(1.5);
 
-  auto ball = geometry::normalSphere();
+  auto ball = geometry::makeSphere();
   ball->setTransform(utility::transformations::translation(0,-3.5,-0.5));
   ball->material().setAmbient(0.5);
   ball->material().setSurfaceColor(utility::Color(1,0,0));

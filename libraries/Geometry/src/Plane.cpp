@@ -19,7 +19,7 @@ utility::Tuple Plane::localNormalAt([[maybe_unused]]const utility::Tuple &object
   return utility::Vector(0, 1, 0);
 }
 
-std::shared_ptr<Plane> normalPlane() noexcept {
+std::shared_ptr<Plane> makePlane() noexcept {
   return std::make_shared<Plane>();
 }
 

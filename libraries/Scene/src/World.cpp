@@ -94,9 +94,9 @@ World defaultWorld() noexcept{
   const auto light = scene::PointLight{utility::Color{1,1,1}, utility::Point(-10,10,-10)};
   world.lights_.push_back(light);
 
-  auto s1 = geometry::normalSphere();
+  auto s1 = geometry::makeSphere();
   s1->setMaterial(material::Material(utility::Color(0.8, 1.0, 0.6), std::nullopt, 0.1, 0.7, 0.2));
-  auto s2 = geometry::normalSphere();
+  auto s2 = geometry::makeSphere();
   s2->setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));
   world.objects_.emplace_back(s1);
   world.objects_.emplace_back(s2);

@@ -26,12 +26,12 @@ int main(){
 
   auto glassMaterial = material::Material(utility::Color(1,1,1), std::nullopt, 0, 0, 0.9, 300, 0.9, 0.9, 1.5);
 
-  auto floor = geometry::normalPlane();
+  auto floor = geometry::makePlane();
   floor->setMaterial(floorMaterial);
   floor->setTransform(utility::transformations::translation(0, 0, 10) * 
                       utility::transformations::rotation_x(std::numbers::pi / 2));
 
-  auto glassSphere = geometry::normalSphere();
+  auto glassSphere = geometry::makeSphere();
   glassSphere->setMaterial(glassMaterial);
 
   auto hollowCenter = geometry::glassSphere();

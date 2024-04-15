@@ -35,7 +35,7 @@ double radius_;
 utility::Tuple origin_;
 };
 
-std::shared_ptr<Sphere> normalSphere() noexcept;
+std::shared_ptr<Sphere> makeSphere() noexcept;
 std::shared_ptr<Sphere> glassSphere() noexcept;
 
 } // namespace geometry

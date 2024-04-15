@@ -68,7 +68,7 @@ utility::Tuple Cylinder::localNormalAt(const utility::Tuple &objectPoint) const 
   return utility::Vector(objectPoint.x(), 0, objectPoint.z());
 }
 
-std::shared_ptr<Cylinder> normalCylinder() noexcept {
+std::shared_ptr<Cylinder> makeCylinder() noexcept {
   return std::make_shared<Cylinder>();
 }
 

@@ -19,7 +19,7 @@ public:
   static std::vector<std::pair<Tuple, Tuple>> testCases;
 };
 
-std::shared_ptr<Cylinder> CylinderMissTest::c = normalCylinder();
+std::shared_ptr<Cylinder> CylinderMissTest::c = makeCylinder();
 std::vector<std::pair<Tuple, Tuple>> CylinderMissTest::testCases = {
   {Point(1, 0, 0),  Vector(0, 1, 0)},
   {Point(0, 0, 0),  Vector(0, 1, 0)},
@@ -46,7 +46,7 @@ public:
   static std::vector<std::tuple<Tuple, Tuple, double, double>> testCases;
 };
 
-std::shared_ptr<Cylinder> CylinderIntersectTest::c = normalCylinder();
+std::shared_ptr<Cylinder> CylinderIntersectTest::c = makeCylinder();
 std::vector<std::tuple<Tuple, Tuple, double, double>> CylinderIntersectTest::testCases = {
   {Point(1, 0, -5), Vector(0, 0, 1), 5, 5},
   {Point(0, 0, -5), Vector(0, 0, 1), 4, 6},
@@ -76,7 +76,7 @@ public:
   static std::vector<std::pair<Tuple, Tuple>> testCases;
 };
 
-std::shared_ptr<Cylinder> CylinderNormalTest::c = normalCylinder();
+std::shared_ptr<Cylinder> CylinderNormalTest::c = makeCylinder();
 std::vector<std::pair<Tuple, Tuple>> CylinderNormalTest::testCases = {
   {Point(1, 0, 0),  Vector(1, 0, 0)},
   {Point(0, 5, -1), Vector(0, 0, -1)},
@@ -99,7 +99,7 @@ TEST_P(CylinderNormalTest, normalOnCylinder)
 
 // =================== Truncated cylinder tests ====================
 TEST(CylinderTests, DefaultCylinderIsNotTruncated){
-  auto cylinder = normalCylinder();
+  auto cylinder = makeCylinder();
   EXPECT_FLOAT_EQ(-std::numeric_limits<double>::infinity(), cylinder->minimum_);
   EXPECT_FLOAT_EQ(std::numeric_limits<double>::infinity(), cylinder->maximum_);
 }
@@ -141,7 +141,7 @@ TEST_P(CylinderWithTruncationIntersectionTest, CylinderWithTruncation){
 
 // =================== Closed cylinder tests ====================
 TEST(CylinderTests, DefaultCylinderNotClosed){
-  auto cylinder = normalCylinder();
+  auto cylinder = makeCylinder();
   EXPECT_FALSE(cylinder->closed_);
 }
 

@@ -26,7 +26,7 @@ TEST(pointLight_tests, Creation){
 /* =========== Light Material Interaction Tests =========== */
 class lightMaterialInteractionTests : public ::testing::Test {
 protected:
-  const std::shared_ptr<geometry::Sphere> s = geometry::normalSphere();
+  const std::shared_ptr<geometry::Sphere> s = geometry::makeSphere();
   const Tuple position = Point(0,0,0);
 };
 

@@ -27,7 +27,7 @@ public:
   std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept override;
 };
 
-std::shared_ptr<Cube> normalCube() noexcept;
+std::shared_ptr<Cube> makeCube() noexcept;
 
 } // namespace geometry
 } // namespace raytracer

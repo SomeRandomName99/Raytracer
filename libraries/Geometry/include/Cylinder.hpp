@@ -33,7 +33,7 @@ public:
   bool closed_{false};
 };
 
-std::shared_ptr<Cylinder> normalCylinder() noexcept;
+std::shared_ptr<Cylinder> makeCylinder() noexcept;
 
 } // namespace geometry
 } // namespace raytracer

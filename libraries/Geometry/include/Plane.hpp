@@ -27,7 +27,7 @@ public:
   std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept override;
 };
 
-std::shared_ptr<Plane> normalPlane() noexcept;
+std::shared_ptr<Plane> makePlane() noexcept;
 
 } // namespace geometry
 } // namespace raytracer

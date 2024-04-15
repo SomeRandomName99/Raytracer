@@ -80,7 +80,7 @@ utility::Tuple Cone::localNormalAt(const utility::Tuple &objectPoint) const noex
   return utility::Vector(objectPoint.x(), normalYCoord, objectPoint.z());
 }
 
-std::shared_ptr<Cone> normalCone() noexcept {
+std::shared_ptr<Cone> makeCone() noexcept {
   return std::make_shared<Cone>();  
 }
 

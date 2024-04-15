@@ -45,7 +45,7 @@ utility::Tuple Cube::localNormalAt(const utility::Tuple &objectPoint) const noex
   }
 }
 
-std::shared_ptr<Cube> normalCube() noexcept {
+std::shared_ptr<Cube> makeCube() noexcept {
   return std::make_shared<Cube>();
 }
 

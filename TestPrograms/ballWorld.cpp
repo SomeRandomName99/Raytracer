@@ -29,15 +29,15 @@ int main(){
   floorMaterial.setPattern(material::Pattern(material::StripePattern(utility::Color(1, 0.9, 0.9), utility::Color(0.9, 1, 0.9))));
   floorMaterial.setSpecular(0);
 
-  auto floor = geometry::normalPlane();
+  auto floor = geometry::makePlane();
   floor->setMaterial(floorMaterial);
 
-  auto wall = geometry::normalPlane();
+  auto wall = geometry::makePlane();
   wall->setMaterial(backWallMaterial);
   wall->setTransform(utility::transformations::translation(0, 0, 6) * 
                      utility::transformations::rotation_x(std::numbers::pi / 2));
 
-  auto middle = geometry::normalSphere();
+  auto middle = geometry::makeSphere();
   middle->setTransform(utility::transformations::translation(-0.5, 1, 0.5)*
                       utility::transformations::rotation_z(std::numbers::pi / 3));
   auto middlePattern = material::Pattern(material::Perturb(material::RingPattern(utility::Color(1,1,1), utility::Color(1,0,0))));
@@ -49,7 +49,7 @@ int main(){
   middle->material().setSpecular(0.3);
   middle->material().setReflectance(0.05);
 
-  auto right = geometry::normalSphere();
+  auto right = geometry::makeSphere();
   right->setTransform(utility::transformations::translation(1.5, 0.5, -0.5) * 
                      utility::transformations::scaling(0.5, 0.5, 0.5));
   auto rightPattern = material::Pattern(material::GradientPattern(utility::Color(1,0,0), utility::Color(0,1,0)));
@@ -59,7 +59,7 @@ int main(){
   right->material().setSpecular(0.3);
   right->material().setReflectance(0.1);
 
-  auto left = geometry::normalSphere();
+  auto left = geometry::makeSphere();
   left->setTransform(utility::transformations::translation(-1.5, 0.33, -0.75) * 
                      utility::transformations::scaling(0.33, 0.33, 0.33));
   left->material().setSurfaceColor(utility::Color(1, 0.8, 0.1));
