@@ -1,5 +1,5 @@
-#ifndef SHAPET_HPP
-#define SHAPET_HPP
+#ifndef SHAPE_HPP
+#define SHAPE_HPP
 
 #include <variant>
 #include <atomic>
@@ -127,4 +127,4 @@ inline utility::Tuple objectNormalToWorldNormal(const ShapeBase* shape, const ut
 } // namespace geometry
 } // namespace raytracer
 
-#endif // SHAPET_HPP
+#endif // SHAPE_HPP

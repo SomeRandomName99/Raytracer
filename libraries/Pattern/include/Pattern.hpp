@@ -1,5 +1,5 @@
-#ifndef PATTERNT_HPP
-#define PATTERNT_HPP
+#ifndef PATTERN_HPP
+#define PATTERN_HPP
 
 #include <memory>
 
@@ -121,4 +121,4 @@ private:
 } // namespace material
 } // namespace raytracer
 
-#endif // PATTERNT_HPP
+#endif // PATTERN_HPP
