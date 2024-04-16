@@ -6,6 +6,8 @@
 #include "Material.hpp"
 #include "Intersections.hpp"
 #include "Ray.hpp"
+#include "Group.hpp"
+#include "Sphere.hpp"
 
 using namespace raytracer;
 using namespace utility;
@@ -93,4 +95,55 @@ TEST_F(TestShapeTests, NormalOnATransformedShape) {
   auto n = s.normalAt(Point(0, std::sqrt(2)/2, -std::sqrt(2)/2));
 
   EXPECT_EQ(n, Vector(0, 0.9701425, -0.2425356));
+}
+
+/* =========== Parent tests =========== */
+TEST_F(TestShapeTests, ParentAttributeOfShape) {
+  EXPECT_EQ(s.parent(), nullptr);
+}
+
+/* =========== Helper functions tests =========== */
+TEST(ShapeTests, ConvertingAPointFromWOrldToObjectSpace) {
+  auto g1 = std::make_shared<geometry::Group>();
+  g1->setTransform(transformations::rotation_y(std::numbers::pi/2));
+  auto g2 = std::make_shared<geometry::Group>();
+  g2->setTransform(transformations::scaling(2, 2, 2));
+  g1->addChild(g2);
+  auto s = std::make_shared<geometry::Sphere>();
+  s->setTransform(transformations::translation(5, 0, 0));
+  g2->addChild(s);
+
+  auto p = worldPointToObjectPoint(s.get(), Point(-2, 0, -10));
+
+  EXPECT_EQ(p, Point(0, 0, -1));
+}
+
+TEST(ShapeTests, ConvertingANormalFromObjectToWorldSpace) {
+  auto g1 = std::make_shared<geometry::Group>();
+  g1->setTransform(transformations::rotation_y(std::numbers::pi/2));
+  auto g2 = std::make_shared<geometry::Group>();
+  g2->setTransform(transformations::scaling(1, 2, 3));
+  g1->addChild(g2);
+  auto s = std::make_shared<geometry::Sphere>();
+  s->setTransform(transformations::translation(5, 0, 0));
+  g2->addChild(s);
+
+  auto n = objectNormalToWorldNormal(s.get(), Vector(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
+
+  EXPECT_EQ(n, Vector(0.2857143, 0.4285714, -0.8571429));
+}
+
+TEST(ShapeTests, FindingNormalOnChildObject) {
+  auto g1 = std::make_shared<geometry::Group>();
+  g1->setTransform(transformations::rotation_y(std::numbers::pi/2));
+  auto g2 = std::make_shared<geometry::Group>();
+  g2->setTransform(transformations::scaling(1, 2, 3));
+  g1->addChild(g2);
+  auto s = std::make_shared<geometry::Sphere>();
+  s->setTransform(transformations::translation(5, 0, 0));
+  g2->addChild(s);
+
+  auto n = s->normalAt(Point(1.7321, 1.1547, -5.5774));
+
+  EXPECT_EQ(n, Vector(0.2857036, 0.4285431, -0.8571605));
 }

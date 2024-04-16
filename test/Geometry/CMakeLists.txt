@@ -8,4 +8,5 @@ target_sources(
     CubeTests.cpp
     CylinderTests.cpp
     ConeTests.cpp
+    GroupTests.cpp
 )
