@@ -19,12 +19,12 @@ using namespace raytracer;
 
 int main(){
   auto floorMaterial = material::Material();
-  floorMaterial.setPattern(material::Pattern(material::CheckerPattern(utility::Color(0.85, 0.85, 0.85), utility::Color(0.15, 0.15, 0.15))));
+  floorMaterial.setPattern(material::CheckerPattern(utility::Color(0.85, 0.85, 0.85), utility::Color(0.15, 0.15, 0.15)));
   floorMaterial.setAmbient(0.8);
   floorMaterial.setDiffuse(0.2);
   floorMaterial.setSpecular(0);
 
-  auto glassMaterial = material::Material(utility::Color(1,1,1), std::nullopt, 0, 0, 0.9, 300, 0.9, 0.9, 1.5);
+  auto glassMaterial = material::Material(utility::Color(1,1,1), 0, 0, 0.9, 300, 0.9, 0.9, 1.5);
 
   auto floor = geometry::makePlane();
   floor->setMaterial(floorMaterial);

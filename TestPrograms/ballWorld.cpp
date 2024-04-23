@@ -23,10 +23,10 @@ using namespace raytracer;
 
 int main(){
   auto backWallMaterial = material::Material();
-  backWallMaterial.setPattern(material::Pattern(material::CheckerPattern(utility::Color(1,1,1), utility::Color(0,0,0))));
+  backWallMaterial.setPattern(material::CheckerPattern(utility::Color(1,1,1), utility::Color(0,0,0)));
 
   auto floorMaterial = material::Material();
-  floorMaterial.setPattern(material::Pattern(material::StripePattern(utility::Color(1, 0.9, 0.9), utility::Color(0.9, 1, 0.9))));
+  floorMaterial.setPattern(material::StripePattern(utility::Color(1, 0.9, 0.9), utility::Color(0.9, 1, 0.9)));
   floorMaterial.setSpecular(0);
 
   auto floor = geometry::makePlane();

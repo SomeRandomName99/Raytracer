@@ -25,6 +25,7 @@ target_include_directories(
   Geometry
   PUBLIC
     include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Material/include
 )
 
 target_link_libraries(

@@ -5,6 +5,7 @@
 
 #include "Matrix.hpp"
 #include "Color.hpp"
+#include "Shape.hpp"
 
 namespace raytracer {
 namespace material {
@@ -13,7 +14,7 @@ namespace details {
 class PatternConcept {
 public:
   virtual ~PatternConcept() {}
-  virtual utility::Color drawPatternAt(const utility::Matrix<4,4>& objectInverseTransformation, const utility::Tuple& worldPoint) const noexcept = 0;
+  virtual utility::Color drawPatternAt(const geometry::ShapeBase* shape, const utility::Tuple& worldPoint) const noexcept = 0;
   virtual void setTransform(const utility::Matrix<4,4> &transformation) noexcept = 0;
   virtual const utility::Matrix<4,4>& transform() const noexcept = 0;
   virtual const utility::Matrix<4,4>& inverseTransform() const noexcept = 0;
@@ -34,11 +35,11 @@ public:
     return std::make_unique<OwningPatternModel<PatternT>>(pattern_, transformation_);
   }
 
-  utility::Color drawPatternAt(const utility::Matrix<4,4>& objectInverseTransformation, const utility::Tuple& worldPoint) const noexcept override {
-    const auto objectPoint  = objectInverseTransformation * worldPoint;
-    const auto patternPoint = this->inverseTransform() * objectPoint;
-    return pattern_.drawPatternAt(patternPoint);
-  }
+  utility::Color drawPatternAt(const geometry::ShapeBase* shape, const utility::Tuple& worldPoint) const noexcept override {
+  const auto objectPoint = geometry::worldPointToObjectPoint(shape, worldPoint);
+  const auto patternPoint = this->inverseTransform() * objectPoint;
+  return pattern_.drawPatternAt(patternPoint);
+}
 
   void swap(OwningPatternModel& other) noexcept {
     std::swap(pattern_, other.pattern_);
@@ -87,8 +88,8 @@ public:
     return *this;
   }
 
-  utility::Color drawPatternAt(const utility::Matrix<4,4>& objectInverseTransformation, const utility::Tuple& worldPoint) const noexcept {
-    return pimpl_->drawPatternAt(objectInverseTransformation, worldPoint);
+  utility::Color drawPatternAt(const geometry::ShapeBase* shape, const utility::Tuple& worldPoint) const noexcept {
+    return pimpl_->drawPatternAt(shape, worldPoint);
   }
 
   void setTransform(const utility::Matrix<4,4> &transformation) noexcept {

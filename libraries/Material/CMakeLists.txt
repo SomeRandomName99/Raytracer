@@ -18,6 +18,5 @@ target_link_libraries(
   Material
   PRIVATE
     Utility
-  PUBLIC
     Pattern
 )

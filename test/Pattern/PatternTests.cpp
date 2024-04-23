@@ -10,6 +10,7 @@
 #include "Tuple.hpp"
 #include "Transformations.hpp"
 #include "Color.hpp"
+#include "Shape.hpp"
 
 using namespace raytracer;
 using namespace utility;
@@ -46,22 +47,34 @@ TEST_F(TestPatternTests, assigning_transformation) {
 }
 
 /* =========== Pattern at shape Tests =========== */
+class MockTestShape : public geometry::ShapeBase {
+public:
+  MOCK_METHOD(std::vector<geometry::Intersection>, localIntersect, (const utility::Ray& ray), (const, noexcept));
+  MOCK_METHOD(utility::Tuple, localNormalAt, (const utility::Tuple &point), (const, noexcept));
+};
+
 TEST_F(TestPatternTests, pattern_with_object_transformation) {
-  auto inverseTransformation = utility::inverse(transformations::scaling(2, 2, 2));
-  const auto c = defaultPattern.drawPatternAt(inverseTransformation, Point(2, 3, 4));
+  const auto s = std::make_shared<MockTestShape>();
+  s->setTransform(transformations::scaling(2, 2, 2));
+
+  const auto c = defaultPattern.drawPatternAt(s.get(), Point(2, 3, 4));
   EXPECT_EQ(c, utility::Color(1, 1.5, 2));
 }
 
 TEST_F(TestPatternTests, pattern_with_pattern_transformation) {
   defaultPattern.setTransform(transformations::scaling(2, 2, 2));
-  const auto c = defaultPattern.drawPatternAt(utility::Matrix<4,4>::identity(), Point(2, 3, 4));
+  const auto s = std::make_shared<MockTestShape>();
+
+  const auto c = defaultPattern.drawPatternAt(s.get(), Point(2, 3, 4));
   EXPECT_EQ(c, utility::Color(1, 1.5, 2));
 }
 
 TEST_F(TestPatternTests, pattern_with_both_object_and_pattern_transformation) {
   defaultPattern.setTransform(transformations::translation(0.5, 1, 1.5));
-  auto inverseTransformation = utility::inverse(transformations::scaling(2, 2, 2));
-  const auto c = defaultPattern.drawPatternAt(inverseTransformation, Point(2.5, 3, 3.5));
+  const auto s = std::make_shared<MockTestShape>();
+  s->setTransform(transformations::scaling(2, 2, 2));
+
+  const auto c = defaultPattern.drawPatternAt(s.get(), Point(2.5, 3, 3.5));
   EXPECT_EQ(c, utility::Color(0.75, 0.5, 0.25));
 }
 

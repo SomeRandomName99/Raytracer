@@ -10,8 +10,8 @@ namespace scene {
 utility::Color lighting(const geometry::ShapeBase* object, const PointLight& light, const utility::Tuple& point, 
                         const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow) noexcept{
   utility::Color color;
-  if (object->material().pattern().has_value()) {
-    color = (*object->material().pattern()).drawPatternAt(object->inverseTransform(), point);
+  if (object->material().pattern()) {
+    color = (*object->material().pattern()).drawPatternAt(object, point);
   } else {
     color = object->material().surfaceColor();
   }

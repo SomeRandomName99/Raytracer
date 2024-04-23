@@ -6,31 +6,32 @@
 
 #include "Color.hpp"
 #include "Tuple.hpp"
-#include "Pattern.hpp"
 
 namespace raytracer {
 namespace material {
 
+class Pattern;
+
 class Material {
 public:
   Material() noexcept;
-  Material(utility::Color surfaceColor, std::optional<Pattern> pattern = std::nullopt, 
-           double ambient = 1.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200,
+  Material(utility::Color surfaceColor, double ambient = 1.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200,
            double reflectance = 0, double transparency = 0, double refractiveIndex = 1) noexcept;
 
-  ~Material() = default;
+  ~Material();
 
   Material(const Material& other) = delete;
   Material& operator=(const Material& other) = delete;
 
-  Material(Material &&other) noexcept = default;
-  Material& operator=(Material&& other) noexcept = default;
+  Material(Material &&other) noexcept;
+  Material& operator=(Material&& other) noexcept;
 
   void setSurfaceColor(const utility::Color& surfaceColor) noexcept;
   const utility::Color& surfaceColor() const noexcept;
 
-  void setPattern(const Pattern& pattern);
-  const std::optional<Pattern>& pattern() const noexcept;
+  void setPattern(const Pattern& pattern) noexcept;
+  void setPattern(std::unique_ptr<Pattern> pattern) noexcept;
+  const std::unique_ptr<Pattern>& pattern() const noexcept;
 
   void setAmbient(double ambient) noexcept;
   double ambient() const noexcept;
@@ -55,7 +56,7 @@ public:
 
 private:
   utility::Color surfaceColor_;
-  std::optional<Pattern> pattern_;
+  std::unique_ptr<Pattern> pattern_{};
   double ambient_;
   double diffuse_;
   double specular_;

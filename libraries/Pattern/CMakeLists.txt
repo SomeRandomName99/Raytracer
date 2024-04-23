@@ -22,6 +22,7 @@ target_include_directories(
   PUBLIC
     include
     ${CMAKE_CURRENT_LIST_DIR}/../../3rdParty
+    ${CMAKE_CURRENT_LIST_DIR}/../Geometry/include
 )
 
 target_link_libraries(

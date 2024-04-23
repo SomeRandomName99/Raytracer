@@ -5,13 +5,18 @@ namespace raytracer {
 namespace material {
 
 Material::Material() noexcept
-    : surfaceColor_{utility::Color(1.0, 1.0, 1.0)}, pattern_{}, ambient_{0.1}, diffuse_{0.9}, specular_{0.9}, 
+    : surfaceColor_{utility::Color(1.0, 1.0, 1.0)}, ambient_{0.1}, diffuse_{0.9}, specular_{0.9}, 
       shininess_{200.0}, reflectance_{0}, transparency_{0}, refractiveIndex_{1} {}
 
-Material::Material(utility::Color surfaceColor, std::optional<Pattern> pattern, double ambient, double diffuse, 
+Material::Material(utility::Color surfaceColor, double ambient, double diffuse, 
                    double specular, double shininess, double reflectance, double transparency, double refractiveIndex) noexcept 
-    : surfaceColor_{surfaceColor}, pattern_{std::move(pattern)}, ambient_{ambient}, diffuse_{diffuse}, specular_{specular}, shininess_{shininess},
+    : surfaceColor_{surfaceColor}, ambient_{ambient}, diffuse_{diffuse}, specular_{specular}, shininess_{shininess},
       reflectance_{reflectance}, transparency_{transparency}, refractiveIndex_{refractiveIndex} {}
+
+Material::~Material() = default;
+
+Material::Material(Material &&other) noexcept = default;
+Material& Material::operator=(Material&& other) noexcept = default;
 
 void Material::setSurfaceColor(const utility::Color& surfaceColor) noexcept {
   surfaceColor_ = surfaceColor;
@@ -20,10 +25,13 @@ const utility::Color& Material::surfaceColor() const noexcept {
   return surfaceColor_;
 }
 
-void Material::setPattern(const Pattern& pattern) {
-  pattern_ = pattern;
+void Material::setPattern(const Pattern& pattern) noexcept {
+  pattern_ = std::make_unique<Pattern>(pattern);
 }
-const std::optional<Pattern>& Material::pattern() const noexcept{
+void Material::setPattern(std::unique_ptr<Pattern> pattern) noexcept {
+  pattern_ = std::move(pattern);
+}
+const std::unique_ptr<Pattern>& Material::pattern() const noexcept{
   return pattern_;
 }
 
