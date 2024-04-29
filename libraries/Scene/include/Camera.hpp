@@ -9,12 +9,12 @@ namespace scene {
 class Camera {
 public:
 
-Camera(unsigned int numHorPixels, unsigned int numVerPixels, double fov) noexcept
+Camera(unsigned int numHorPixels, unsigned int numVerPixels, float fov) noexcept
     : numHorPixels_{numHorPixels}, numVerPixels_{numVerPixels}, fov_{fov}, transform_{utility::Matrix<4,4>::identity()} {
       // Imagine a triangle made from the camera to the canvas(1 unit away), the angle of which it the fov.
       // We calculate the half width because we can make a right angle triangle with adjacent = 1 and angle = fov/2.
       const auto halfView = std::tan(fov / 2);
-      const auto aspect = static_cast<double>(numHorPixels) / static_cast<double>(numVerPixels);
+      const auto aspect = static_cast<float>(numHorPixels) / static_cast<float>(numVerPixels);
 
       if(aspect >= 1){
         halfWidth_ = halfView;
@@ -26,7 +26,7 @@ Camera(unsigned int numHorPixels, unsigned int numVerPixels, double fov) noexcep
         halfHeight_ = halfView;
       }
 
-      pixelSize_ = halfWidth_ / static_cast<double>(numHorPixels_) * 2; // fullWidth/NumofHorizontalPixels
+      pixelSize_ = halfWidth_ / static_cast<float>(numHorPixels_) * 2; // fullWidth/NumofHorizontalPixels
 }
 
 /**
@@ -48,11 +48,11 @@ Canvas render(const World& world) noexcept;
 
 unsigned int numHorPixels_;
 unsigned int numVerPixels_;
-double fov_;
+float fov_;
 utility::Matrix<4,4> transform_;
-double halfWidth_;
-double halfHeight_;
-double pixelSize_;
+float halfWidth_;
+float halfHeight_;
+float pixelSize_;
 };
 
 } // namespace raytracer

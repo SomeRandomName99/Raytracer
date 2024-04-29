@@ -137,7 +137,7 @@ TEST(prepare_computations_tests, FindingRefractionIndicesAtVariousIntersections)
                                           geometry::Intersection(c.get(), 5.25),
                                           geometry::Intersection(a.get(), 6));
 
-  const auto expected = std::vector<double>{1.0, 1.5, 2.0, 2.5, 2.5, 1.5};
+  const auto expected = std::vector<float>{1.0, 1.5, 2.0, 2.5, 2.5, 1.5};
   for (size_t i = 0; i < xs.size(); i++){
     const auto comps = geometry::prepareComputations(xs[i], r, xs);
     EXPECT_FLOAT_EQ(comps.n1, expected[i]);

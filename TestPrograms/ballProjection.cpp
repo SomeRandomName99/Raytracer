@@ -17,9 +17,9 @@ using namespace raytracer;
 const auto shadow    = utility::Color(0.627, 0.125, 0.941);
 const auto wallcolor = utility::Color(0.0, 0.0, 0.0);
 
-utility::Tuple pixelToWorldCoords(unsigned int widthPixel, unsigned int heightPixel, unsigned int canvasSize, double canvasToWallConversionRatio){
-  double x_axis = (widthPixel  - canvasSize/2.0) / canvasToWallConversionRatio;
-  double y_axis = (heightPixel - canvasSize/2.0) / canvasToWallConversionRatio;
+utility::Tuple pixelToWorldCoords(unsigned int widthPixel, unsigned int heightPixel, unsigned int canvasSize, float canvasToWallConversionRatio){
+  float x_axis = (widthPixel  - canvasSize/2.0) / canvasToWallConversionRatio;
+  float y_axis = (heightPixel - canvasSize/2.0) / canvasToWallConversionRatio;
 
   return utility::Point(x_axis, y_axis, 0);
 }
@@ -36,7 +36,7 @@ int main(void){
   const int wallZOffset    = 10;
   const int wallSize       = 10;
   const int canvasSize     = 500;
-  const double canvasToWallConversionRatio = canvasSize/wallSize;
+  const float canvasToWallConversionRatio = canvasSize/wallSize;
   auto canvas = Canvas(canvasSize, canvasSize);
 
   

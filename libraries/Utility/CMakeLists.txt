@@ -9,7 +9,7 @@ target_sources(
     src/Transformations.cpp
   PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/include/Color.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/include/FloatUtils.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/floatUtils.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/Matrix.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/Ray.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/Tuple.hpp

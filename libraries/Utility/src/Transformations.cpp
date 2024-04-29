@@ -5,7 +5,7 @@
 namespace raytracer {
 namespace utility {
 namespace transformations{
-  Matrix<4,4> translation(const double x, const double y, const double z) noexcept{
+  Matrix<4,4> translation(const float x, const float y, const float z) noexcept{
     auto translationMatrix = Matrix<4,4>::identity();
     
     translationMatrix.at(0,3) = x;
@@ -14,7 +14,7 @@ namespace transformations{
     return translationMatrix;
   }
 
-  Matrix<4,4> scaling(const double x, const double y, const double z) noexcept{
+  Matrix<4,4> scaling(const float x, const float y, const float z) noexcept{
     auto translationMatrix = Matrix<4,4>::identity();
     
     translationMatrix.at(0,0) = x;
@@ -23,7 +23,7 @@ namespace transformations{
     return translationMatrix;
   }
 
-  Matrix<4,4> rotation_x(const double rads) noexcept{
+  Matrix<4,4> rotation_x(const float rads) noexcept{
     auto rotationMatrix = Matrix<4,4>::identity();
 
     rotationMatrix.at(1,1) =  std::cos(rads);
@@ -32,7 +32,7 @@ namespace transformations{
     rotationMatrix.at(2,2) =  std::cos(rads);
     return rotationMatrix;
   }
-  Matrix<4,4> rotation_y(const double rads) noexcept{
+  Matrix<4,4> rotation_y(const float rads) noexcept{
     auto rotationMatrix = Matrix<4,4>::identity();
 
     rotationMatrix.at(0,0) =  std::cos(rads);
@@ -41,7 +41,7 @@ namespace transformations{
     rotationMatrix.at(2,2) =  std::cos(rads);
     return rotationMatrix;
   }
-  Matrix<4,4> rotation_z(const double rads) noexcept{
+  Matrix<4,4> rotation_z(const float rads) noexcept{
     auto rotationMatrix = Matrix<4,4>::identity();
 
     rotationMatrix.at(0,0) =  std::cos(rads);
@@ -51,9 +51,9 @@ namespace transformations{
     return rotationMatrix;
   }
 
-  Matrix<4,4> shearing(const double x_y, const double x_z, 
-                       const double y_x, const double y_z,
-                       const double z_x, const double z_y) noexcept{
+  Matrix<4,4> shearing(const float x_y, const float x_z, 
+                       const float y_x, const float y_z,
+                       const float z_x, const float z_y) noexcept{
     auto shearingMatrix = Matrix<4,4>::identity();
 
     shearingMatrix.at(0,1) =  x_y;
@@ -74,10 +74,10 @@ namespace transformations{
     const auto trueUpVector  = leftVector.cross(forwardVector);
     
     const auto orientation = Matrix<4,4>{
-      leftVector.x(),      leftVector.y(),     leftVector.z(),    0.0,
-      trueUpVector.x(),    trueUpVector.y(),   trueUpVector.z(),  0.0,
-      -forwardVector.x(), -forwardVector.y(), -forwardVector.z(), 0.0,
-      0.0,                0.0,               0.0,              1.0
+      leftVector.x(),      leftVector.y(),     leftVector.z(),    0.0f,
+      trueUpVector.x(),    trueUpVector.y(),   trueUpVector.z(),  0.0f,
+      -forwardVector.x(), -forwardVector.y(), -forwardVector.z(), 0.0f,
+      0.0f,                0.0f,               0.0f,              1.0
     };
 
     return orientation * translation(-from.x(), -from.y(), -from.z());

@@ -14,14 +14,14 @@ class Cone final : public ShapeBase
 {
 public:
   Cone() noexcept {}
-  Cone(double minimum, double maximum, bool closed = false) noexcept : minimum_{minimum}, maximum_{maximum}, 
+  Cone(float minimum, float maximum, bool closed = false) noexcept : minimum_{minimum}, maximum_{maximum}, 
                                                                        closed_{closed} {}
 
   utility::Tuple localNormalAt(const utility::Tuple &objectPoint) const noexcept;
   std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept;
 
-  double minimum_{-std::numeric_limits<double>::infinity()};
-  double maximum_{std::numeric_limits<double>::infinity()};
+  float minimum_{-std::numeric_limits<float>::infinity()};
+  float maximum_{std::numeric_limits<float>::infinity()};
   bool closed_{false};
 };
 

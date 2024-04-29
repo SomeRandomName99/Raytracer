@@ -230,20 +230,20 @@ TEST(matrix_tests, Matrix_inverse_thorough){
                         1.0,-3.0, 7.0, 4.0};
   auto M2 = inverse(M1);
 
-  std::array<double, 16> cofactors{116, 240, 128,-24,
+  std::array<float, 16> cofactors{116, 240, 128,-24,
                                   -430,-775,-236, 277,
                                   -42, -119,-28,  105,
                                   -278,-433,-160, 163};
   std::transform(cofactors.cbegin(), cofactors.cend(), 
                  cofactors.begin(), 
-                 [M1](const double& arrayElement){return arrayElement/M1.determinant();});
+                 [M1](const float& arrayElement){return arrayElement/M1.determinant();});
   const Matrix<4,4> M3{cofactors};
 
   EXPECT_EQ(M1.determinant(), 532);
   EXPECT_EQ(cofactor(M1, 2, 3), -160);
-  EXPECT_EQ(M2.at(3,2), -160.0/532);
+  EXPECT_FLOAT_EQ(M2.at(3,2), -160.0/532);
   EXPECT_EQ(cofactor(M1, 3, 2), 105);
-  EXPECT_EQ(M2.at(2,3), 105.0/532);
+  EXPECT_FLOAT_EQ(M2.at(2,3), 105.0/532);
   EXPECT_EQ(M3, M2);
 }
 
@@ -254,13 +254,13 @@ TEST(matrix_tests, Matrix_inverse_Simple1){
                        -3.0, 0.0,-9.0,-4.0};
   auto M2 = inverse(M1);
 
-  std::array<double, 16> cofactors{  90,    90,   165,   315,
+  std::array<float, 16> cofactors{  90,    90,   165,   315,
                                     45,   -72,   -15,   -18,
                                   -210,  -210,  -255,  -540,
                                    405,   405,   450,  1125};
   std::transform(cofactors.cbegin(), cofactors.cend(), 
                  cofactors.begin(), 
-                 [M1](const double& arrayElement){return arrayElement/M1.determinant();});
+                 [M1](const float& arrayElement){return arrayElement/M1.determinant();});
   const Matrix<4,4> M3{cofactors};
 
   EXPECT_EQ(M3, M2);
@@ -273,13 +273,13 @@ TEST(matrix_tests, Matrix_inverse_Simple2){
                        -7.0, 6.0, 6.0, 2.0};
   auto M2 = inverse(M1);
 
-  std::array<double, 16> cofactors{ -66.0,  -126.0,   234.0,  -360.0,
+  std::array<float, 16> cofactors{ -66.0,  -126.0,   234.0,  -360.0,
                                    -126.0,    54.0,   594.0,  -540.0,
                                     -47.0,  -237.0,  -177.0,   210.0,
                                     288.0,   108.0,  -432.0,   540.0};
   std::transform(cofactors.cbegin(), cofactors.cend(), 
                  cofactors.begin(), 
-                 [M1](const double& arrayElement){return arrayElement/M1.determinant();});
+                 [M1](const float& arrayElement){return arrayElement/M1.determinant();});
   const Matrix<4,4> M3{cofactors};
 
   EXPECT_EQ(M3, M2);

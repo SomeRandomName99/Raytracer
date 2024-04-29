@@ -3,7 +3,7 @@
 
 #include "Cube.hpp"
 #include "Intersections.hpp"
-#include "FloatUtils.hpp"
+#include "floatUtils.hpp"
 
 namespace raytracer {
 namespace geometry {
@@ -12,20 +12,20 @@ namespace geometry {
 // using the optimized slab intersection method
 // https://tavianator.com/2015/ray_box_nan.html
 std::vector<Intersection> Cube::localIntersect(const utility::Ray &transformedRay) const noexcept {
-  double tx1 = (-1 - transformedRay.origin_.x()) / transformedRay.direction_.x();
-  double tx2 = (1 - transformedRay.origin_.x()) / transformedRay.direction_.x();
+  float tx1 = (-1 - transformedRay.origin_.x()) / transformedRay.direction_.x();
+  float tx2 = (1 - transformedRay.origin_.x()) / transformedRay.direction_.x();
 
-  double tmin = std::min(tx1, tx2);
-  double tmax = std::max(tx1, tx2);
+  float tmin = std::min(tx1, tx2);
+  float tmax = std::max(tx1, tx2);
 
-  double ty1 = (-1 - transformedRay.origin_.y()) / transformedRay.direction_.y();
-  double ty2 = (1 - transformedRay.origin_.y()) / transformedRay.direction_.y();
+  float ty1 = (-1 - transformedRay.origin_.y()) / transformedRay.direction_.y();
+  float ty2 = (1 - transformedRay.origin_.y()) / transformedRay.direction_.y();
 
   tmin = std::max(tmin, std::min(ty1, ty2));
   tmax = std::min(tmax, std::max(ty1, ty2));
 
-  double tz1 = (-1 - transformedRay.origin_.z()) / transformedRay.direction_.z();
-  double tz2 = (1 - transformedRay.origin_.z()) / transformedRay.direction_.z();
+  float tz1 = (-1 - transformedRay.origin_.z()) / transformedRay.direction_.z();
+  float tz2 = (1 - transformedRay.origin_.z()) / transformedRay.direction_.z();
 
   tmin = std::max(tmin, std::min(tz1, tz2));
   tmax = std::min(tmax, std::max(tz1, tz2));

@@ -40,17 +40,17 @@ TEST_P(CylinderMissTest, rayMissesCylinder)
   EXPECT_EQ(0, xs.size());
 }
 
-class CylinderIntersectTest : public ::testing::TestWithParam<std::tuple<Tuple, Tuple, double, double>>{
+class CylinderIntersectTest : public ::testing::TestWithParam<std::tuple<Tuple, Tuple, float, float>>{
 public:
   static std::shared_ptr<Cylinder> c;
-  static std::vector<std::tuple<Tuple, Tuple, double, double>> testCases;
+  static std::vector<std::tuple<Tuple, Tuple, float, float>> testCases;
 };
 
 std::shared_ptr<Cylinder> CylinderIntersectTest::c = makeCylinder();
-std::vector<std::tuple<Tuple, Tuple, double, double>> CylinderIntersectTest::testCases = {
+std::vector<std::tuple<Tuple, Tuple, float, float>> CylinderIntersectTest::testCases = {
   {Point(1, 0, -5), Vector(0, 0, 1), 5, 5},
   {Point(0, 0, -5), Vector(0, 0, 1), 4, 6},
-  {Point(0.5, 0, -5), Vector(0.1, 1, 1), 6.807981, 7.088723},
+  {Point(0.5, 0, -5), Vector(0.1, 1, 1), 6.807999, 7.0887051},
 };
 
 INSTANTIATE_TEST_SUITE_P(
@@ -100,18 +100,18 @@ TEST_P(CylinderNormalTest, normalOnCylinder)
 // =================== Truncated cylinder tests ====================
 TEST(CylinderTests, DefaultCylinderIsNotTruncated){
   auto cylinder = makeCylinder();
-  EXPECT_FLOAT_EQ(-std::numeric_limits<double>::infinity(), cylinder->minimum_);
-  EXPECT_FLOAT_EQ(std::numeric_limits<double>::infinity(), cylinder->maximum_);
+  EXPECT_FLOAT_EQ(-std::numeric_limits<float>::infinity(), cylinder->minimum_);
+  EXPECT_FLOAT_EQ(std::numeric_limits<float>::infinity(), cylinder->maximum_);
 }
 
-class CylinderWithTruncationIntersectionTest : public ::testing::TestWithParam<std::pair<const std::string, std::tuple<Tuple, Tuple, double>>>{
+class CylinderWithTruncationIntersectionTest : public ::testing::TestWithParam<std::pair<const std::string, std::tuple<Tuple, Tuple, float>>>{
 public:
   static std::shared_ptr<Cylinder> c;
-  static std::unordered_map<std::string, std::tuple<Tuple, Tuple, double>> testCases;
+  static std::unordered_map<std::string, std::tuple<Tuple, Tuple, float>> testCases;
 };
 
 std::shared_ptr<Cylinder> CylinderWithTruncationIntersectionTest::c = std::make_shared<Cylinder>(1, 2);
-std::unordered_map<std::string, std::tuple<Tuple, Tuple, double>> CylinderWithTruncationIntersectionTest::testCases = {
+std::unordered_map<std::string, std::tuple<Tuple, Tuple, float>> CylinderWithTruncationIntersectionTest::testCases = {
   {"RayFromInsideEscapesThroughTheTop", {Point(0, 1.5, 0), Vector(0.1, 1, 0), 0}},
   {"RayPerpendicularToYAxisAboveCylinder", {Point(0, 3, -5), Vector(0, 0, 1), 0}},
   {"RayPerpendicularToYAxisBelowCylinder", {Point(0, 0, -5), Vector(0, 0, 1), 0}},
@@ -145,14 +145,14 @@ TEST(CylinderTests, DefaultCylinderNotClosed){
   EXPECT_FALSE(cylinder->closed_);
 }
 
-class ClosedCylinderIntersectionTest : public ::testing::TestWithParam<std::pair<const std::string, std::tuple<Tuple, Tuple, double>>>{
+class ClosedCylinderIntersectionTest : public ::testing::TestWithParam<std::pair<const std::string, std::tuple<Tuple, Tuple, float>>>{
 public:
   static std::shared_ptr<Cylinder> c;
-  static std::unordered_map<std::string, std::tuple<Tuple, Tuple, double>> testCases;
+  static std::unordered_map<std::string, std::tuple<Tuple, Tuple, float>> testCases;
 };
 
 std::shared_ptr<Cylinder> ClosedCylinderIntersectionTest::c = std::make_shared<Cylinder>(1, 2, true);
-std::unordered_map<std::string, std::tuple<Tuple, Tuple, double>> ClosedCylinderIntersectionTest::testCases = {
+std::unordered_map<std::string, std::tuple<Tuple, Tuple, float>> ClosedCylinderIntersectionTest::testCases = {
   {"RayAboveTheCylinderGoesThroughCaps", {Point(0, 3, 0), Vector(0, -1, 0), 2}},
   {"RayAboveTheCylinderAndGoesDiagonallyThrough", {Point(0, 3, -2), Vector(0, -1, 2), 2}},
   {"RayBelowTheCylinderAndGoesDiagonallyThrough", {Point(0, 0, -2), Vector(0,  1, 2), 2}},

@@ -40,14 +40,14 @@ void Canvas::PPMData(std::ostream& outputStream) const noexcept{
   }
 }
 
-inline unsigned int Canvas::convertColor(const double& ColorComponent) const noexcept{
+inline unsigned int Canvas::convertColor(const float& ColorComponent) const noexcept{
   // map the range 0.0-1.0 to 0-255 which is used for the PPM format
   if(std::isgreater(ColorComponent, 1.0)){return 255;}
   else if(std::isless(ColorComponent, 0.0)){return 0;}
   else{return std::ceil(255*ColorComponent);}
 }
 
-size_t Canvas::ColorComponentToPPM(const double& ColorComponent, std::ostream& outputStream, size_t rowLineLen) const noexcept{
+size_t Canvas::ColorComponentToPPM(const float& ColorComponent, std::ostream& outputStream, size_t rowLineLen) const noexcept{
   const auto maxLineLen = 70u;
   std::string ComponentString{std::to_string(convertColor(ColorComponent))};
 

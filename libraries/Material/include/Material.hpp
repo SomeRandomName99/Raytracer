@@ -15,8 +15,8 @@ class Pattern;
 class Material {
 public:
   Material() noexcept;
-  Material(utility::Color surfaceColor, double ambient = 1.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200,
-           double reflectance = 0, double transparency = 0, double refractiveIndex = 1) noexcept;
+  Material(utility::Color surfaceColor, float ambient = 1.1, float diffuse = 0.9, float specular = 0.9, float shininess = 200,
+           float reflectance = 0, float transparency = 0, float refractiveIndex = 1) noexcept;
 
   ~Material();
 
@@ -33,37 +33,37 @@ public:
   void setPattern(std::unique_ptr<Pattern> pattern) noexcept;
   const std::unique_ptr<Pattern>& pattern() const noexcept;
 
-  void setAmbient(double ambient) noexcept;
-  double ambient() const noexcept;
+  void setAmbient(float ambient) noexcept;
+  float ambient() const noexcept;
 
-  void setDiffuse(double diffuse) noexcept;
-  double diffuse() const noexcept;
+  void setDiffuse(float diffuse) noexcept;
+  float diffuse() const noexcept;
 
-  void setSpecular(double specular) noexcept;
-  double specular() const noexcept;
+  void setSpecular(float specular) noexcept;
+  float specular() const noexcept;
 
-  void setShininess(double shininess) noexcept;
-  double shininess() const noexcept;
+  void setShininess(float shininess) noexcept;
+  float shininess() const noexcept;
 
-  void setReflectance(double reflectance) noexcept;
-  double reflectance() const noexcept;
+  void setReflectance(float reflectance) noexcept;
+  float reflectance() const noexcept;
 
-  void setTransparency(double transparency) noexcept;
-  double transparency() const noexcept;
+  void setTransparency(float transparency) noexcept;
+  float transparency() const noexcept;
 
-  void setRefractiveIndex(double refractiveIndex) noexcept;
-  double refractiveIndex() const noexcept;
+  void setRefractiveIndex(float refractiveIndex) noexcept;
+  float refractiveIndex() const noexcept;
 
 private:
   utility::Color surfaceColor_;
   std::unique_ptr<Pattern> pattern_{};
-  double ambient_;
-  double diffuse_;
-  double specular_;
-  double shininess_;
-  double reflectance_;
-  double transparency_;
-  double refractiveIndex_;
+  float ambient_;
+  float diffuse_;
+  float specular_;
+  float shininess_;
+  float reflectance_;
+  float transparency_;
+  float refractiveIndex_;
 };
 
 bool operator==(const raytracer::material::Material& lhs, const raytracer::material::Material& rhs) noexcept;

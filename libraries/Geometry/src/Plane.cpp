@@ -7,11 +7,11 @@ namespace raytracer {
 namespace geometry {
 
 std::vector<Intersection> Plane::localIntersect(const utility::Ray &transformedRay) const noexcept {
-  if (std::abs(transformedRay.direction_.y()) < utility::EPSILON<double>) {
+  if (std::abs(transformedRay.direction_.y()) < utility::EPSILON<float>) {
     return std::vector<Intersection>();
   }
 
-  double t = -transformedRay.origin_.y() / transformedRay.direction_.y();
+  float t = -transformedRay.origin_.y() / transformedRay.direction_.y();
   return std::vector<Intersection>{Intersection(this, t)};
 }
 

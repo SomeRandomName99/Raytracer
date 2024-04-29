@@ -10,14 +10,14 @@ using namespace utility;
 using namespace geometry;
 
 // =================== Ray intersects cone ====================
-class ConeIntersectTest : public ::testing::TestWithParam<std::tuple<Tuple, Tuple, double, double>> {
+class ConeIntersectTest : public ::testing::TestWithParam<std::tuple<Tuple, Tuple, float, float>> {
 public:
   static std::shared_ptr<Cone> c;
-  static std::vector<std::tuple<Tuple, Tuple, double, double>> testCases;
+  static std::vector<std::tuple<Tuple, Tuple, float, float>> testCases;
 };
 
 std::shared_ptr<Cone> ConeIntersectTest::c = makeCone();
-std::vector<std::tuple<Tuple, Tuple, double, double>> ConeIntersectTest::testCases = {
+std::vector<std::tuple<Tuple, Tuple, float, float>> ConeIntersectTest::testCases = {
   {Point(0, 0, -5), Vector(0, 0, 1), 5, 5},
   {Point(0, 0, -5), Vector(1, 1, 1), 8.660254, 8.660254},
   {Point(1, 1, -5), Vector(-0.5, -1, 1), 4.550056, 49.449944},

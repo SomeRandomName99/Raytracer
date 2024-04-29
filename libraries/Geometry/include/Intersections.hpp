@@ -11,7 +11,7 @@
 #include "Material.hpp"
 #include "Matrix.hpp"
 
-constexpr double SHADOW_OFFSET = 1e-6;
+constexpr float SHADOW_OFFSET = 1e-4;
 
 namespace raytracer {
 namespace geometry {
@@ -27,7 +27,7 @@ class ShapeBase;
 struct Intersection
 {
   const ShapeBase *object;
-  double dist; ///< Distance from the ray origin to the intersection point.
+  float dist; ///< Distance from the ray origin to the intersection point.
 };
 
 bool operator==(Intersection const& lhs, Intersection const& rhs) noexcept;
@@ -40,8 +40,8 @@ struct Computations{
   utility::Tuple underPoint; // used for refractions
   utility::Tuple eyeVector;
   utility::Tuple reflectVector;
-  double n1; // refractive indices
-  double n2;
+  float n1; // refractive indices
+  float n2;
   bool inside;
 };
 
@@ -76,7 +76,7 @@ std::optional<Intersection> hit(const std::vector<Intersection>& intersections) 
  * @param comps The pre-computed state of a ray-object intersection.
  * @return The reflectance factor, a value between 0 and 1.
  */
-double schlick(const Computations& comps) noexcept;
+float schlick(const Computations& comps) noexcept;
 
 } // namespace geometry
 } // namespace raytracer

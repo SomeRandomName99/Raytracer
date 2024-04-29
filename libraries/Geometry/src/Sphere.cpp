@@ -20,7 +20,7 @@ std::vector<Intersection> Sphere::localIntersect(const utility::Ray& transformed
 
   const auto discriminant = b*b - 4*a*c;
 
-  if (discriminant < 0.)
+  if (discriminant < 0)
     return std::vector<Intersection>{};
 
   const auto dist1 = (-b - utility::sqrt(discriminant)) / (2*a);

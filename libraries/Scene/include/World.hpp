@@ -31,7 +31,7 @@ public:
    * This function is typically used to determine if a point is in shadow or not. If the ray does intersect with an object,
    * that means the point is in shadow. If the ray does not intersect with any objects, that means the point is lit by the light source.
    */
-  bool intersectShadow(const utility::Ray& ray, double distanceToLight) const noexcept;
+  bool intersectShadow(const utility::Ray& ray, float distanceToLight) const noexcept;
 
   /**
    * Calculates the color of a shaded hit based on the given computation.

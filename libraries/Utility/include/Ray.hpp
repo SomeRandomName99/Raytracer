@@ -13,7 +13,7 @@ public:
       : origin_{origin}, direction_{direction} {}
   explicit Ray() noexcept = default;
 
-  Tuple position(const double time) const noexcept;
+  Tuple position(const float time) const noexcept;
 
   Tuple origin_;
   Tuple direction_;

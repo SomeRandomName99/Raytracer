@@ -3,7 +3,7 @@
 
 #include "World.hpp"
 #include "Material.hpp"
-#include "FloatUtils.hpp"
+#include "floatUtils.hpp"
 
 namespace raytracer {
 namespace scene {
@@ -18,12 +18,12 @@ std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) co
   return intersections;
 }
 
-bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) const noexcept{
+bool World::intersectShadow(const utility::Ray& ray, float distanceToLight) const noexcept{
   return std::ranges::any_of(objects_, [&](const auto &object)
                              {
     const auto objectIntersections = object->intersect(ray);
     const auto hit = geometry::hit(objectIntersections);
-    return hit && hit->object->hasShadow() && hit->dist > 0.0 && hit->dist < distanceToLight; });
+    return hit && hit->object->hasShadow() && hit->dist > 0.0f && hit->dist < distanceToLight; });
 }
 
 utility::Color World::shadeHit(const geometry::Computations& comps, size_t recursionLimit) const noexcept{

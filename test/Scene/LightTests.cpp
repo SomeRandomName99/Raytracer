@@ -57,7 +57,7 @@ TEST_F(lightMaterialInteractionTests, EyeOppositeSurfaceLightOffset45){
 
   const auto result = scene::lighting(s.get(), light, position, eyeVector, normalVector, false);
 
-  const double colorCompExpected = 0.1 + 0.9 * std::sqrt(2)/2;
+  const auto colorCompExpected = 0.1 + 0.9 * std::sqrt(2)/2;
   EXPECT_TRUE(result  == Color(colorCompExpected,colorCompExpected,colorCompExpected));
 }
 
@@ -68,7 +68,7 @@ TEST_F(lightMaterialInteractionTests, EyeInPathOfReflectionVector){
 
   const auto result = scene::lighting(s.get(), light, position, eyeVector, normalVector, false);
 
-  const double colorCompExpected = 0.1 + 0.9 * std::sqrt(2)/2 + 0.9;
+  const auto colorCompExpected = 0.1 + 0.9 * std::sqrt(2.0)/2 + 0.899989;
   EXPECT_TRUE(result  == Color(colorCompExpected,colorCompExpected,colorCompExpected));
 }
 
