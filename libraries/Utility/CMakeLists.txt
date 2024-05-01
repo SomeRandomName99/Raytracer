@@ -14,6 +14,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/include/Ray.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/Tuple.hpp
     ${CMAKE_CURRENT_LIST_DIR}/include/Transformations.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/AABB.hpp
 )
 
 target_include_directories(
