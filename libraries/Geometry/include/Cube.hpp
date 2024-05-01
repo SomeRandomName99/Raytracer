@@ -13,7 +13,7 @@ namespace geometry {
 class Cube final : public ShapeBase
 {
 public:
-  Cube() noexcept {}
+  Cube() noexcept;
   bool operator==(Cube const& other) const noexcept;
 
   /**

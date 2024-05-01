@@ -4,10 +4,14 @@
 #include "Cube.hpp"
 #include "Intersections.hpp"
 #include "floatUtils.hpp"
+#include "AABB.hpp"
 
 namespace raytracer {
 namespace geometry {
 
+Cube::Cube() noexcept {
+  this->setBoundingBox(utility::AABB(utility::Point(-1, -1, -1), utility::Point(1, 1, 1)));
+}
 
 // using the optimized slab intersection method
 // https://tavianator.com/2015/ray_box_nan.html

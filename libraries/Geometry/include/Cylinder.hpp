@@ -13,9 +13,9 @@ namespace geometry {
 class Cylinder final : public ShapeBase
 {
 public:
-  Cylinder() noexcept {}
-  Cylinder(float minimum, float maximum, bool closed = false) noexcept : minimum_{minimum}, maximum_{maximum},
-                                                                   closed_{closed} {}
+  Cylinder() noexcept;
+  Cylinder(float minimum, float maximum, bool closed = false) noexcept;
+
   bool operator==(Cylinder const& other) const noexcept;
 
   /**

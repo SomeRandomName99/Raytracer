@@ -5,9 +5,17 @@
 #include "Cylinder.hpp"
 #include "Intersections.hpp"
 #include "floatUtils.hpp"
+#include "AABB.hpp"
 
 namespace raytracer {
 namespace geometry {
+Cylinder::Cylinder() noexcept {
+  this->setBoundingBox(utility::AABB(utility::Point(-1, -std::numeric_limits<float>::infinity(), -1),
+                                     utility::Point(1, std::numeric_limits<float>::infinity(), 1)));
+}
+Cylinder::Cylinder(float minimum, float maximum, bool closed) noexcept : minimum_{minimum}, maximum_{maximum}, closed_{closed} {
+  this->setBoundingBox(utility::AABB(utility::Point(-1, minimum, -1), utility::Point(1, maximum, 1)));
+}
 
 static inline bool isIntersectionWithinRadius(const utility::Ray &ray, float t) noexcept {
   auto x = ray.origin_.x() + t * ray.direction_.x();

@@ -1,16 +1,35 @@
 #include <memory>
+#include <limits>
 
 #include "Cone.hpp"
 #include "Intersections.hpp"
 #include "floatUtils.hpp"
+#include "AABB.hpp"
 
 namespace raytracer {
 namespace geometry {
 
+using utility::AABB;
+
+Cone::Cone() noexcept {
+ this->setBoundingBox(AABB(utility::Point(-std::numeric_limits<float>::infinity(),
+                                  -std::numeric_limits<float>::infinity(),
+                                  -std::numeric_limits<float>::infinity()),
+                           utility::Point(std::numeric_limits<float>::infinity(),
+                                  std::numeric_limits<float>::infinity(),
+                                  std::numeric_limits<float>::infinity())));
+}
+
+Cone::Cone(float minimum, float maximum, bool closed) noexcept : minimum_{minimum}, maximum_{maximum}, closed_{closed} {
+  const auto limit = std::max(std::abs(minimum), std::abs(maximum));
+  this->setBoundingBox(AABB(utility::Point(-limit, minimum, -limit), utility::Point(limit, maximum, limit)));
+}
+
+
 static inline bool isIntersectionWithinRadius(const utility::Ray &ray, float radius, float t) noexcept {
   auto x = ray.origin_.x() + t * ray.direction_.x();
   auto z = ray.origin_.z() + t * ray.direction_.z();
-  return (x * x + z * z) <= radius; // The radius of a cone will be the y coordinate at the intersectio plane
+  return (x * x + z * z) <= radius; // The radius of a cone will be the y coordinate at the intersection plane
 }
 
 static inline std::vector<Intersection> intersectCaps(const Cone &cone, const utility::Ray &ray) {

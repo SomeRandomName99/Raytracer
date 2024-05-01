@@ -2,9 +2,15 @@
 
 #include "Plane.hpp"
 #include "Intersections.hpp"
+#include "AABB.hpp"
 
 namespace raytracer {
 namespace geometry {
+
+Plane::Plane() noexcept {
+  this->setBoundingBox(utility::AABB(utility::Point(-std::numeric_limits<float>::infinity(), 0, -std::numeric_limits<float>::infinity()),
+                                     utility::Point(std::numeric_limits<float>::infinity(), 0, std::numeric_limits<float>::infinity())));
+}
 
 std::vector<Intersection> Plane::localIntersect(const utility::Ray &transformedRay) const noexcept {
   if (std::abs(transformedRay.direction_.y()) < utility::EPSILON<float>) {

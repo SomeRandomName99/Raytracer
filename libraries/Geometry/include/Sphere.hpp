@@ -18,7 +18,7 @@ class Shape;
 class Sphere final : public ShapeBase
 {
 public:
-Sphere() noexcept {}
+Sphere() noexcept;
 bool operator==(Sphere const& other) const noexcept;
 
 /**

@@ -11,6 +11,7 @@
 #include "Matrix.hpp"
 #include "Material.hpp"
 #include "Intersections.hpp"
+#include "AABB.hpp"
 
 namespace raytracer {
 namespace geometry {
@@ -23,7 +24,8 @@ class ShapeBase : public std::enable_shared_from_this<ShapeBase> {
 public:
   ShapeBase() noexcept: transformation_{utility::Matrix<4,4>::identity()},
                         inverseTransformation_{utility::Matrix<4,4>::identity()}, 
-                        material_{}, id_{ID++}, hasShadow_{true}{}
+                        boundingBox{}, material_{}, id_{ID++},
+                        hasShadow_{true}{}
 
   virtual ~ShapeBase() {}
 
@@ -89,12 +91,20 @@ public:
     return objectNormalToWorldNormal(this, localNormal);
   }
 
+  void setBoundingBox(const utility::AABB& boundingBox) noexcept {
+    this->boundingBox = boundingBox;
+  }
+  const utility::AABB& getBoundingBox() const noexcept {
+    return boundingBox;
+  }
+
 protected:
   virtual std::vector<Intersection> localIntersect(const utility::Ray& transformedRay) const noexcept = 0;
   virtual utility::Tuple localNormalAt(const utility::Tuple &objectPoint) const = 0;
 private:
   utility::Matrix<4,4> transformation_;
   utility::Matrix<4,4> inverseTransformation_;
+  utility::AABB boundingBox;
   material::Material material_;
   std::size_t id_;
   std::shared_ptr<ShapeBase> parent_{};

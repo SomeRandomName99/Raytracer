@@ -13,7 +13,7 @@ namespace geometry {
 class Plane final : public ShapeBase
 {
 public:
-  Plane() noexcept {}
+  Plane() noexcept;
   bool operator==(Plane const& other) const noexcept;
 
   /**

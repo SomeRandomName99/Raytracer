@@ -13,9 +13,8 @@ namespace geometry {
 class Cone final : public ShapeBase
 {
 public:
-  Cone() noexcept {}
-  Cone(float minimum, float maximum, bool closed = false) noexcept : minimum_{minimum}, maximum_{maximum}, 
-                                                                       closed_{closed} {}
+  Cone() noexcept;
+  Cone(float minimum, float maximum, bool closed = false) noexcept;
 
   utility::Tuple localNormalAt(const utility::Tuple &objectPoint) const noexcept;
   std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept;

@@ -2,9 +2,14 @@
 
 #include "Sphere.hpp"
 #include "Intersections.hpp"
+#include "AABB.hpp"
 
 namespace raytracer {
 namespace geometry {
+
+Sphere::Sphere() noexcept {
+  this->setBoundingBox(utility::AABB(utility::Point(-1, -1, -1), utility::Point(1, 1, 1)));
+}
 
 bool Sphere::operator==(const Sphere& other) const noexcept{
   return this->id() == other.id();
