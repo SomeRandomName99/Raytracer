@@ -5,7 +5,7 @@
 #include <execution>
 
 #include "Tuple.hpp"
-#include "floatUtils.hpp"
+#include "FloatUtils.hpp"
 
 namespace raytracer {
 namespace utility { 

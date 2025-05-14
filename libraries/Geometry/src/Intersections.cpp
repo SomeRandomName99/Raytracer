@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "Intersections.hpp"
-#include "floatUtils.hpp"
+#include "FloatUtils.hpp"
 #include "Shape.hpp"
 #include "Transformations.hpp"
 

@@ -4,7 +4,7 @@
 
 #include "Cylinder.hpp"
 #include "Intersections.hpp"
-#include "floatUtils.hpp"
+#include "FloatUtils.hpp"
 #include "AABB.hpp"
 
 namespace raytracer {
