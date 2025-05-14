@@ -24,7 +24,7 @@ class ShapeBase : public std::enable_shared_from_this<ShapeBase> {
 public:
   ShapeBase() noexcept: transformation_{utility::Matrix<4,4>::identity()},
                         inverseTransformation_{utility::Matrix<4,4>::identity()}, 
-                        boundingBox{}, material_{}, id_{ID++},
+                        boundingBox_{}, material_{}, id_{ID++},
                         hasShadow_{true}{}
 
   virtual ~ShapeBase() {}
@@ -92,10 +92,13 @@ public:
   }
 
   void setBoundingBox(const utility::AABB& boundingBox) noexcept {
-    this->boundingBox = boundingBox;
+    this->boundingBox_ = boundingBox;
   }
   const utility::AABB& getBoundingBox() const noexcept {
-    return boundingBox;
+    return boundingBox_;
+  }
+  utility::AABB& getBoundingBox() noexcept {
+    return boundingBox_;
   }
 
 protected:
@@ -104,7 +107,7 @@ protected:
 private:
   utility::Matrix<4,4> transformation_;
   utility::Matrix<4,4> inverseTransformation_;
-  utility::AABB boundingBox;
+  utility::AABB boundingBox_;
   material::Material material_;
   std::size_t id_;
   std::shared_ptr<ShapeBase> parent_{};

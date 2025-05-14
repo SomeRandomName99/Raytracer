@@ -15,7 +15,7 @@ struct fail :std::false_type{};
 
 class Group final : public ShapeBase {
 public:
-  Group() {}
+  Group() noexcept;
 
   utility::Tuple localNormalAt([[maybe_unused]]const utility::Tuple &objectPoint) const {
     throw std::logic_error("Group::localNormalAt should not be called");

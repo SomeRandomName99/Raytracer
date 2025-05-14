@@ -4,6 +4,9 @@
 
 namespace raytracer { 
 namespace geometry {
+Group::Group() noexcept {
+  this->setBoundingBox(utility::AABB(utility::Point(0, 0, 0), utility::Point(0, 0, 0)));
+}
 
 std::vector<Intersection> Group::localIntersect(const utility::Ray &transformedRay) const noexcept {
   std::vector<Intersection> xs{};
@@ -21,6 +24,11 @@ std::vector<Intersection> Group::localIntersect(const utility::Ray &transformedR
 void Group::addChild(std::shared_ptr<ShapeBase> child) noexcept {
   child->setParent(shared_from_this());
   children.emplace_back(child);
+
+  // Update the bounding box of the group
+  auto childBoundingBox = child->getBoundingBox();
+  auto test = child->transformation() * childBoundingBox.max;
+  this->getBoundingBox().expandToInclude(child->getBoundingBox());
 }
 std::vector<std::shared_ptr<ShapeBase>> const& Group::getChildren() const noexcept{
   return children;
