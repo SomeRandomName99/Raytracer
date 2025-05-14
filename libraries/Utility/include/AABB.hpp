@@ -37,6 +37,11 @@ struct AABB {
 
     return tmax < tmin;
   }
+
+  void expandToInclude(const AABB &other) noexcept {
+    min = componentWiseMin(min, other.min);
+    max = componentWiseMax(max, other.max);
+  }
 };
 
 } // namespace utility

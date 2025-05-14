@@ -47,6 +47,12 @@ Tuple Vector(const float x, const float y, const float z) noexcept;
 std::ostream& operator<<(std::ostream& os, const Tuple& rhs) noexcept;
 Tuple operator*(const Tuple& lhs, const Tuple& rhs) noexcept;
 
+// It is assumed that the tuples are of the same type(point or vector)
+Tuple componentWiseMin(const Tuple& lhs, const Tuple& rhs) noexcept;
+
+// It is assumed that the tuples are of the same type(point or vector)
+Tuple componentWiseMax(const Tuple& lhs, const Tuple& rhs) noexcept;
+
 } // namespace utility
 } // namespace raytracer
 

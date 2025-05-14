@@ -95,5 +95,15 @@ Tuple operator*(const Tuple& lhs, const Tuple& rhs) noexcept{
                lhs.z()*rhs.z(), lhs.w()*rhs.w()};
 }
 
+Tuple componentWiseMin(const Tuple& lhs, const Tuple& rhs) noexcept{
+  return Tuple{std::min(lhs.x(), rhs.x()), std::min(lhs.y(), rhs.y()), 
+               std::min(lhs.z(), rhs.z()), lhs.w()};
+}
+
+Tuple componentWiseMax(const Tuple& lhs, const Tuple& rhs) noexcept{
+  return Tuple{std::max(lhs.x(), rhs.x()), std::max(lhs.y(), rhs.y()), 
+               std::max(lhs.z(), rhs.z()), lhs.w()};
+}
+
 } // namespace utility
 } // namespace raytracer
