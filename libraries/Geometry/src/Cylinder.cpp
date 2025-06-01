@@ -79,6 +79,9 @@ utility::Tuple Cylinder::localNormalAt(const utility::Tuple &objectPoint) const 
 std::shared_ptr<Cylinder> makeCylinder() noexcept {
   return std::make_shared<Cylinder>();
 }
+std::shared_ptr<Cylinder> makeCylinder(double minimum, double maximum, bool closed) noexcept {
+  return std::make_shared<Cylinder>(minimum, maximum, closed);
+}
 
 } // namespace geometry
 } // namespace raytracer

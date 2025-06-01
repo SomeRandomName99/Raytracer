@@ -34,6 +34,7 @@ public:
 };
 
 std::shared_ptr<Cylinder> makeCylinder() noexcept;
+std::shared_ptr<Cylinder> makeCylinder(double minimum, double maximum, bool closed) noexcept;
 
 } // namespace geometry
 } // namespace raytracer
