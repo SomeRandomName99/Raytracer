@@ -10,14 +10,14 @@
 namespace raytracer {
 namespace geometry {
 Cylinder::Cylinder() noexcept {
-  this->setBoundingBox(utility::AABB(utility::Point(-1, -std::numeric_limits<float>::infinity(), -1),
-                                     utility::Point(1, std::numeric_limits<float>::infinity(), 1)));
+  this->setBoundingBox(utility::AABB(utility::Point(-1, -std::numeric_limits<double>::infinity(), -1),
+                                     utility::Point(1, std::numeric_limits<double>::infinity(), 1)));
 }
-Cylinder::Cylinder(float minimum, float maximum, bool closed) noexcept : minimum_{minimum}, maximum_{maximum}, closed_{closed} {
+Cylinder::Cylinder(double minimum, double maximum, bool closed) noexcept : minimum_{minimum}, maximum_{maximum}, closed_{closed} {
   this->setBoundingBox(utility::AABB(utility::Point(-1, minimum, -1), utility::Point(1, maximum, 1)));
 }
 
-static inline bool isIntersectionWithinRadius(const utility::Ray &ray, float t) noexcept {
+static inline bool isIntersectionWithinRadius(const utility::Ray &ray, double t) noexcept {
   auto x = ray.origin_.x() + t * ray.direction_.x();
   auto z = ray.origin_.z() + t * ray.direction_.z();
   return (x * x + z * z) <= 1; // radius is always considered to be 1
@@ -55,7 +55,7 @@ std::vector<Intersection> Cylinder::localIntersect(const utility::Ray &transform
   auto t1 = (-b + utility::sqrt(discriminant)) / (2 * a);
 
   auto intersections = std::vector<Intersection>{};
-  auto isBetweenMinAndMax = [this](float y) { return y > minimum_ && y < maximum_; };
+  auto isBetweenMinAndMax = [this](double y) { return y > minimum_ && y < maximum_; };
 
   auto firstIntersectionY = transformedRay.origin_.y() + t0 * transformedRay.direction_.y();
   if (isBetweenMinAndMax(firstIntersectionY)){intersections.emplace_back(Intersection(this, t0));}
@@ -71,8 +71,8 @@ std::vector<Intersection> Cylinder::localIntersect(const utility::Ray &transform
 
 utility::Tuple Cylinder::localNormalAt(const utility::Tuple &objectPoint) const noexcept {
   auto distanceFromYSquared = objectPoint.x() * objectPoint.x() + objectPoint.z() * objectPoint.z();
-  if (distanceFromYSquared < 1 && objectPoint.y() >= maximum_ - utility::EPSILON<float>) { return utility::Vector(0, 1, 0); }
-  else if (distanceFromYSquared < 1 && objectPoint.y() <= minimum_ + utility::EPSILON<float>) { return utility::Vector(0, -1, 0); }
+  if (distanceFromYSquared < 1 && objectPoint.y() >= maximum_ - utility::EPSILON<double>) { return utility::Vector(0, 1, 0); }
+  else if (distanceFromYSquared < 1 && objectPoint.y() <= minimum_ + utility::EPSILON<double>) { return utility::Vector(0, -1, 0); }
   return utility::Vector(objectPoint.x(), 0, objectPoint.z());
 }
 

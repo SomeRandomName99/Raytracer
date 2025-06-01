@@ -75,7 +75,7 @@ std::optional<Intersection> hit(const std::vector<Intersection>& intersections) 
   return *smallestIntersection;
 }
 
-float schlick(const Computations& comps) noexcept{
+double schlick(const Computations& comps) noexcept{
   auto cos = comps.eyeVector.dot(comps.normalVector);
   if(comps.n1 > comps.n2){
     auto n = comps.n1 / comps.n2;

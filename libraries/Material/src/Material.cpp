@@ -8,8 +8,8 @@ Material::Material() noexcept
     : surfaceColor_{utility::Color(1.0, 1.0, 1.0)}, ambient_{0.1}, diffuse_{0.9}, specular_{0.9}, 
       shininess_{200.0f}, reflectance_{0}, transparency_{0}, refractiveIndex_{1} {}
 
-Material::Material(utility::Color surfaceColor, float ambient, float diffuse, 
-                   float specular, float shininess, float reflectance, float transparency, float refractiveIndex) noexcept 
+Material::Material(utility::Color surfaceColor, double ambient, double diffuse, 
+                   double specular, double shininess, double reflectance, double transparency, double refractiveIndex) noexcept 
     : surfaceColor_{surfaceColor}, ambient_{ambient}, diffuse_{diffuse}, specular_{specular}, shininess_{shininess},
       reflectance_{reflectance}, transparency_{transparency}, refractiveIndex_{refractiveIndex} {}
 
@@ -35,52 +35,52 @@ const std::unique_ptr<Pattern>& Material::pattern() const noexcept{
   return pattern_;
 }
 
-void Material::setAmbient(float ambient) noexcept {
+void Material::setAmbient(double ambient) noexcept {
   ambient_ = ambient;
 }
-float Material::ambient() const noexcept {
+double Material::ambient() const noexcept {
   return ambient_;
 }
 
-void Material::setDiffuse(float diffuse) noexcept {
+void Material::setDiffuse(double diffuse) noexcept {
   diffuse_ = diffuse;
 }
-float Material::diffuse() const noexcept {
+double Material::diffuse() const noexcept {
   return diffuse_;
 }
 
-void Material::setSpecular(float specular) noexcept {
+void Material::setSpecular(double specular) noexcept {
   specular_ = specular;
 }
-float Material::specular() const noexcept {
+double Material::specular() const noexcept {
   return specular_;
 }
 
-void Material::setShininess(float shininess) noexcept {
+void Material::setShininess(double shininess) noexcept {
   shininess_ = shininess;
 }
-float Material::shininess() const noexcept {
+double Material::shininess() const noexcept {
   return shininess_;
 }
 
-void Material::setReflectance(float reflectance) noexcept {
+void Material::setReflectance(double reflectance) noexcept {
   reflectance_ = reflectance;
 }
-float Material::reflectance() const noexcept {
+double Material::reflectance() const noexcept {
   return reflectance_;
 }
 
-void Material::setTransparency(float transparency) noexcept {
+void Material::setTransparency(double transparency) noexcept {
   transparency_ = transparency;
 }
-float Material::transparency() const noexcept {
+double Material::transparency() const noexcept {
   return transparency_;
 }
 
-void Material::setRefractiveIndex(float refractiveIndex) noexcept {
+void Material::setRefractiveIndex(double refractiveIndex) noexcept {
   refractiveIndex_ = refractiveIndex;
 }
-float Material::refractiveIndex() const noexcept {
+double Material::refractiveIndex() const noexcept {
   return refractiveIndex_;
 }
 

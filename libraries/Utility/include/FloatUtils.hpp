@@ -22,7 +22,7 @@ bool floatNearlyEqual(T a, T b) noexcept{
 
 template <floating T, floating U> 
 bool floatNearlyEqual(T a, U b) noexcept{
-  return floatNearlyEqual(static_cast<float>(a), static_cast<float>(b));
+  return floatNearlyEqual(static_cast<double>(a), static_cast<double>(b));
 }
 
 template <typename T> 

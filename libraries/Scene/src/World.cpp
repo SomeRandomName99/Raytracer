@@ -18,7 +18,7 @@ std::vector<geometry::Intersection> World::intersect(const utility::Ray& ray) co
   return intersections;
 }
 
-bool World::intersectShadow(const utility::Ray& ray, float distanceToLight) const noexcept{
+bool World::intersectShadow(const utility::Ray& ray, double distanceToLight) const noexcept{
   return std::ranges::any_of(objects_, [&](const auto &object)
                              {
     const auto objectIntersections = object->intersect(ray);

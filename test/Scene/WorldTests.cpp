@@ -193,7 +193,7 @@ TEST_F(defaultWorldTests, ReflectedColorForReflectiveMaterial){
   const auto comps = prepareComputations(i, r);
   const auto color = world.reflectedColor(comps);
 
-  EXPECT_EQ(color, utility::Color(0.190330, 0.237914, 0.1427480));
+  EXPECT_EQ(color, utility::Color(0.1903477, 0.2379347, 0.1427608));
 }
 
 TEST_F(defaultWorldTests, ShadeHitWithReflectiveMaterial){
@@ -207,7 +207,7 @@ TEST_F(defaultWorldTests, ShadeHitWithReflectiveMaterial){
   const auto comps = prepareComputations(i, r);
   const auto color = world.shadeHit(comps);
 
-  EXPECT_EQ(color, utility::Color(0.8767562, 0.9243389, 0.8291734));
+  EXPECT_EQ(color, utility::Color(0.87677319, 0.92436014, 0.82918625));
 }
 
 TEST_F(defaultWorldTests, colorAtWithMutuallyReflectiveSurfaces){
@@ -306,7 +306,7 @@ TEST_F(defaultWorldTests, RefractedColorWithARefractedRay){
   const auto comps = prepareComputations(xs[2], r, xs);
   const auto color = world.refractedColor(comps);
 
-  EXPECT_EQ(color, utility::Color(0,0.998885,0.047217));
+  EXPECT_EQ(color, utility::Color(0,0.99888324,0.04724672));
 }
 
 TEST_F(defaultWorldTests, shadeHitWithTransparentMaterial){

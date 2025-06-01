@@ -31,7 +31,7 @@ utility::Tuple localNormalAt(const utility::Tuple &objectPoint) const noexcept;
  */
 std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept;
 
-float radius_;
+double radius_;
 utility::Tuple origin_;
 };
 

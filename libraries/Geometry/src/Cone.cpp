@@ -12,21 +12,21 @@ namespace geometry {
 using utility::AABB;
 
 Cone::Cone() noexcept {
- this->setBoundingBox(AABB(utility::Point(-std::numeric_limits<float>::infinity(),
-                                  -std::numeric_limits<float>::infinity(),
-                                  -std::numeric_limits<float>::infinity()),
-                           utility::Point(std::numeric_limits<float>::infinity(),
-                                  std::numeric_limits<float>::infinity(),
-                                  std::numeric_limits<float>::infinity())));
+ this->setBoundingBox(AABB(utility::Point(-std::numeric_limits<double>::infinity(),
+                                  -std::numeric_limits<double>::infinity(),
+                                  -std::numeric_limits<double>::infinity()),
+                           utility::Point(std::numeric_limits<double>::infinity(),
+                                  std::numeric_limits<double>::infinity(),
+                                  std::numeric_limits<double>::infinity())));
 }
 
-Cone::Cone(float minimum, float maximum, bool closed) noexcept : minimum_{minimum}, maximum_{maximum}, closed_{closed} {
+Cone::Cone(double minimum, double maximum, bool closed) noexcept : minimum_{minimum}, maximum_{maximum}, closed_{closed} {
   const auto limit = std::max(std::abs(minimum), std::abs(maximum));
   this->setBoundingBox(AABB(utility::Point(-limit, minimum, -limit), utility::Point(limit, maximum, limit)));
 }
 
 
-static inline bool isIntersectionWithinRadius(const utility::Ray &ray, float radius, float t) noexcept {
+static inline bool isIntersectionWithinRadius(const utility::Ray &ray, double radius, double t) noexcept {
   auto x = ray.origin_.x() + t * ray.direction_.x();
   auto z = ray.origin_.z() + t * ray.direction_.z();
   return (x * x + z * z) <= radius; // The radius of a cone will be the y coordinate at the intersection plane
@@ -40,7 +40,7 @@ static inline std::vector<Intersection> intersectCaps(const Cone &cone, const ut
   if (isIntersectionWithinRadius(ray, std::abs(cone.minimum_), tLowerCap)) { intersections.emplace_back(Intersection(&cone, tLowerCap)); }
 
   auto tUpperCap = (cone.maximum_ - ray.origin_.y()) / ray.direction_.y();
-  if (isIntersectionWithinRadius(ray, std::abs(cone.minimum_), tUpperCap)) { intersections.emplace_back(Intersection(&cone, tUpperCap)); }
+  if (isIntersectionWithinRadius(ray, std::abs(cone.maximum_), tUpperCap)) { intersections.emplace_back(Intersection(&cone, tUpperCap)); }
 
   return intersections;
 }
@@ -60,11 +60,11 @@ std::vector<Intersection> Cone::localIntersect(const utility::Ray &transformedRa
 
   // if a is nearly equal to 0, then the ray is parallel to one of the cone's halves
   if (utility::floatNearlyEqual(a, 0.0f)) {
-    if (utility::floatNearlyEqual(b, 0.0f)) { return {}; }
     if (closed_){
       auto CapIntersections = intersectCaps(*this, transformedRay);
       intersections.insert(intersections.end(), CapIntersections.begin(), CapIntersections.end());
     }
+    if (utility::floatNearlyEqual(b, 0.0f)) { return {}; }
 
     intersections.emplace_back(Intersection(this, -c / (2 * b)));
     return intersections;
@@ -76,7 +76,7 @@ std::vector<Intersection> Cone::localIntersect(const utility::Ray &transformedRa
   auto t0 = (-b - utility::sqrt(discriminant)) / (2 * a);
   auto t1 = (-b + utility::sqrt(discriminant)) / (2 * a);
 
-  auto isBetweenMinAndMax = [this](float y) { return y > minimum_ && y < maximum_; };
+  auto isBetweenMinAndMax = [this](double y) { return y > minimum_ && y < maximum_; };
 
   auto firstIntersectionY = transformedRay.origin_.y() + t0 * transformedRay.direction_.y();
   if (isBetweenMinAndMax(firstIntersectionY)){intersections.emplace_back(Intersection(this, t0));}
@@ -92,8 +92,8 @@ std::vector<Intersection> Cone::localIntersect(const utility::Ray &transformedRa
 
 utility::Tuple Cone::localNormalAt(const utility::Tuple &objectPoint) const noexcept{
   auto distanceFromYSquared = objectPoint.x() * objectPoint.x() + objectPoint.z() * objectPoint.z();
-  if (distanceFromYSquared < 1 && objectPoint.y() >= maximum_ - utility::EPSILON<float>) { return utility::Vector(0, 1, 0); }
-  else if (distanceFromYSquared < 1 && objectPoint.y() <= minimum_ + utility::EPSILON<float>) { return utility::Vector(0, -1, 0); }
+  if (distanceFromYSquared < 1 && objectPoint.y() >= maximum_ - utility::EPSILON<double>) { return utility::Vector(0, 1, 0); }
+  else if (distanceFromYSquared < 1 && objectPoint.y() <= minimum_ + utility::EPSILON<double>) { return utility::Vector(0, -1, 0); }
 
   auto normalYCoord = objectPoint.y() > 0 ? -utility::sqrt(distanceFromYSquared) : utility::sqrt(distanceFromYSquared);
   return utility::Vector(objectPoint.x(), normalYCoord, objectPoint.z());
