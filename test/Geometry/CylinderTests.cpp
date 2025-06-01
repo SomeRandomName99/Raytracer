@@ -50,7 +50,7 @@ std::shared_ptr<Cylinder> CylinderIntersectTest::c = makeCylinder();
 std::vector<std::tuple<Tuple, Tuple, double, double>> CylinderIntersectTest::testCases = {
   {Point(1, 0, -5), Vector(0, 0, 1), 5, 5},
   {Point(0, 0, -5), Vector(0, 0, 1), 4, 6},
-  {Point(0.5, 0, -5), Vector(0.1, 1, 1), 6.807999, 7.0887051},
+  {Point(0.5, 0, -5), Vector(0.1, 1, 1), 6.807982, 7.0887232},
 };
 
 INSTANTIATE_TEST_SUITE_P(

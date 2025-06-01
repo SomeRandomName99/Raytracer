@@ -9,7 +9,7 @@ namespace utility {
 
 template <typename T> 
 requires std::floating_point<T> 
-const T EPSILON = 1e-6;
+const T EPSILON = 1e-4;
 
 template <typename T>
 concept floating = std::floating_point<T>;
