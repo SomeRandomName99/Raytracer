@@ -27,8 +27,7 @@ void Group::addChild(std::shared_ptr<ShapeBase> child) noexcept {
 
   // Update the bounding box of the group
   auto childBoundingBox = child->getBoundingBox();
-  auto test = child->transformation() * childBoundingBox.max;
-  this->getBoundingBox().expandToInclude(child->getBoundingBox());
+  this->getBoundingBox().expandToInclude(childBoundingBox.transform(child->transformation()));
 }
 std::vector<std::shared_ptr<ShapeBase>> const& Group::getChildren() const noexcept{
   return children;

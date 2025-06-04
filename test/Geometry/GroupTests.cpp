@@ -5,6 +5,7 @@
 #include "Intersections.hpp"
 #include "Shape.hpp"
 #include "Sphere.hpp"
+#include "Cylinder.hpp"
 
 using namespace raytracer;
 using namespace utility;
@@ -69,4 +70,27 @@ TEST(GroupTests, intersectingTransformedGroup)
   ASSERT_EQ(2, xs.size());
   EXPECT_EQ(s.get(), xs.at(0).object);
   EXPECT_EQ(s.get(), xs.at(1).object);
+}
+
+TEST(GroupTests, localNormalAtNotSupported){
+  auto g = makeGroup();
+  auto s = makeSphere();
+  g->addChild(s);
+  EXPECT_THROW(g->localNormalAt(Point(0, 0, 0)), std::logic_error);
+}
+
+TEST(GroupTests, BoundingBoxTest){
+  auto s1 = makeSphere();
+  s1->setTransform(transformations::translation(2, 5, -3) * transformations::scaling(2, 2, 2));
+
+  auto s2 = makeCylinder(-2, 2, true);
+  s2->setTransform(transformations::translation(-4, -1, 4) * transformations::scaling(0.5, 1, 0.5));
+  
+  auto g = makeGroup();
+  g->addChild(s1);
+  g->addChild(s2);
+  
+  auto bbox = g->getBoundingBox();
+  EXPECT_EQ(Point(-4.5, -3, -5), bbox.min);
+  EXPECT_EQ(Point(4, 7, 4.5), bbox.max);
 }
