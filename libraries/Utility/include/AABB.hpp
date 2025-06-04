@@ -14,7 +14,8 @@ struct AABB {
   Tuple max{};
 
   AABB() noexcept = default;
-  AABB(const Tuple &min, const Tuple &max) noexcept : min{min}, max{max} {}
+  AABB(const Tuple &p1, const Tuple &p2) noexcept : min{componentWiseMin(p1, p2)}, max{componentWiseMax(p1,p2)} {}
+  AABB(const Tuple &p) noexcept : min{p}, max{p} {}
 
   bool intersect(const Ray &ray) const noexcept {
     double tx1 = (min.x() - ray.origin_.x()) / ray.direction_.x();
@@ -41,6 +42,26 @@ struct AABB {
   void expandToInclude(const AABB &other) noexcept {
     min = componentWiseMin(min, other.min);
     max = componentWiseMax(max, other.max);
+  }
+
+  void expandToInclude(const Tuple &p) noexcept {
+    min = componentWiseMin(min, p);
+    max = componentWiseMax(max, p);
+  }
+
+  AABB transform(const Matrix<4, 4> &matrix) const noexcept {
+    AABB transformedAABB;
+
+    transformedAABB.expandToInclude(matrix*Point(min.x(), min.y(), min.z()));
+    transformedAABB.expandToInclude(matrix*Point(min.x(), min.y(), max.z()));
+    transformedAABB.expandToInclude(matrix*Point(min.x(), max.y(), min.z()));
+    transformedAABB.expandToInclude(matrix*Point(min.x(), max.y(), max.z()));
+    transformedAABB.expandToInclude(matrix*Point(max.x(), min.y(), min.z()));
+    transformedAABB.expandToInclude(matrix*Point(max.x(), min.y(), max.z()));
+    transformedAABB.expandToInclude(matrix*Point(max.x(), max.y(), min.z()));
+    transformedAABB.expandToInclude(matrix*Point(max.x(), max.y(), max.z()));
+
+    return transformedAABB;
   }
 };
 
