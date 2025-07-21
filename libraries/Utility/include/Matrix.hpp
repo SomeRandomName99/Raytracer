@@ -77,16 +77,14 @@ inline Matrix<rows, cols> operator*(Matrix<rows, cols> lhs, const Matrix<rows, c
 }
 
 template <uint8_t rows, uint8_t cols>
-typename std::enable_if<rows==4, Tuple>::type
-operator*(const Matrix<rows, cols>& lhs, const Tuple& rhs) noexcept{
-  Tuple result{
-    Tuple{lhs.at(0, 0), lhs.at(0, 1), lhs.at(0, 2), lhs.at(0, 3)}.dot(rhs),
-    Tuple{lhs.at(1, 0), lhs.at(1, 1), lhs.at(1, 2), lhs.at(1, 3)}.dot(rhs),
-    Tuple{lhs.at(2, 0), lhs.at(2, 1), lhs.at(2, 2), lhs.at(2, 3)}.dot(rhs),
-    Tuple{lhs.at(3, 0), lhs.at(3, 1), lhs.at(3, 2), lhs.at(3, 3)}.dot(rhs)
-  };
-
-  return result;
+constexpr typename std::enable_if<rows == 4, Tuple>::type
+operator*(const Matrix<rows, cols>& lhs, const Tuple& rhs) noexcept {
+    return Tuple{
+        lhs.at(0, 0) * rhs.x() + lhs.at(0, 1) * rhs.y() + lhs.at(0, 2) * rhs.z() + lhs.at(0, 3) * rhs.w(),
+        lhs.at(1, 0) * rhs.x() + lhs.at(1, 1) * rhs.y() + lhs.at(1, 2) * rhs.z() + lhs.at(1, 3) * rhs.w(),
+        lhs.at(2, 0) * rhs.x() + lhs.at(2, 1) * rhs.y() + lhs.at(2, 2) * rhs.z() + lhs.at(2, 3) * rhs.w(),
+        lhs.at(3, 0) * rhs.x() + lhs.at(3, 1) * rhs.y() + lhs.at(3, 2) * rhs.z() + lhs.at(3, 3) * rhs.w()
+    };
 }
 
 template <uint8_t rows, uint8_t cols> 

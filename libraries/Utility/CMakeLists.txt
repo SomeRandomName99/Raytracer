@@ -5,7 +5,6 @@ target_sources(
   PRIVATE
     src/Color.cpp
     src/Ray.cpp
-    src/Tuple.cpp
     src/Transformations.cpp
   PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/include/Color.hpp
