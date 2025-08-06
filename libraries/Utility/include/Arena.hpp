@@ -12,7 +12,7 @@ struct Arena {
   size_t size; // Number of elements in the arena
   size_t capacity; 
 
-  Arena(size_t capacity = GB(128)) : allocator(capacity), data{nullptr}, size{0}, capacity{capacity/sizeof(T)} {
+  Arena(size_t capacity = GB(128)) : allocator(capacity), data{nullptr}, size{0}, capacity{0} {
     data = static_cast<T*>(allocator.begin);
   }
 
@@ -21,7 +21,10 @@ struct Arena {
     return allocator.allocate(count * sizeof(T)) == 0;
   }
 
+  // TODO: Make sure that there is enough committed memory in the linear allocator
   void pushBack(const T& item){
+    if(size*sizeof(T) > allocator.committed){
+    }
     if(size >= capacity) return;
     data[size++] = item;
   }
@@ -40,13 +43,13 @@ struct Arena {
     size = index;
   }
 
-  std::optional<T&> operator[](size_t index){
-    if(index >= size) return std::nullopt;
-    return data[index];
+  T* operator[](size_t index){
+    if(index >= size) return nullptr;
+    return &data[index];
   }
-  std::optional<const T&> operator[](size_t index) const{
-    if(index >= size) return std::nullopt;
-    return data[index];
+  const T* operator[](size_t index) const{
+    if(index >= size) return nullptr;
+    return &data[index];
   }
 
   // Iterator support
