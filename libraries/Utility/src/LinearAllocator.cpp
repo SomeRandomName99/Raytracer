@@ -77,13 +77,13 @@ size_t pageSize() {
 size_t page_size = platform::pageSize();
 
 LinearAllocator::LinearAllocator(size_t capacity) : capacity{capacity}, committed{0}, used{0}, begin{nullptr} {
-  const size_t pageAlignedSize = roundup(capacity, page_size);
+   size_t pageAlignedSize = roundup(capacity, page_size);
   begin = platform::reserveMemory(pageAlignedSize);
 }
 
 LinearAllocator::~LinearAllocator() {
   if (begin != nullptr) {
-    const size_t pageAlignedSize = roundup(capacity, page_size);
+    size_t pageAlignedSize = roundup(capacity, page_size);
     platform::freeMemory(begin, pageAlignedSize);
   }
 }
@@ -94,9 +94,9 @@ int LinearAllocator::allocate(size_t size) {
   }
 
   if(this->used + size > this->committed){
-    const size_t additionalNeeded = (this->used + size) - this->committed;
-    const size_t pageAlignedSize = roundup(additionalNeeded, page_size);
-    void* const currentEndOfCommited = static_cast<char*>(this->begin) + this->committed;
+    size_t additionalNeeded = (this->used + size) - this->committed;
+    size_t pageAlignedSize = roundup(additionalNeeded, page_size);
+    void* currentEndOfCommited = static_cast<char*>(this->begin) + this->committed;
     if(platform::commitMemory(currentEndOfCommited, pageAlignedSize) != 0) {
       return -1;
     }
