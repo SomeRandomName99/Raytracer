@@ -12,20 +12,34 @@ struct Arena {
   size_t size; // Number of elements in the arena
   size_t capacity; 
 
-  Arena(size_t capacity = GB(128)) : allocator(capacity), data{nullptr}, size{0}, capacity{0} {
+  Arena(size_t maxSize = GB(128), size_t initialCapacity = 100) : allocator(maxSize), data{nullptr}, size{0} {
     data = static_cast<T*>(allocator.begin);
+    while(initialCapacity * sizeof(T) > maxSize) {
+      initialCapacity /= 2;
+    }
+    if(allocate(initialCapacity)) {
+      capacity = initialCapacity;
+    } else {
+      capacity = 0;
+    }
   }
 
   bool allocate(size_t count){
-    if(count > capacity) return false;
-    return allocator.allocate(count * sizeof(T)) == 0;
+    if(allocator.allocate(count * sizeof(T)) == 0){
+      capacity += count;
+      return true;
+    }
+    return false;
   }
 
-  // TODO: Make sure that there is enough committed memory in the linear allocator
   void pushBack(const T& item){
-    if(size*sizeof(T) > allocator.committed){
+    if(capacity == 0) return; // Memory was not allocated during initialization
+    if (size >= capacity) {
+      if(!allocate(capacity)) {
+        // If there isn't enough memory, the new data will be lost
+        return;
+      }
     }
-    if(size >= capacity) return;
     data[size++] = item;
   }
 
