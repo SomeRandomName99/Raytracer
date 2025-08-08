@@ -13,29 +13,38 @@
 namespace raytracer {
 namespace geometry {
 
+using utility::Arena;
+using utility::MB;
+
 bool operator==(Intersection const& lhs, Intersection const& rhs) noexcept{
   return utility::floatNearlyEqual(lhs.dist, rhs.dist) && lhs.object == rhs.object;
 }
 
 Computations prepareComputations(Intersection intersection, const utility::Ray& ray, 
-                                 const std::vector<Intersection>& intersections) noexcept{
+                                 const Arena<Intersection>& intersections) noexcept{
   Computations computations;
-  std::vector<const geometry::ShapeBase*> unexitedShapes;
+  static Arena<const geometry::ShapeBase*> unexitedShapes(MB(1));
+  unexitedShapes.clear();
 
   for(const auto& i: intersections){
     if(i == intersection){
-      computations.n1 = unexitedShapes.empty() ? 1.0 : unexitedShapes.back()->material().refractiveIndex();
+      size_t size = unexitedShapes.size;
+      computations.n1 = size == 0 ? 1.0 : (*unexitedShapes[size - 1])->material().refractiveIndex();
     }
 
     auto found = std::find(unexitedShapes.begin(), unexitedShapes.end(), i.object);
     if(found != unexitedShapes.end()){
-      unexitedShapes.erase(found);
+      size_t size = unexitedShapes.size;
+      size_t index = found - unexitedShapes.begin();
+      *unexitedShapes[index] = *unexitedShapes[size - 1];
+      unexitedShapes.popBack();
     } else {
-      unexitedShapes.push_back(i.object);
+      unexitedShapes.pushBack(i.object);
     }
 
     if(i == intersection){
-      computations.n2 = unexitedShapes.empty() ? 1.0 : unexitedShapes.back()->material().refractiveIndex();
+      size_t size = unexitedShapes.size;
+      computations.n2 = size == 0 ? 1.0 : (*unexitedShapes[size - 1])->material().refractiveIndex();
       break;
     }
   }
@@ -66,7 +75,7 @@ Computations prepareComputations(Intersection intersection, const utility::Ray& 
  * @param intersections A utility::Vector of intersections to search through.
  * @return The smallest positive intersection, wrapped in std::optional. If no positive intersection is found, returns std::nullopt.
  */
-std::optional<Intersection> hit(const std::vector<Intersection>& intersections) noexcept{
+std::optional<Intersection> hit(const Arena<Intersection>& intersections) noexcept{
   auto positiveT = intersections | std::views::filter([](const auto& intersection) { return intersection.dist > 0.0f; });
   auto smallestIntersection = std::ranges::min_element(positiveT, {}, [](const auto& intersection){return intersection.dist;});
 

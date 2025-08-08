@@ -5,7 +5,7 @@
 #include "Intersections.hpp"
 #include "FloatUtils.hpp"
 #include "AABB.hpp"
-
+#include "Arena.hpp"
 namespace raytracer {
 namespace geometry {
 
@@ -15,7 +15,7 @@ Cube::Cube() noexcept {
 
 // using the optimized slab intersection method
 // https://tavianator.com/2015/ray_box_nan.html
-std::vector<Intersection> Cube::localIntersect(const utility::Ray &transformedRay) const noexcept {
+void Cube::localIntersect(const utility::Ray &transformedRay, utility::Arena<Intersection>& out) const noexcept {
   double tx1 = (-1 - transformedRay.origin_.x()) / transformedRay.direction_.x();
   double tx2 = (1 - transformedRay.origin_.x()) / transformedRay.direction_.x();
 
@@ -34,7 +34,9 @@ std::vector<Intersection> Cube::localIntersect(const utility::Ray &transformedRa
   tmin = std::max(tmin, std::min(tz1, tz2));
   tmax = std::min(tmax, std::max(tz1, tz2));
 
-  return tmin > tmax ? std::vector<Intersection>() : std::vector<Intersection>{Intersection(this, tmin), Intersection(this, tmax)};
+  if (tmin > tmax) return;
+  out.pushBack(Intersection{this, tmin});
+  out.pushBack(Intersection{this, tmax});
 }
 
 utility::Tuple Cube::localNormalAt(const utility::Tuple &objectPoint) const noexcept {

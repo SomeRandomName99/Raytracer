@@ -3,10 +3,9 @@
 
 #include <memory>
 #include <vector>
-#include <algorithm>
 
 #include "Shape.hpp"
-
+#include "Arena.hpp"
 namespace raytracer{
 namespace geometry{
 
@@ -17,11 +16,11 @@ class Group final : public ShapeBase {
 public:
   Group() noexcept;
 
-  utility::Tuple localNormalAt([[maybe_unused]]const utility::Tuple &objectPoint) const {
+  utility::Tuple localNormalAt([[maybe_unused]]const utility::Tuple &objectPoint) const override {
     throw std::logic_error("Group::localNormalAt should not be called");
   }
 
-  std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept;
+  void localIntersect(const utility::Ray &transformedRay, utility::Arena<Intersection>& intersections) const noexcept override;
 
   void addChild(std::shared_ptr<ShapeBase> child) noexcept;
   std::vector<std::shared_ptr<ShapeBase>> const& getChildren() const noexcept;

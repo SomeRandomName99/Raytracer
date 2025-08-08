@@ -2,13 +2,12 @@
 #define SPHERE_H
 
 #include <vector>
-#include <atomic>
 #include <memory>
 
 #include "Tuple.hpp"
 #include "Ray.hpp"
 #include "Shape.hpp"
-
+#include "Arena.hpp"
 namespace raytracer {
 namespace geometry {
 
@@ -29,7 +28,7 @@ utility::Tuple localNormalAt(const utility::Tuple &objectPoint) const noexcept;
 /**
  * Function to calculate the intersections between a ray and a sphere.
  */
-std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept;
+void localIntersect(const utility::Ray &transformedRay, utility::Arena<Intersection>& intersections) const noexcept;
 
 double radius_;
 utility::Tuple origin_;

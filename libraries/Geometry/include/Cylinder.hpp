@@ -6,7 +6,7 @@
 #include "Tuple.hpp"
 #include "Ray.hpp"
 #include "Shape.hpp"
-
+#include "Arena.hpp"
 namespace raytracer {
 namespace geometry {
 
@@ -26,7 +26,7 @@ public:
   /**
    * Function to calculate the intersections between a ray and a plane.
    */
-  std::vector<Intersection> localIntersect(const utility::Ray &transformedRay) const noexcept override;
+  void localIntersect(const utility::Ray &transformedRay, utility::Arena<Intersection>& intersections) const noexcept override;
 
   double minimum_{-std::numeric_limits<double>::infinity()};
   double maximum_{std::numeric_limits<double>::infinity()};

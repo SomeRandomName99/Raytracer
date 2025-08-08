@@ -15,7 +15,7 @@ bool Sphere::operator==(const Sphere& other) const noexcept{
   return this->id() == other.id();
 }
 
-std::vector<Intersection> Sphere::localIntersect(const utility::Ray& transformedRay) const noexcept{
+void Sphere::localIntersect(const utility::Ray& transformedRay, utility::Arena<Intersection>& intersections) const noexcept{
   // For now we assume that the sphere is always at the origin
   const auto SphereCenterToRay = transformedRay.origin_ - utility::Point(0, 0, 0);
 
@@ -26,12 +26,12 @@ std::vector<Intersection> Sphere::localIntersect(const utility::Ray& transformed
   const auto discriminant = b*b - 4*a*c;
 
   if (discriminant < 0)
-    return std::vector<Intersection>{};
+    return;
 
   const auto dist1 = (-b - utility::sqrt(discriminant)) / (2*a);
   const auto dist2 = (-b + utility::sqrt(discriminant)) / (2*a);
-  return std::vector<Intersection>{Intersection{this, dist1},
-                                   Intersection{this, dist2}};
+  intersections.pushBack(Intersection{this, dist1});
+  intersections.pushBack(Intersection{this, dist2});
 }
 
 utility::Tuple Sphere::localNormalAt(const utility::Tuple &objectPoint) const noexcept{

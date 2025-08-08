@@ -5,11 +5,13 @@
 #include <concepts>
 #include <optional>
 #include <memory>
+#include <span>
 
 #include "Tuple.hpp"
 #include "Ray.hpp"
 #include "Material.hpp"
 #include "Matrix.hpp"
+#include "Arena.hpp"
 
 constexpr double SHADOW_OFFSET = 1e-4;
 
@@ -21,12 +23,9 @@ class ShapeBase;
  * \class Intersection
  * \brief Save information about an intersection between a ray and a geometry object.
  */
-/*
- * TODO: Use a reference wrapper instead of a pointer in order to make sure that the pointer is never null.
-*/
 struct Intersection
 {
-  const ShapeBase *object;
+  const ShapeBase* object;
   double dist; ///< Distance from the ray origin to the intersection point.
 };
 
@@ -47,7 +46,7 @@ struct Computations{
 
 
 Computations prepareComputations(Intersection intersection, const utility::Ray& ray, 
-                                 const std::vector<Intersection>& intersections = {}) noexcept;
+                                 const utility::Arena<Intersection>& intersections) noexcept;
 
 /**
  * @brief Creates a vector of intersections from the given arguments.
@@ -62,7 +61,7 @@ auto intersections(const Arg&... arg) noexcept{
  * 
  * This is used to find the first object that was hit in order to display it first.
  */
-std::optional<Intersection> hit(const std::vector<Intersection>& intersections) noexcept;
+std::optional<Intersection> hit(const utility::Arena<Intersection>& intersections) noexcept;
 
 /**
  * @brief Computes the Schlick approximation for the Fresnel effect.

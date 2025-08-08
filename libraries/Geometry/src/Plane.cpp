@@ -3,6 +3,7 @@
 #include "Plane.hpp"
 #include "Intersections.hpp"
 #include "AABB.hpp"
+#include "Arena.hpp"
 
 namespace raytracer {
 namespace geometry {
@@ -12,13 +13,12 @@ Plane::Plane() noexcept {
                                      utility::Point(std::numeric_limits<double>::infinity(), 0, std::numeric_limits<double>::infinity())));
 }
 
-std::vector<Intersection> Plane::localIntersect(const utility::Ray &transformedRay) const noexcept {
-  if (std::abs(transformedRay.direction_.y()) < utility::EPSILON<double>) {
-    return std::vector<Intersection>();
-  }
-
-  double t = -transformedRay.origin_.y() / transformedRay.direction_.y();
-  return std::vector<Intersection>{Intersection(this, t)};
+void Plane::localIntersect(const utility::Ray &transformedRay, utility::Arena<Intersection>& out) const noexcept {
+    if (std::abs(transformedRay.direction_.y()) < utility::EPSILON<double>) {
+        return;
+    }
+    double t = -transformedRay.origin_.y() / transformedRay.direction_.y();
+    out.pushBack(Intersection{this, t});
 }
 
 utility::Tuple Plane::localNormalAt([[maybe_unused]]const utility::Tuple &objectPoint) const noexcept {

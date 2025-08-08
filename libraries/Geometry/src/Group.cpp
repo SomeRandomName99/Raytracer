@@ -1,24 +1,17 @@
 #include <memory>
-
 #include "Group.hpp"
-
+#include "Arena.hpp"
 namespace raytracer { 
 namespace geometry {
+
 Group::Group() noexcept {
   this->setBoundingBox(utility::AABB(utility::Point(0, 0, 0), utility::Point(0, 0, 0)));
 }
 
-std::vector<Intersection> Group::localIntersect(const utility::Ray &transformedRay) const noexcept {
-  std::vector<Intersection> xs{};
-
-  for(const auto &child : children){
-    auto childXs = child->intersect(transformedRay);
-    xs.insert(xs.end(), childXs.begin(), childXs.end());
-  }
-
-  std::ranges::sort(xs, std::less<>{}, [](const auto intersection){return intersection.dist;});
-
-  return xs;
+void Group::localIntersect(const utility::Ray &transformedRay, utility::Arena<Intersection>& intersections) const noexcept {
+    for(const auto &child : children){
+        child->intersect(transformedRay, intersections);
+    }
 }
 
 void Group::addChild(std::shared_ptr<ShapeBase> child) noexcept {

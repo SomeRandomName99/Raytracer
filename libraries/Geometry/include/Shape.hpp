@@ -1,9 +1,9 @@
 #ifndef SHAPE_HPP
 #define SHAPE_HPP
 
-#include <variant>
 #include <atomic>
 #include <memory>
+#include <span>
 
 #include "Tuple.hpp"
 #include "Ray.hpp"
@@ -12,6 +12,7 @@
 #include "Material.hpp"
 #include "Intersections.hpp"
 #include "AABB.hpp"
+#include "Arena.hpp"
 
 namespace raytracer {
 namespace geometry {
@@ -77,8 +78,8 @@ public:
   /**
    * @brief Function to calculate the intersections between a ray and a sphere.
    */
-  std::vector<Intersection> intersect(const utility::Ray& ray) const noexcept {
-    return localIntersect(utility::transform(ray, inverseTransform()));
+    void intersect(const utility::Ray& ray, utility::Arena<Intersection>& intersections) const noexcept {
+    localIntersect(utility::transform(ray, inverseTransform()), intersections);
   }
 
   /**
@@ -102,7 +103,7 @@ public:
   }
 
 protected:
-  virtual std::vector<Intersection> localIntersect(const utility::Ray& transformedRay) const noexcept = 0;
+  virtual void localIntersect(const utility::Ray& transformedRay, utility::Arena<Intersection>& intersections) const noexcept = 0;
   virtual utility::Tuple localNormalAt(const utility::Tuple &objectPoint) const = 0;
 private:
   utility::Matrix<4,4> transformation_;
