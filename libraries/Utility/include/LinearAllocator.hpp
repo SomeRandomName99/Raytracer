@@ -3,6 +3,7 @@
 
 #include <cstddef>
 
+namespace raytracer {
 namespace utility {
 
 constexpr size_t KB(size_t size) {
@@ -49,5 +50,5 @@ struct LinearAllocator {
 };
 
 } // namespace utility
-
+} // namespace raytracer
 #endif 

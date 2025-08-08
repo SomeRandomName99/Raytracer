@@ -3,6 +3,7 @@
 #include "LinearAllocator.hpp"
 #include <optional>
 
+namespace raytracer {
 namespace utility {
 
 template <typename T>
@@ -78,5 +79,6 @@ struct Arena {
 };
 
 } // namespace utility
+} // namespace raytracer
 
 #endif // ARENA_HPP

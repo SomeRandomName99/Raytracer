@@ -17,6 +17,7 @@
   #error "Unsupported platform"
 #endif
 
+namespace raytracer {
 namespace utility {
 
 // Platform-specific implementation functions
@@ -116,3 +117,4 @@ void LinearAllocator::reset() {
 }
 
 } // namespace utility 
+} // namespace raytracer
