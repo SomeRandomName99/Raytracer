@@ -67,10 +67,10 @@ TEST_F(GroupTest, intersectingRayWithNonEmptyGroup)
   auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   g->intersect(r, xs);
   ASSERT_EQ(4, xs.size);
-  EXPECT_EQ(s2.get(), xs[0].object);
-  EXPECT_EQ(s2.get(), xs[1].object);
-  EXPECT_EQ(s1.get(), xs[2].object);
-  EXPECT_EQ(s1.get(), xs[3].object);
+  EXPECT_EQ(s1.get(), xs[0].object);
+  EXPECT_EQ(s1.get(), xs[1].object);
+  EXPECT_EQ(s2.get(), xs[2].object);
+  EXPECT_EQ(s2.get(), xs[3].object);
 }
 
 TEST_F(GroupTest, intersectingTransformedGroup)
