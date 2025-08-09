@@ -2,6 +2,7 @@
 #define ARENA_HPP
 #include "LinearAllocator.hpp"
 #include <optional>
+#include <cassert>
 
 namespace raytracer {
 namespace utility {
@@ -58,13 +59,13 @@ struct Arena {
     size = index;
   }
 
-  T* operator[](size_t index){
-    if(index >= size) return nullptr;
-    return &data[index];
+  T& operator[](size_t index){
+    assert(index < size && "Arena index out of bounds");
+    return data[index];
   }
-  const T* operator[](size_t index) const{
-    if(index >= size) return nullptr;
-    return &data[index];
+  const T& operator[](size_t index) const{
+    assert(index < size && "Arena index out of bounds");
+    return data[index];
   }
 
   // Iterator support
