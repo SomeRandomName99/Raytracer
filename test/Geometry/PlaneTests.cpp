@@ -3,9 +3,24 @@
 #include "Plane.hpp"
 #include "Intersections.hpp"
 #include "Shape.hpp"
+#include "Arena.hpp"
 
 using namespace raytracer;
 using namespace utility;
+
+class PlaneTest : public ::testing::Test {
+protected:
+  Arena<geometry::Intersection> xs;
+  
+  PlaneTest() : xs(MB(1)) {}
+  
+  void SetUp() override {
+    // Clear arena before each test to ensure clean state
+    xs.clear();
+  }
+  
+  void TearDown() override {}
+};
 
 TEST(plane_tests, normalOfPlaneIsConstantEverywhere) {
   auto p = geometry::Plane();
@@ -18,38 +33,38 @@ TEST(plane_tests, normalOfPlaneIsConstantEverywhere) {
   EXPECT_EQ(n3, Vector(0, 1, 0));
 }
 
-TEST(plane_tests, intersectWithRayParallelToPlane) {
+TEST_F(PlaneTest, intersectWithRayParallelToPlane) {
   auto p = geometry::Plane();
   const auto r = Ray(Point(0, 10, 0), Vector(0, 0, 1));
-  const auto xs = p.intersect(r);
+  p.intersect(r, xs);
 
-  EXPECT_EQ(0, xs.size());
+  EXPECT_EQ(0, xs.size);
 }
 
-TEST(plane_tests, intersectWithCoplanarRay) {
+TEST_F(PlaneTest, intersectWithCoplanarRay) {
   auto p = geometry::Plane();
   const auto r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
-  const auto xs = p.intersect(r);
+  p.intersect(r, xs);
 
-  EXPECT_EQ(0, xs.size());
+  EXPECT_EQ(0, xs.size);
 }
 
-TEST(plane_tests, intersectWithRayFromAbove) {
+TEST_F(PlaneTest, intersectWithRayFromAbove) {
   auto p = geometry::Plane();
   const auto r = Ray(Point(0, 1, 0), Vector(0, -1, 0));
-  const auto xs = p.intersect(r);
+  p.intersect(r, xs);
 
-  EXPECT_EQ(1, xs.size());
-  EXPECT_FLOAT_EQ(1, xs.at(0).dist);
-  EXPECT_TRUE(p.material() == xs.at(0).object->material());
+  EXPECT_EQ(1, xs.size);
+  EXPECT_FLOAT_EQ(1, xs[0].dist);
+  EXPECT_TRUE(p.material() == xs[0].object->material());
 }
 
-TEST(plane_tests, intersectWithRayFromBelow) {
+TEST_F(PlaneTest, intersectWithRayFromBelow) {
   auto p = geometry::Plane();
   const auto r = Ray(Point(0, -1, 0), Vector(0, 1, 0));
-  const auto xs = p.intersect(r);
+  p.intersect(r, xs);
 
-  EXPECT_EQ(1, xs.size());
-  EXPECT_FLOAT_EQ(1, xs.at(0).dist);
-  EXPECT_TRUE(p.material() == xs.at(0).object->material());
+  EXPECT_EQ(1, xs.size);
+  EXPECT_FLOAT_EQ(1, xs[0].dist);
+  EXPECT_TRUE(p.material() == xs[0].object->material());
 }

@@ -6,6 +6,7 @@
 #include <iostream>
 
 // Tests originally written by Cursor
+namespace raytracer {
 namespace utility {
 namespace test {
 
@@ -297,3 +298,4 @@ TEST_F(LinearAllocatorTest, MixedAllocationSizes) {
 
 } // namespace test
 } // namespace utility 
+} // namespace raytracer

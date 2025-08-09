@@ -49,7 +49,7 @@ TEST_F(TestPatternTests, assigning_transformation) {
 /* =========== Pattern at shape Tests =========== */
 class MockTestShape : public geometry::ShapeBase {
 public:
-  MOCK_METHOD(std::vector<geometry::Intersection>, localIntersect, (const utility::Ray& ray), (const, noexcept));
+  MOCK_METHOD(void, localIntersect, (const utility::Ray& ray, utility::Arena<geometry::Intersection>& intersections), (const, noexcept));
   MOCK_METHOD(utility::Tuple, localNormalAt, (const utility::Tuple &point), (const, noexcept));
 };
 

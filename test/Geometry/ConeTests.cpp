@@ -4,13 +4,28 @@
 #include "Cone.hpp"
 #include "Intersections.hpp"
 #include "Shape.hpp"
+#include "Arena.hpp"
 
 using namespace raytracer;
 using namespace utility;
 using namespace geometry;
 
+class ConeTest : public ::testing::Test {
+protected:
+  Arena<geometry::Intersection> xs;
+  
+  ConeTest() : xs(MB(1)) {}
+  
+  void SetUp() override {
+    // Clear arena before each test to ensure clean state
+    xs.clear();
+  }
+  
+  void TearDown() override {}
+};
+
 // =================== Ray intersects cone ====================
-class ConeIntersectTest : public ::testing::TestWithParam<std::tuple<Tuple, Tuple, double, double>> {
+class ConeIntersectTest : public ConeTest, public ::testing::WithParamInterface<std::tuple<Tuple, Tuple, double, double>> {
 public:
   static std::shared_ptr<Cone> c;
   static std::vector<std::tuple<Tuple, Tuple, double, double>> testCases;
@@ -33,22 +48,22 @@ TEST_P(ConeIntersectTest, rayIntersectsCone)
 {
   auto [origin, direction, t0, t1] = GetParam();
   auto ray = Ray(origin, direction.normalize());
-  auto xs = c->intersect(ray);
-  EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(t0, xs.at(0).dist);
-  EXPECT_FLOAT_EQ(t1, xs.at(1).dist);
+  c->intersect(ray, xs);
+  EXPECT_EQ(2, xs.size);
+  EXPECT_FLOAT_EQ(t0, xs[0].dist);
+  EXPECT_FLOAT_EQ(t1, xs[1].dist);
 }
 
-TEST(ConeTests, intersectingConeWithRayParallelToOneHalf)
+TEST_F(ConeTest, intersectingConeWithRayParallelToOneHalf)
 {
   auto c = makeCone();
   auto ray = Ray(Point(0, 0, -1), Vector(0, 1, 1).normalize());
-  auto xs = c->intersect(ray);
-  EXPECT_EQ(1, xs.size());
-  EXPECT_FLOAT_EQ(0.3535533, xs.at(0).dist);
+  c->intersect(ray, xs);
+  EXPECT_EQ(1, xs.size);
+  EXPECT_FLOAT_EQ(0.3535533, xs[0].dist);
 }
 
-class ConeIntersectCapTest : public ::testing::TestWithParam<std::tuple<Tuple, Tuple, int>> {
+class ConeIntersectCapTest : public ConeTest, public ::testing::WithParamInterface<std::tuple<Tuple, Tuple, int>> {
 public:
   static std::shared_ptr<Cone> c;
   static std::vector<std::tuple<Tuple, Tuple, int>> testCases;
@@ -71,8 +86,8 @@ TEST_P(ConeIntersectCapTest, rayIntersectsConeCaps)
 {
   auto [origin, direction, count] = GetParam();
   auto ray = Ray(origin, direction.normalize());
-  auto xs = c->intersect(ray);
-  ASSERT_EQ(count, xs.size());
+  c->intersect(ray, xs);
+  ASSERT_EQ(count, xs.size);
 }
 
 // =================== Normal on the surface of the cone ====================

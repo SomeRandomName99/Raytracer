@@ -5,14 +5,29 @@
 #include "Cube.hpp"
 #include "Intersections.hpp"
 #include "Shape.hpp"
+#include "Arena.hpp"
 
 using namespace raytracer;
 using namespace utility;
 using namespace geometry;
 
+class CubeTest : public ::testing::Test {
+protected:
+  Arena<geometry::Intersection> xs;
+  
+  CubeTest() : xs(MB(1)) {}
+  
+  void SetUp() override {
+    // Clear arena before each test to ensure clean state
+    xs.clear();
+  }
+  
+  void TearDown() override {}
+};
+
 // =================== Ray intersects each cube face ====================
 
-class CubeFaceIntersectTest : public ::testing::TestWithParam<std::pair<const std::string, std::tuple<Ray, std::vector<Intersection>>>> {
+class CubeFaceIntersectTest : public CubeTest, public ::testing::WithParamInterface<std::pair<const std::string, std::tuple<Ray, std::vector<Intersection>>>> {
 public:
   static std::shared_ptr<Cube> c;
   static std::unordered_map<std::string, std::tuple<Ray, std::vector<Intersection>>> testCases; 
@@ -40,16 +55,16 @@ TEST_P(CubeFaceIntersectTest, rayIntersectsCube)
 {
   auto [name, data] = GetParam();
   auto [ray, expectedIntersections] = data;
-  auto xs = c->intersect(ray);
-  ASSERT_EQ(expectedIntersections.size(), xs.size());
-  for (size_t i = 0; i < xs.size(); ++i) {
-    EXPECT_FLOAT_EQ(expectedIntersections.at(i).dist, xs.at(i).dist);
-    EXPECT_TRUE(expectedIntersections.at(i).object == xs.at(i).object);
+  c->intersect(ray, xs);
+  ASSERT_EQ(expectedIntersections.size(), xs.size);
+  for (size_t i = 0; i < xs.size; ++i) {
+    EXPECT_FLOAT_EQ(expectedIntersections.at(i).dist, xs[i].dist);
+    EXPECT_TRUE(expectedIntersections.at(i).object == xs[i].object);
   }
 }
 
 // =================== Ray misses the cube ====================
-class CubeMissTest : public ::testing::TestWithParam<Ray> {
+class CubeMissTest : public CubeTest, public ::testing::WithParamInterface<Ray> {
 public:
   static std::shared_ptr<Cube> c;
   static std::vector<Ray> testCases;
@@ -73,8 +88,8 @@ INSTANTIATE_TEST_SUITE_P(
 
 TEST_P(CubeMissTest, rayMissesCube)
 {
-  auto xs = CubeMissTest::c->intersect(GetParam());
-  ASSERT_EQ(0, xs.size());
+  CubeMissTest::c->intersect(GetParam(), xs);
+  ASSERT_EQ(0, xs.size);
 }
 
 

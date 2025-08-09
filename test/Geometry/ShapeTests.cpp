@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <vector>
+#include <numbers>
 
 #include "Shape.hpp"
 #include "Material.hpp"
@@ -8,22 +9,29 @@
 #include "Ray.hpp"
 #include "Group.hpp"
 #include "Sphere.hpp"
+#include "Arena.hpp"
 
 using namespace raytracer;
 using namespace utility;
 
 class MockTestShape : public geometry::ShapeBase {
 public:
-  MOCK_METHOD(std::vector<geometry::Intersection>, localIntersect, (const utility::Ray& ray), (const, noexcept));
+  MOCK_METHOD(void, localIntersect, (const utility::Ray& ray, utility::Arena<geometry::Intersection>& intersections), (const, noexcept));
   MOCK_METHOD(utility::Tuple, localNormalAt, (const utility::Tuple &point), (const, noexcept));
 };
 
 class TestShapeTests : public ::testing::Test {
 protected:
   MockTestShape s{};
+  Arena<geometry::Intersection> xs;
 
-  TestShapeTests() {
+  TestShapeTests() : xs(MB(1)) {
     ON_CALL(s, localNormalAt(testing::_)).WillByDefault(testing::ReturnArg<0>());
+  }
+  
+  void SetUp() override {
+    // Clear arena before each test to ensure clean state
+    xs.clear();
   }
 };
 
@@ -59,10 +67,10 @@ TEST_F(TestShapeTests, IntersectingScaledShapeWithRay) {
   s.setTransform(transformations::scaling(2, 2, 2));
 
   auto transformedRay = Ray();
-  EXPECT_CALL(s, localIntersect(testing::_)).WillOnce(
+  EXPECT_CALL(s, localIntersect(testing::_, testing::_)).WillOnce(
               testing::DoAll(testing::SaveArg<0>(&transformedRay),
-       testing::Return(std::vector<geometry::Intersection>{})));
-  const auto xs = s.intersect(r);
+       testing::Return()));
+  s.intersect(r, xs);
 
   EXPECT_EQ(transformedRay.origin_, Point(0, 0, -2.5));
   EXPECT_EQ(transformedRay.direction_, Vector(0, 0, 0.5));
@@ -73,10 +81,10 @@ TEST_F(TestShapeTests, IntersectingTranslatedShapeWithRay) {
   s.setTransform(transformations::translation(5, 0, 0));
 
   auto transformedRay = Ray();
-  EXPECT_CALL(s, localIntersect(testing::_)).WillOnce(
+  EXPECT_CALL(s, localIntersect(testing::_, testing::_)).WillOnce(
               testing::DoAll(testing::SaveArg<0>(&transformedRay),
-       testing::Return(std::vector<geometry::Intersection>{})));
-  const auto xs = s.intersect(r);
+       testing::Return()));
+  s.intersect(r, xs);
 
   EXPECT_EQ(transformedRay.origin_, Point(-5, 0, -5));
   EXPECT_EQ(transformedRay.direction_, Vector(0, 0, 1));

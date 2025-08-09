@@ -7,13 +7,28 @@
 #include "Cylinder.hpp"
 #include "Intersections.hpp"
 #include "Shape.hpp"
+#include "Arena.hpp"
 
 using namespace raytracer;
 using namespace utility;
 using namespace geometry;
 
+class CylinderTest : public ::testing::Test {
+protected:
+  Arena<geometry::Intersection> xs;
+  
+  CylinderTest() : xs(MB(1)) {}
+  
+  void SetUp() override {
+    // Clear arena before each test to ensure clean state
+    xs.clear();
+  }
+  
+  void TearDown() override {}
+};
+
 // =================== Ray intersects cylinder ====================
-class CylinderMissTest : public ::testing::TestWithParam<std::pair<Tuple, Tuple>> {
+class CylinderMissTest : public CylinderTest, public ::testing::WithParamInterface<std::pair<Tuple, Tuple>> {
 public:
   static std::shared_ptr<Cylinder> c;
   static std::vector<std::pair<Tuple, Tuple>> testCases;
@@ -36,11 +51,11 @@ TEST_P(CylinderMissTest, rayMissesCylinder)
 {
   auto [origin, direction] = GetParam();
   auto ray = Ray(origin, direction.normalize());
-  auto xs = c->intersect(ray);
-  EXPECT_EQ(0, xs.size());
+  c->intersect(ray, xs);
+  EXPECT_EQ(0, xs.size);
 }
 
-class CylinderIntersectTest : public ::testing::TestWithParam<std::tuple<Tuple, Tuple, double, double>>{
+class CylinderIntersectTest : public CylinderTest, public ::testing::WithParamInterface<std::tuple<Tuple, Tuple, double, double>>{
 public:
   static std::shared_ptr<Cylinder> c;
   static std::vector<std::tuple<Tuple, Tuple, double, double>> testCases;
@@ -63,10 +78,10 @@ TEST_P(CylinderIntersectTest, rayIntersectsCylinder)
 {
   auto [origin, direction, t0, t1] = GetParam();
   auto ray = Ray(origin, direction.normalize());
-  auto xs = c->intersect(ray);
-  EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(t0, xs.at(0).dist);
-  EXPECT_FLOAT_EQ(t1, xs.at(1).dist);
+  c->intersect(ray, xs);
+  EXPECT_EQ(2, xs.size);
+  EXPECT_FLOAT_EQ(t0, xs[0].dist);
+  EXPECT_FLOAT_EQ(t1, xs[1].dist);
 }
 
 // =================== Normal on the surface of the cylinder ====================
@@ -104,7 +119,7 @@ TEST(CylinderTests, DefaultCylinderIsNotTruncated){
   EXPECT_FLOAT_EQ(std::numeric_limits<double>::infinity(), cylinder->maximum_);
 }
 
-class CylinderWithTruncationIntersectionTest : public ::testing::TestWithParam<std::pair<const std::string, std::tuple<Tuple, Tuple, double>>>{
+class CylinderWithTruncationIntersectionTest : public CylinderTest, public ::testing::WithParamInterface<std::pair<const std::string, std::tuple<Tuple, Tuple, double>>>{
 public:
   static std::shared_ptr<Cylinder> c;
   static std::unordered_map<std::string, std::tuple<Tuple, Tuple, double>> testCases;
@@ -135,8 +150,8 @@ TEST_P(CylinderWithTruncationIntersectionTest, CylinderWithTruncation){
   EXPECT_FLOAT_EQ(2, cylinder->maximum_);
 
   auto ray = Ray(origin, direction.normalize());
-  auto xs = cylinder->intersect(ray);
-  EXPECT_EQ(intersectionCount, xs.size());
+  cylinder->intersect(ray, xs);
+  EXPECT_EQ(intersectionCount, xs.size);
 }
 
 // =================== Closed cylinder tests ====================
@@ -145,7 +160,7 @@ TEST(CylinderTests, DefaultCylinderNotClosed){
   EXPECT_FALSE(cylinder->closed_);
 }
 
-class ClosedCylinderIntersectionTest : public ::testing::TestWithParam<std::pair<const std::string, std::tuple<Tuple, Tuple, double>>>{
+class ClosedCylinderIntersectionTest : public CylinderTest, public ::testing::WithParamInterface<std::pair<const std::string, std::tuple<Tuple, Tuple, double>>>{
 public:
   static std::shared_ptr<Cylinder> c;
   static std::unordered_map<std::string, std::tuple<Tuple, Tuple, double>> testCases;
@@ -176,8 +191,8 @@ TEST_P(ClosedCylinderIntersectionTest, ClosedCylinder){
   EXPECT_TRUE(cylinder->closed_);
 
   auto ray = Ray(origin, direction.normalize());
-  auto xs = cylinder->intersect(ray);
-  EXPECT_EQ(intersectionCount, xs.size());
+  cylinder->intersect(ray, xs);
+  EXPECT_EQ(intersectionCount, xs.size);
 }
 
 // =================== Normal on the surface of the closed cylinder ====================

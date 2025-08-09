@@ -9,87 +9,102 @@
 #include "Matrix.hpp"
 #include "Shape.hpp"
 #include "Transformations.hpp"
+#include "Arena.hpp"
 
 using namespace raytracer;
 using namespace utility;
 
+class SphereTest : public ::testing::Test {
+protected:
+  Arena<geometry::Intersection> xs;
+  
+  SphereTest() : xs(MB(1)) {}
+  
+  void SetUp() override {
+    // Clear arena before each test to ensure clean state
+    xs.clear();
+  }
+  
+  void TearDown() override {}
+};
+
 /* =========== Intersection tests =========== */
-TEST(sphere_tests, raySphereInterSectionAtTwoPoints) {
+TEST_F(SphereTest, raySphereInterSectionAtTwoPoints) {
   const auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   auto s = geometry::Sphere();
-  const auto xs = s.intersect(r);
+  s.intersect(r, xs);
 
-  EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).dist, 4.0);
-  EXPECT_FLOAT_EQ(xs.at(1).dist, 6.0);
+  EXPECT_EQ(2, xs.size);
+  EXPECT_FLOAT_EQ(xs[0].dist, 4.0);
+  EXPECT_FLOAT_EQ(xs[1].dist, 6.0);
 }
 
-TEST(sphere_tests, raySphereInterSectionAtATangent) {
+TEST_F(SphereTest, raySphereInterSectionAtATangent) {
   const auto r = Ray(Point(0, 1, -5), Vector(0, 0, 1));
   auto s = geometry::Sphere();
-  const auto xs = s.intersect(r);
+  s.intersect(r, xs);
 
-  EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).dist, 5.0);
-  EXPECT_FLOAT_EQ(xs.at(1).dist, 5.0);
+  EXPECT_EQ(2, xs.size);
+  EXPECT_FLOAT_EQ(xs[0].dist, 5.0);
+  EXPECT_FLOAT_EQ(xs[1].dist, 5.0);
 }
 
-TEST(sphere_tests, rayMissesSphere) {
+TEST_F(SphereTest, rayMissesSphere) {
   const auto r = Ray(Point(0, 2, -5), Vector(0, 0, 1));
   auto s = geometry::Sphere();
-  const auto xs = s.intersect(r);
+  s.intersect(r, xs);
 
-  EXPECT_EQ(0, xs.size());
+  EXPECT_EQ(0, xs.size);
 }
 
-TEST(sphere_tests, rayOriginatesInsideSphere) {
+TEST_F(SphereTest, rayOriginatesInsideSphere) {
   const auto r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
   auto s = geometry::Sphere();
-  const auto xs = s.intersect(r);
+  s.intersect(r, xs);
 
-  EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).dist, -1.0);
-  EXPECT_FLOAT_EQ(xs.at(1).dist,  1.0);
+  EXPECT_EQ(2, xs.size);
+  EXPECT_FLOAT_EQ(xs[0].dist, -1.0);
+  EXPECT_FLOAT_EQ(xs[1].dist,  1.0);
 }
 
-TEST(sphere_tests, sphereBehindRay) {
+TEST_F(SphereTest, sphereBehindRay) {
   const auto r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
   auto s = geometry::Sphere();
-  const auto xs = s.intersect(r);
+  s.intersect(r, xs);
 
-  EXPECT_EQ(2, xs.size());
-  EXPECT_FLOAT_EQ(xs.at(0).dist, -6.0);
-  EXPECT_FLOAT_EQ(xs.at(1).dist, -4.0);
+  EXPECT_EQ(2, xs.size);
+  EXPECT_FLOAT_EQ(xs[0].dist, -6.0);
+  EXPECT_FLOAT_EQ(xs[1].dist, -4.0);
 }
 
-TEST(sphere_tests, setMaterialOnIntersection) {
+TEST_F(SphereTest, setMaterialOnIntersection) {
   const auto r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
   auto s = geometry::Sphere();
-  const auto xs = s.intersect(r);
+  s.intersect(r, xs);
 
-  EXPECT_EQ(2, xs.size());
-  EXPECT_TRUE(xs.at(0).object->material() == s.material());
-  EXPECT_TRUE(xs.at(1).object->material() == s.material());
+  EXPECT_EQ(2, xs.size);
+  EXPECT_TRUE(xs[0].object->material() == s.material());
+  EXPECT_TRUE(xs[1].object->material() == s.material());
 }
 
-TEST(sphere_tests, IntersectingScaledSphereWithRay) {
+TEST_F(SphereTest, IntersectingScaledSphereWithRay) {
   const auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   auto s = geometry::Sphere();
   s.setTransform(transformations::scaling(2, 2, 2));
-  const auto xs = s.intersect(r);
+  s.intersect(r, xs);
 
-  EXPECT_EQ(2, xs.size());
-  EXPECT_EQ(xs.at(0).dist, 3);
-  EXPECT_EQ(xs.at(1).dist, 7);
+  EXPECT_EQ(2, xs.size);
+  EXPECT_EQ(xs[0].dist, 3);
+  EXPECT_EQ(xs[1].dist, 7);
 }
 
-TEST(sphere_tests, IntersectingTranslatedSphereWithRay) {
+TEST_F(SphereTest, IntersectingTranslatedSphereWithRay) {
   const auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   auto s = geometry::Sphere();
   s.setTransform(transformations::translation(5, 0, 0));
-  const auto xs = s.intersect(r);
+  s.intersect(r, xs);
 
-  EXPECT_EQ(0, xs.size());
+  EXPECT_EQ(0, xs.size);
 }
 
 /* =========== Normal tests =========== */

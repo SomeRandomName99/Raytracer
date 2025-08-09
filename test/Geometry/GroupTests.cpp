@@ -6,10 +6,25 @@
 #include "Shape.hpp"
 #include "Sphere.hpp"
 #include "Cylinder.hpp"
+#include "Arena.hpp"
 
 using namespace raytracer;
 using namespace utility;
 using namespace geometry;
+
+class GroupTest : public ::testing::Test {
+protected:
+  Arena<geometry::Intersection> xs;
+  
+  GroupTest() : xs(MB(1)) {}
+  
+  void SetUp() override {
+    // Clear arena before each test to ensure clean state
+    xs.clear();
+  }
+  
+  void TearDown() override {}
+};
 
 // =================== group creating tests ====================
 TEST(GroupTests, createGroup)
@@ -30,15 +45,15 @@ TEST(GroupTests, addChildToGroup)
 }
 
 // =================== group intersect tests ====================
-TEST(GroupTests, intersectingRayWithEmptyGroup)
+TEST_F(GroupTest, intersectingRayWithEmptyGroup)
 {
   auto g = makeGroup();
   auto r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
-  auto xs = g->intersect(r);
-  EXPECT_EQ(0, xs.size());
+  g->intersect(r, xs);
+  EXPECT_EQ(0, xs.size);
 }
 
-TEST(GroupTests, intersectingRayWithNonEmptyGroup)
+TEST_F(GroupTest, intersectingRayWithNonEmptyGroup)
 {
   auto g = makeGroup();
   auto s1 = makeSphere();
@@ -50,15 +65,15 @@ TEST(GroupTests, intersectingRayWithNonEmptyGroup)
   g->addChild(s2);
   g->addChild(s3);
   auto r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  auto xs = g->intersect(r);
-  ASSERT_EQ(4, xs.size());
-  EXPECT_EQ(s2.get(), xs.at(0).object);
-  EXPECT_EQ(s2.get(), xs.at(1).object);
-  EXPECT_EQ(s1.get(), xs.at(2).object);
-  EXPECT_EQ(s1.get(), xs.at(3).object);
+  g->intersect(r, xs);
+  ASSERT_EQ(4, xs.size);
+  EXPECT_EQ(s2.get(), xs[0].object);
+  EXPECT_EQ(s2.get(), xs[1].object);
+  EXPECT_EQ(s1.get(), xs[2].object);
+  EXPECT_EQ(s1.get(), xs[3].object);
 }
 
-TEST(GroupTests, intersectingTransformedGroup)
+TEST_F(GroupTest, intersectingTransformedGroup)
 {
   auto g = makeGroup();
   g->setTransform(transformations::scaling(2, 2, 2));
@@ -66,10 +81,10 @@ TEST(GroupTests, intersectingTransformedGroup)
   s->setTransform(transformations::translation(5, 0, 0));
   g->addChild(s);
   auto r = Ray(Point(10, 0, -10), Vector(0, 0, 1));
-  auto xs = g->intersect(r);
-  ASSERT_EQ(2, xs.size());
-  EXPECT_EQ(s.get(), xs.at(0).object);
-  EXPECT_EQ(s.get(), xs.at(1).object);
+  g->intersect(r, xs);
+  ASSERT_EQ(2, xs.size);
+  EXPECT_EQ(s.get(), xs[0].object);
+  EXPECT_EQ(s.get(), xs[1].object);
 }
 
 TEST(GroupTests, localNormalAtNotSupported){
