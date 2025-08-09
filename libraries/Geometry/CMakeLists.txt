@@ -30,7 +30,7 @@ target_include_directories(
 
 target_link_libraries(
   Geometry
-  PRIVATE
+  PUBLIC
     Utility
     Material
 )

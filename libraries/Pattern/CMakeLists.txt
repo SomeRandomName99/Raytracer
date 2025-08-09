@@ -23,11 +23,12 @@ target_include_directories(
     include
     ${CMAKE_CURRENT_LIST_DIR}/../../3rdParty
     ${CMAKE_CURRENT_LIST_DIR}/../Geometry/include
+    ${CMAKE_CURRENT_LIST_DIR}/../Material/include
 )
 
 target_link_libraries(
   Pattern
-  PRIVATE
+  PUBLIC
     Geometry
     Utility
 )

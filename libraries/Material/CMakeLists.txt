@@ -16,7 +16,7 @@ target_include_directories(
 
 target_link_libraries(
   Material
-  PRIVATE
+  PUBLIC
     Utility
     Pattern
 )
