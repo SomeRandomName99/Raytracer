@@ -29,14 +29,14 @@ Computations prepareComputations(Intersection intersection, const utility::Ray& 
   for(const auto& i: intersections){
     if(i == intersection){
       size_t size = unexitedShapes.size;
-      computations.n1 = size == 0 ? 1.0 : (*unexitedShapes[size - 1])->material().refractiveIndex();
+      computations.n1 = size == 0 ? 1.0 : unexitedShapes[size - 1]->material().refractiveIndex();
     }
 
     auto found = std::find(unexitedShapes.begin(), unexitedShapes.end(), i.object);
     if(found != unexitedShapes.end()){
       size_t size = unexitedShapes.size;
       size_t index = found - unexitedShapes.begin();
-      *unexitedShapes[index] = *unexitedShapes[size - 1];
+      unexitedShapes[index] = unexitedShapes[size - 1];
       unexitedShapes.popBack();
     } else {
       unexitedShapes.pushBack(i.object);
@@ -44,7 +44,7 @@ Computations prepareComputations(Intersection intersection, const utility::Ray& 
 
     if(i == intersection){
       size_t size = unexitedShapes.size;
-      computations.n2 = size == 0 ? 1.0 : (*unexitedShapes[size - 1])->material().refractiveIndex();
+      computations.n2 = size == 0 ? 1.0 : unexitedShapes[size - 1]->material().refractiveIndex();
       break;
     }
   }

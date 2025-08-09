@@ -49,14 +49,6 @@ Computations prepareComputations(Intersection intersection, const utility::Ray& 
                                  const utility::Arena<Intersection>& intersections) noexcept;
 
 /**
- * @brief Creates a vector of intersections from the given arguments.
- */
-template<std::same_as<Intersection> ... Arg> 
-auto intersections(const Arg&... arg) noexcept{
-  return std::vector<Intersection>{arg...};
-}
-
-/**
  * @brief A function that returns the intersection with the least distance.
  * 
  * This is used to find the first object that was hit in order to display it first.
