@@ -33,7 +33,7 @@ Canvas Camera::render(const World& world) noexcept{
   std::iota(pixelIndices.begin(), pixelIndices.end(), 0);
   thread_local Arena<geometry::Intersection> intersectionsArena(MB(1));
   for_each(std::execution::par_unseq, pixelIndices.begin(), pixelIndices.end(),
-           [this, &image, &world, &intersectionsArena](const auto index) {
+           [this, &image, &world](const auto index) {
              const auto x = index % this->numHorPixels_;
              const auto y = index / this->numHorPixels_;
              const auto ray = this->rayForPixel(x, y);
