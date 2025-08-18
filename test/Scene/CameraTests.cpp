@@ -50,7 +50,7 @@ TEST(ray_construction_tests, rayThroughCornerOfCanvas){
 
 TEST(ray_construction_tests, rayWhenCameraIsTransformed){
   auto c = scene::Camera(201, 101, std::numbers::pi / 2);
-  c.transform_ = utility::transformations::rotation_y(std::numbers::pi / 4) * utility::transformations::translation(0, -2, 5);
+  c.setTransform(utility::transformations::rotation_y(std::numbers::pi / 4) * utility::transformations::translation(0, -2, 5));
   const auto r = c.rayForPixel(100, 50);
 
   EXPECT_EQ(r.origin_, utility::Point(0,2,-5));
@@ -64,7 +64,7 @@ TEST(rendering_tests, renderingWorldWithCamera){
   const auto from = utility::Point(0,0,-5);
   const auto to   = utility::Point(0,0,0);
   const auto up   = utility::Vector(0,1,0);
-  c.transform_    = utility::transformations::view_transform(from, to, up);
+  c.setTransform(utility::transformations::view_transform(from, to, up));
   const auto image = c.render(w);
 
   EXPECT_EQ(image.pixelAt(5,5), utility::Color(0.380661107, 0.4758263837, 0.28549583));

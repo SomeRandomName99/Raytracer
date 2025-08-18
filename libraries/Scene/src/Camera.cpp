@@ -19,11 +19,10 @@ Ray Camera::rayForPixel(const unsigned int x, const unsigned int y) const noexce
   const auto worldX = this->halfWidth_  - xOffsetToPixelCenter;
   const auto worldY = this->halfHeight_ - yOffsetToPixelCenter;
   // z-coord is -1 because the canvas is always 1 unit away from the camera
-  const auto pixel     = inverse(this->transform_) * Point(worldX, worldY, -1); 
-  const auto origin    = inverse(this->transform_) * Point(0, 0, 0);
-  const auto direction = (pixel - origin).normalize();
+  const auto pixel     = this->inverseTransform_ * Point(worldX, worldY, -1); 
+  const auto direction = (pixel - this->cameraOrigin_).normalize();
 
-  return Ray{origin, direction};
+  return Ray{this->cameraOrigin_, direction};
 }
 
 Canvas Camera::render(const World& world) noexcept{

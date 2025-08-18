@@ -2,6 +2,8 @@
 #include "Ray.hpp"
 #include "Canvas.hpp"
 #include "World.hpp"
+#include "Tuple.hpp"
+#include "Transformations.hpp"
 
 namespace raytracer {
 namespace scene {
@@ -10,7 +12,10 @@ class Camera {
 public:
 
 Camera(unsigned int numHorPixels, unsigned int numVerPixels, double fov) noexcept
-    : numHorPixels_{numHorPixels}, numVerPixels_{numVerPixels}, fov_{fov}, transform_{utility::Matrix<4,4>::identity()} {
+    : numHorPixels_{numHorPixels}, numVerPixels_{numVerPixels}, fov_{fov}, 
+      transform_{utility::Matrix<4,4>::identity()}, 
+      inverseTransform_{utility::Matrix<4,4>::identity()},
+      cameraOrigin_{utility::Point(0, 0, 0)} {
       // Imagine a triangle made from the camera to the canvas(1 unit away), the angle of which it the fov.
       // We calculate the half width because we can make a right angle triangle with adjacent = 1 and angle = fov/2.
       const auto halfView = std::tan(fov / 2);
@@ -46,10 +51,18 @@ utility::Ray rayForPixel(const unsigned int x, const unsigned int y) const noexc
  */
 Canvas render(const World& world) noexcept;
 
+void setTransform(const utility::Matrix<4,4>& transform) noexcept {
+  transform_ = transform;
+  inverseTransform_ = inverse(transform_);
+  cameraOrigin_ = inverseTransform_ * utility::Point(0, 0, 0);  // Precompute origin
+}
+
 unsigned int numHorPixels_;
 unsigned int numVerPixels_;
 double fov_;
 utility::Matrix<4,4> transform_;
+utility::Matrix<4,4> inverseTransform_;  // Precomputed inverse
+utility::Tuple cameraOrigin_;            // Precomputed camera origin in world space
 double halfWidth_;
 double halfHeight_;
 double pixelSize_;
