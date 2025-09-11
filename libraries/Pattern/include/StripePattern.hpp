@@ -15,7 +15,7 @@ public:
     StripePattern(utility::Color a, utility::Color b) : a{a}, b{b}{}
 
     utility::Color drawPatternAt(const utility::Tuple& point) const noexcept {
-      if(static_cast<int>(std::floor(point.x())) % 2 == 0){
+      if(static_cast<int>(std::floor(point.x)) % 2 == 0){
         return a;
       } else {
         return b;

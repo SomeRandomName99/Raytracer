@@ -15,14 +15,12 @@ namespace raytracer {
 namespace utility {
 
 template <uint8_t rows, uint8_t cols> 
-class Matrix
+struct alignas(32) Matrix
 {
-private:
-  std::array<double, rows*cols> elements;
-public:
+  std::array<double, rows*cols> data;
   template<typename... T>
-  explicit Matrix(T... data) noexcept: elements{static_cast<double>(data)...}{};
-  explicit Matrix(const std::array<double, rows*cols>& data) noexcept : elements(data) {}
+  explicit Matrix(T... args) noexcept: data{static_cast<double>(args)...}{};
+  explicit Matrix(const std::array<double, rows*cols>& arr) noexcept : data(arr) {}
 
   bool operator==(const Matrix& rhs) const noexcept;
 
@@ -39,7 +37,7 @@ public:
 
 template <uint8_t rows, uint8_t cols>
 inline const double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t& column) const noexcept{
-  return elements[row*cols+column];
+  return data[row*cols+column];
 }
 
 template <uint8_t rows, uint8_t cols> 
@@ -49,9 +47,12 @@ inline double& Matrix<rows, cols>::at(const std::size_t& row, const std::size_t&
 
 template <uint8_t rows, uint8_t cols> 
 bool Matrix<rows, cols>::operator==(const Matrix& rhs) const noexcept{
-  return std::equal(std::execution::unseq, this->elements.cbegin(), this->elements.cend(),
-                                           rhs.elements.cbegin()  , rhs.elements.cend(), 
-                    floatNearlyEqual<double>);
+  for (size_t i = 0; i < data.size(); ++i) {
+    if (!floatNearlyEqual<double>(data[i], rhs.data[i])) {
+      return false;
+    }
+  }
+  return true;
 }
 
 template <uint8_t rows, uint8_t cols> 
@@ -65,7 +66,7 @@ template <uint8_t rows, uint8_t cols>
         }
       }
     }
-    this->elements.swap(results.elements);
+    this->data.swap(results.data);
     return *this;
   }
 
@@ -79,12 +80,19 @@ inline Matrix<rows, cols> operator*(Matrix<rows, cols> lhs, const Matrix<rows, c
 template <uint8_t rows, uint8_t cols>
 constexpr typename std::enable_if<rows == 4, Tuple>::type
 operator*(const Matrix<rows, cols>& lhs, const Tuple& rhs) noexcept {
-    return Tuple{
-        lhs.at(0, 0) * rhs.x() + lhs.at(0, 1) * rhs.y() + lhs.at(0, 2) * rhs.z() + lhs.at(0, 3) * rhs.w(),
-        lhs.at(1, 0) * rhs.x() + lhs.at(1, 1) * rhs.y() + lhs.at(1, 2) * rhs.z() + lhs.at(1, 3) * rhs.w(),
-        lhs.at(2, 0) * rhs.x() + lhs.at(2, 1) * rhs.y() + lhs.at(2, 2) * rhs.z() + lhs.at(2, 3) * rhs.w(),
-        lhs.at(3, 0) * rhs.x() + lhs.at(3, 1) * rhs.y() + lhs.at(3, 2) * rhs.z() + lhs.at(3, 3) * rhs.w()
-    };
+  Tuple result;
+  
+  const double* matrix_data = lhs.data.data();
+  
+  for (int i = 0; i < 4; ++i) {
+    double sum = 0.0;
+    for (int j = 0; j < 4; ++j) {
+      sum += matrix_data[i * 4 + j] * (&rhs.x)[j];
+    }
+    (&result.x)[i] = sum;
+  }
+  
+  return result;
 }
 
 template <uint8_t rows, uint8_t cols> 
@@ -160,8 +168,8 @@ inline double Matrix<4,4>::determinant() const noexcept{
   };
 
   return
-    this->at(0,0) * determinantCoefficients.x() + this->at(0,1) * determinantCoefficients.y() +
-    this->at(0,2) * determinantCoefficients.z() + this->at(0,3) * determinantCoefficients.w();
+    this->at(0,0) * determinantCoefficients.x + this->at(0,1) * determinantCoefficients.y +
+    this->at(0,2) * determinantCoefficients.z + this->at(0,3) * determinantCoefficients.w;
 }
 
 template <uint8_t rows, uint8_t cols>
@@ -263,10 +271,10 @@ inline inverse(const Matrix<rows,cols>& matrix) noexcept{
   const Tuple Inv2{(Vec0 * Fac1 - Vec1 * Fac3 + Vec3 * Fac5) * oneOverDeterminant * SignA};
   const Tuple Inv3{(Vec0 * Fac2 - Vec1 * Fac4 + Vec2 * Fac5) * oneOverDeterminant * SignB};
 
-  const Matrix<4,4> inverse{Inv0.x(), Inv0.y(), Inv0.z(), Inv0.w(),
-                            Inv1.x(), Inv1.y(), Inv1.z(), Inv1.w(),
-                            Inv2.x(), Inv2.y(), Inv2.z(), Inv2.w(),
-                            Inv3.x(), Inv3.y(), Inv3.z(), Inv3.w()}; 
+  const Matrix<4,4> inverse{Inv0.x, Inv0.y, Inv0.z, Inv0.w,
+                            Inv1.x, Inv1.y, Inv1.z, Inv1.w,
+                            Inv2.x, Inv2.y, Inv2.z, Inv2.w,
+                            Inv3.x, Inv3.y, Inv3.z, Inv3.w}; 
 
   return inverse;
 }

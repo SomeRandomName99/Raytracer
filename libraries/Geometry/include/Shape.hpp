@@ -35,43 +35,43 @@ public:
     inverseTransformation_ = inverse(transformation_);
   }
 
-  const utility::Matrix<4,4>& transformation() const noexcept {
+  const inline utility::Matrix<4,4>& transformation() const noexcept {
     return transformation_;
   }
 
-  const utility::Matrix<4,4>& inverseTransform() const noexcept {
+  const inline utility::Matrix<4,4>& inverseTransform() const noexcept {
     return inverseTransformation_;
   }
 
-  std::size_t id() const noexcept {
+  inline std::size_t id() const noexcept {
     return id_;
   }
 
-  const material::Material& material() const noexcept {
+  const inline material::Material& material() const noexcept {
     return material_;
   }
-  material::Material& material() noexcept {
+  inline material::Material& material() noexcept {
     return const_cast<material::Material&>(const_cast<const ShapeBase*>(this)->material());
   }
 
-  void setMaterial(material::Material& material) noexcept {
+  inline void setMaterial(material::Material& material) noexcept {
     material_ = std::move(material);
   }
-  void setMaterial(material::Material&& material) noexcept {
+  inline void setMaterial(material::Material&& material) noexcept {
     material_ = std::move(material);
   }
 
-  bool hasShadow() const noexcept {
+  inline bool hasShadow() const noexcept {
     return hasShadow_;
   }
-  void setShadow(bool hasShadow) noexcept {
+  inline void setShadow(bool hasShadow) noexcept {
     hasShadow_ = hasShadow;
   }
 
-  const std::shared_ptr<ShapeBase> parent() const noexcept {
+  const inline std::shared_ptr<ShapeBase> parent() const noexcept {
     return parent_;
   }
-  void setParent(std::shared_ptr<ShapeBase> parent) noexcept {
+  inline void setParent(std::shared_ptr<ShapeBase> parent) noexcept {
     parent_ = std::move(parent);
   }
 
@@ -131,7 +131,7 @@ inline utility::Tuple objectNormalToWorldNormal(const ShapeBase* shape, const ut
   auto normal = shape->inverseTransform().transpose() * objectNormal;
 
   if (shape->parent() == nullptr) {
-    normal.w() = 0;
+    normal.w = 0;
     normal = normal.normalize();
     return normal;
   }

@@ -15,10 +15,7 @@ bool Color::operator==(const Color& rhs) const noexcept{
   return this->_color==rhs._color;
 }
 
-Color Color::operator+(const Color& rhs) const noexcept{
-  const auto newTuple = this->_color + rhs._color;
-  return Color(newTuple.x(), newTuple.y(), newTuple.z()); 
-}
+
 
 Color Color::operator+=(const Color& rhs) noexcept {
   this->_color = this->_color + rhs._color;
@@ -27,12 +24,12 @@ Color Color::operator+=(const Color& rhs) noexcept {
 
 Color Color::operator-(const Color& rhs) const noexcept{
   const auto newTuple = this->_color - rhs._color;
-  return Color(newTuple.x(), newTuple.y(), newTuple.z()); 
+  return Color(newTuple.x, newTuple.y, newTuple.z); 
 }
 
 Color Color::operator*(const double& rhs) const noexcept{
   const auto newTuple = this->_color * rhs;
-  return Color(newTuple.x(), newTuple.y(), newTuple.z());
+  return Color(newTuple.x, newTuple.y, newTuple.z);
 }
 
 Color Color::operator*(const Color& rhs) const noexcept{ // Hadamarad Product
@@ -41,24 +38,24 @@ Color Color::operator*(const Color& rhs) const noexcept{ // Hadamarad Product
 
 // Color setters and getters
 const double& Color::red() const noexcept{
-  return _color.x();
+  return _color.x;
 }
 void Color::red(const double& val) noexcept {
-  _color.x() = val;
+  _color.x = val;
 }
 
 const double& Color::green() const noexcept{
-  return _color.y();
+  return _color.y;
 }
 void Color::green(const double& val) noexcept {
-  _color.y() = val;
+  _color.y = val;
 }
 
 const double& Color::blue() const noexcept{
-  return _color.z();
+  return _color.z;
 }
 void Color::blue(const double& val) noexcept {
-  _color.z() = val;
+  _color.z = val;
 }
 
 Color hexColor(unsigned int hex) noexcept{

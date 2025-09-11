@@ -22,7 +22,7 @@ class MockTestPattern {
 public:
   MockTestPattern() = default;
   utility::Color drawPatternAt(const utility::Tuple& point) const noexcept {
-    return utility::Color(point.x(), point.y(), point.z());
+    return utility::Color(point.x, point.y, point.z);
   }
 };
 

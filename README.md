@@ -162,7 +162,7 @@ Converted `Tuple` operations to inline header-only methods:
 
 ```cpp
 inline double dot(const Tuple rhs) const noexcept 
-    return x()rhs.x()  y()rhs.y()  z()rhs.z()  w()rhs.w()
+    return x()rhs.x  y()rhs.y  z()rhs.z  w()rhs.w
 
 ```
 

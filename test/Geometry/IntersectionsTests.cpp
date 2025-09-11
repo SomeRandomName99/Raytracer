@@ -180,8 +180,8 @@ TEST_F(IntersectionTest, UnderPointOffset){
   xs.pushBack(i);
   const auto comps = geometry::prepareComputations(i, r, xs);
 
-  EXPECT_TRUE(comps.underPoint.z() > SHADOW_OFFSET/2);
-  EXPECT_TRUE(comps.point.z() < comps.underPoint.z());
+  EXPECT_TRUE(comps.underPoint.z > SHADOW_OFFSET/2);
+  EXPECT_TRUE(comps.point.z < comps.underPoint.z);
 }
 
 // =========== Schlick Approximation Test ===========

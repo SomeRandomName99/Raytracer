@@ -43,7 +43,7 @@ int main(void){
   for (size_t x = 0; x < canvas.width; x++){
     for(size_t y = 0; y < canvas.height; y++){
       utility::Tuple pointOnWall = pixelToWorldCoords(x, y, canvasSize, canvasToWallConversionRatio);
-      pointOnWall.z() = wallZOffset;
+      pointOnWall.z = wallZOffset;
 
       utility::Ray firedRay{rayOrigin, (pointOnWall - rayOrigin).normalize()};
       auto intersections = sphere.intersect(firedRay);

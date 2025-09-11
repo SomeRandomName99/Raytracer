@@ -18,25 +18,25 @@ Cylinder::Cylinder(double minimum, double maximum, bool closed) noexcept : minim
 }
 
 static inline bool isIntersectionWithinRadius(const utility::Ray &ray, double t) noexcept {
-  auto x = ray.origin_.x() + t * ray.direction_.x();
-  auto z = ray.origin_.z() + t * ray.direction_.z();
+  auto x = ray.origin_.x + t * ray.direction_.x;
+  auto z = ray.origin_.z + t * ray.direction_.z;
   return (x * x + z * z) <= 1; // radius is always considered to be 1
 }
 
 static inline void intersectCaps(const Cylinder &cylinder, const utility::Ray &ray, utility::Arena<Intersection>& intersections) {
-  if (!cylinder.closed_ || utility::floatNearlyEqual(ray.direction_.y(), 0.0f)) { return; }
+  if (!cylinder.closed_ || utility::floatNearlyEqual(ray.direction_.y, 0.0f)) { return; }
 
-  auto tLowerCap = (cylinder.minimum_ - ray.origin_.y()) / ray.direction_.y();
+  auto tLowerCap = (cylinder.minimum_ - ray.origin_.y) / ray.direction_.y;
   if (isIntersectionWithinRadius(ray, tLowerCap)) { intersections.pushBack(Intersection{&cylinder, tLowerCap}); }
 
-  auto tUpperCap = (cylinder.maximum_ - ray.origin_.y()) / ray.direction_.y();
+  auto tUpperCap = (cylinder.maximum_ - ray.origin_.y) / ray.direction_.y;
   if (isIntersectionWithinRadius(ray, tUpperCap)) { intersections.pushBack(Intersection{&cylinder, tUpperCap}); }
 
 }
 
 void Cylinder::localIntersect(const utility::Ray &transformedRay, utility::Arena<Intersection>& intersections) const noexcept {
-  auto a = transformedRay.direction_.x() * transformedRay.direction_.x() + 
-            transformedRay.direction_.z() * transformedRay.direction_.z();
+  auto a = transformedRay.direction_.x * transformedRay.direction_.x + 
+            transformedRay.direction_.z * transformedRay.direction_.z;
   if (utility::floatNearlyEqual(a, 0.0f)) {
       if (closed_) {
           intersectCaps(*this, transformedRay, intersections);
@@ -44,10 +44,10 @@ void Cylinder::localIntersect(const utility::Ray &transformedRay, utility::Arena
       return;
   }
 
-  auto b = 2 * transformedRay.origin_.x() * transformedRay.direction_.x() + 
-            2 * transformedRay.origin_.z() * transformedRay.direction_.z();
-  auto c = transformedRay.origin_.x() * transformedRay.origin_.x() +
-            transformedRay.origin_.z() * transformedRay.origin_.z() 
+  auto b = 2 * transformedRay.origin_.x * transformedRay.direction_.x + 
+            2 * transformedRay.origin_.z * transformedRay.direction_.z;
+  auto c = transformedRay.origin_.x * transformedRay.origin_.x +
+            transformedRay.origin_.z * transformedRay.origin_.z 
             - 1;
 
   auto discriminant = b * b - 4 * a * c;
@@ -59,20 +59,20 @@ void Cylinder::localIntersect(const utility::Ray &transformedRay, utility::Arena
 
   auto isBetweenMinAndMax = [this](double y) { return y > minimum_ && y < maximum_; };
 
-  auto firstIntersectionY = transformedRay.origin_.y() + t0 * transformedRay.direction_.y();
+  auto firstIntersectionY = transformedRay.origin_.y + t0 * transformedRay.direction_.y;
   if (isBetweenMinAndMax(firstIntersectionY)){intersections.pushBack(Intersection{this, t0});}
 
-  auto secondIntersectionY = transformedRay.origin_.y() + t1 * transformedRay.direction_.y();
+  auto secondIntersectionY = transformedRay.origin_.y + t1 * transformedRay.direction_.y;
   if (isBetweenMinAndMax(secondIntersectionY)){intersections.pushBack(Intersection{this, t1});}
 
   intersectCaps(*this, transformedRay, intersections);
 }
 
 utility::Tuple Cylinder::localNormalAt(const utility::Tuple &objectPoint) const noexcept {
-  auto distanceFromYSquared = objectPoint.x() * objectPoint.x() + objectPoint.z() * objectPoint.z();
-  if (distanceFromYSquared < 1 && objectPoint.y() >= maximum_ - utility::EPSILON<double>) { return utility::Vector(0, 1, 0); }
-  else if (distanceFromYSquared < 1 && objectPoint.y() <= minimum_ + utility::EPSILON<double>) { return utility::Vector(0, -1, 0); }
-  return utility::Vector(objectPoint.x(), 0, objectPoint.z());
+  auto distanceFromYSquared = objectPoint.x * objectPoint.x + objectPoint.z * objectPoint.z;
+  if (distanceFromYSquared < 1 && objectPoint.y >= maximum_ - utility::EPSILON<double>) { return utility::Vector(0, 1, 0); }
+  else if (distanceFromYSquared < 1 && objectPoint.y <= minimum_ + utility::EPSILON<double>) { return utility::Vector(0, -1, 0); }
+  return utility::Vector(objectPoint.x, 0, objectPoint.z);
 }
 
 std::shared_ptr<Cylinder> makeCylinder() noexcept {

@@ -15,7 +15,7 @@ public :
     CheckerPattern(utility::Color a, utility::Color b) : a{a}, b{b}{}
 
     utility::Color drawPatternAt(const utility::Tuple& point) const noexcept {
-        auto sum = std::floor(point.x()) + std::floor(point.y()) + std::floor(point.z());
+        auto sum = std::floor(point.x) + std::floor(point.y) + std::floor(point.z);
         if (std::fmod(sum, 2) == 0) {
             return a;
         } else {

@@ -14,10 +14,10 @@ Plane::Plane() noexcept {
 }
 
 void Plane::localIntersect(const utility::Ray &transformedRay, utility::Arena<Intersection>& out) const noexcept {
-    if (std::abs(transformedRay.direction_.y()) < utility::EPSILON<double>) {
+    if (std::abs(transformedRay.direction_.y) < utility::EPSILON<double>) {
         return;
     }
-    double t = -transformedRay.origin_.y() / transformedRay.direction_.y();
+    double t = -transformedRay.origin_.y / transformedRay.direction_.y;
     out.pushBack(Intersection{this, t});
 }
 

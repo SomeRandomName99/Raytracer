@@ -15,7 +15,7 @@ public:
 
     utility::Color drawPatternAt(const utility::Tuple& point) const noexcept {
       auto distance = b - a;
-      auto fraction = point.x() - std::floor(point.x());
+      auto fraction = point.x - std::floor(point.x);
       return a + distance * fraction;
     }
     utility::Color a;

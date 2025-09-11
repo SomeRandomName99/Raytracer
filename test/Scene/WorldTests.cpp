@@ -183,8 +183,8 @@ TEST_F(WorldTest, HitOffsetsPointOfIntersection){
   xs.pushBack(i);
   const auto comps = prepareComputations(i, r, xs);
 
-  EXPECT_LT(comps.overPoint.z(), -SHADOW_OFFSET / 2);
-  EXPECT_GT(comps.point.z(), comps.overPoint.z());
+  EXPECT_LT(comps.overPoint.z, -SHADOW_OFFSET / 2);
+  EXPECT_GT(comps.point.z, comps.overPoint.z);
 }
 
 TEST_F(WorldTest, NoSHadowWhenObjectHasNoShadowProperty){
@@ -314,7 +314,7 @@ class MockTestPattern {
 public:
   MockTestPattern() = default;
   utility::Color drawPatternAt(const utility::Tuple& point) const noexcept {
-    return utility::Color(point.x(), point.y(), point.z());
+    return utility::Color(point.x, point.y, point.z);
   }
 };
 static bool operator==([[maybe_unused]]const MockTestPattern& lhs, [[maybe_unused]]const MockTestPattern& rhs) noexcept{

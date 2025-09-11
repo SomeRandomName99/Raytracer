@@ -13,7 +13,10 @@ public:
    Color(double red, double green, double blue) noexcept;
 
   bool operator==(const Color& rhs) const noexcept;
-  Color operator+(const Color& rhs) const noexcept;
+  inline Color operator+(const Color& rhs) const noexcept {
+    const auto newTuple = this->_color + rhs._color;
+    return Color(newTuple.x, newTuple.y, newTuple.z);
+  }
   Color operator+=(const Color& rhs) noexcept;
   Color operator-(const Color& rhs) const noexcept;
   Color operator*(const double& rhs) const noexcept;

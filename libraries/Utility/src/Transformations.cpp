@@ -74,13 +74,13 @@ namespace transformations{
     const auto trueUpVector  = leftVector.cross(forwardVector);
     
     const auto orientation = Matrix<4,4>{
-      leftVector.x(),      leftVector.y(),     leftVector.z(),    0.0f,
-      trueUpVector.x(),    trueUpVector.y(),   trueUpVector.z(),  0.0f,
-      -forwardVector.x(), -forwardVector.y(), -forwardVector.z(), 0.0f,
+      leftVector.x,      leftVector.y,     leftVector.z,    0.0f,
+      trueUpVector.x,    trueUpVector.y,   trueUpVector.z,  0.0f,
+      -forwardVector.x, -forwardVector.y, -forwardVector.z, 0.0f,
       0.0f,                0.0f,               0.0f,              1.0
     };
 
-    return orientation * translation(-from.x(), -from.y(), -from.z());
+    return orientation * translation(-from.x, -from.y, -from.z);
   }
 }
 

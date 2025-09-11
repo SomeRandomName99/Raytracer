@@ -19,8 +19,8 @@ public:
   Perturb(PatternT pattern) noexcept : pattern_{std::move(pattern)} {}
 
   utility::Color drawPatternAt(const utility::Tuple& point) const noexcept{
-    auto noise = stb_perlin_noise3(point.x(), point.y(), point.z(), 0, 0, 0);
-    auto perturbedPoint = point + noise;
+    auto noise = stb_perlin_noise3(point.x, point.y, point.z, 0, 0, 0);
+    auto perturbedPoint = point + utility::Vector(noise, noise, noise);
     return pattern_.drawPatternAt(perturbedPoint);
   }
 
