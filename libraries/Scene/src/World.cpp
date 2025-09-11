@@ -28,13 +28,17 @@ void World::intersect(const Ray& ray, Arena<Intersection>& intersections) const 
 }
 
 bool World::intersectShadow(const Ray& ray, double distanceToLight, Arena<Intersection>& intersections) const noexcept{
-  return std::ranges::any_of(objects_, [&](const auto &object)
-  {
+  for(const auto& object : objects_){
+    if(!object->hasShadow()) continue;
     intersections.clear();
     object->intersect(ray, intersections);
-    const auto hit = geometry::hit(intersections);
-    return hit && hit->object->hasShadow() && hit->dist > 0.0f && hit->dist < distanceToLight; 
-  });
+    for(const auto& intersection : intersections){
+      if(intersection.dist > 0.0f && intersection.dist < distanceToLight){
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 Color World::shadeHit(const Computations& comps, Arena<Intersection>& intersections, size_t recursionLimit) const noexcept{
@@ -44,9 +48,11 @@ Color World::shadeHit(const Computations& comps, Arena<Intersection>& intersecti
   for(const auto& light : this->lights_) {
     surfaceColor += scene::lighting(comps.intersection.object, light, comps.point, comps.eyeVector, 
                                     comps.normalVector, this->isShadowed(light, comps.overPoint, intersections));
-    reflectedColor += this->reflectedColor(comps, intersections, recursionLimit);
-    refractedColor += this->refractedColor(comps, intersections, recursionLimit);
   }
+
+  reflectedColor += this->reflectedColor(comps, intersections, recursionLimit);
+  refractedColor += this->refractedColor(comps, intersections, recursionLimit);
+
   if(comps.intersection.object->material().reflectance() > 0 && comps.intersection.object->material().transparency() > 0){
     auto reflectance = geometry::schlick(comps);
     return surfaceColor + reflectedColor * reflectance + refractedColor * (1 - reflectance);

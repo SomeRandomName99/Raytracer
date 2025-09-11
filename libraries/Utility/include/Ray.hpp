@@ -19,8 +19,9 @@ public:
   Tuple direction_;
 };
 
-
-Ray transform(const Ray &ray, const Matrix<4,4> &transformation) noexcept;
+inline Ray transform(const Ray &ray, const Matrix<4,4> &transformation) noexcept {
+  return Ray(transformation * ray.origin_, transformation * ray.direction_);
+}
 
 } // namespace utility
 } // namespace raytracer
