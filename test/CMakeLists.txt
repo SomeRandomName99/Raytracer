@@ -5,12 +5,7 @@ add_executable(${This} "")
 target_link_libraries(${This} PUBLIC
   GTest::gtest_main
   GTest::gmock_main
-  Canvas
-  Geometry
-  Utility
   Scene
-  Material
-  Pattern
 )
 
 add_subdirectory(Canvas)
