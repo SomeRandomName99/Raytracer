@@ -23,7 +23,7 @@ bool operator==(Intersection const& lhs, Intersection const& rhs) noexcept{
 Computations prepareComputations(Intersection intersection, const utility::Ray& ray, 
                                  const Arena<Intersection>& intersections) noexcept{
   Computations computations;
-  static Arena<const geometry::ShapeBase*> unexitedShapes(MB(1));
+  static thread_local Arena<const geometry::ShapeBase*> unexitedShapes(MB(1));
   unexitedShapes.clear();
 
   for(const auto& i: intersections){
