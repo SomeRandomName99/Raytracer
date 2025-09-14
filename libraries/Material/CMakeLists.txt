@@ -6,6 +6,7 @@ target_sources(
     src/Material.cpp
   PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/include/Material.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/Pattern.hpp
 )
 
 target_include_directories(
@@ -18,5 +19,4 @@ target_link_libraries(
   Material
   PUBLIC
     Utility
-    Pattern
 )
