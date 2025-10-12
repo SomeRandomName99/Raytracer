@@ -45,16 +45,6 @@ struct Computations{
 };
 
 
-Computations prepareComputations(Intersection intersection, const utility::Ray& ray, 
-                                 const utility::Arena<Intersection>& intersections) noexcept;
-
-/**
- * @brief A function that returns the intersection with the least distance.
- * 
- * This is used to find the first object that was hit in order to display it first.
- */
-std::optional<Intersection> hit(const utility::Arena<Intersection>& intersections) noexcept;
-
 /**
  * @brief Computes the Schlick approximation for the Fresnel effect.
  *
