@@ -13,27 +13,31 @@ namespace scene {
 using utility::Arena;
 using utility::Ray;
 using geometry::Intersection;
-using geometry::Computations;
 using utility::Color;
-using geometry::hit;
 using utility::Tuple;
 using utility::Point;
 
-void World::intersect(const Ray& ray, Arena<Intersection>& intersections) const noexcept{
-  intersections.clear();
+// Buffer reused across recursive calls to avoid allocations
+static thread_local Arena<Intersection> intersectionsBuffer(GB(10));
+
+void intersect(const Ray& ray) const noexcept{
+  intersectionsBuffer.clear();
   for(const auto& object : objects_){
-    object->intersect(ray, intersections);
+    object->intersect(ray, intersectionsBuffer);
   }
-  std::ranges::sort(intersections, {}, [](const auto& intersection){ return intersection.dist; });
 }
 
-bool World::intersectShadow(const Ray& ray, double distanceToLight, Arena<Intersection>& intersections) const noexcept{
+inline bool isShadowed(const PointLight& light, const Tuple& point) const noexcept{
+  const auto pointToLightVector = light.position - point;
+  const auto pointToLightDistance = pointToLightVector.magnitude();
+  const auto pointToLightDirection = pointToLightVector.normalize();
+  const auto pointToLightRay = Ray(point, pointToLightDirection);
+
   for(const auto& object : objects_){
     if(!object->hasShadow()) continue;
-    intersections.clear();
-    object->intersect(ray, intersections);
-    for(const auto& intersection : intersections){
-      if(intersection.dist > 0.0f && intersection.dist < distanceToLight){
+    intersect(pointToLightRay);
+    for(const auto& intersection : intersectionsBuffer){
+      if(intersection.dist > 0.0f && intersection.dist < pointToLightDistance){
         return true;
       }
     }
@@ -41,40 +45,83 @@ bool World::intersectShadow(const Ray& ray, double distanceToLight, Arena<Inters
   return false;
 }
 
-Color World::shadeHit(const Computations& comps, Arena<Intersection>& intersections, size_t recursionLimit) const noexcept{
-  auto surfaceColor   = Color{0,0,0};
-  auto reflectedColor = Color{0,0,0};
-  auto refractedColor = Color{0,0,0};
-  for(const auto& light : this->lights_) {
-    surfaceColor += scene::lighting(comps.intersection.object, light, comps.point, comps.eyeVector, 
-                                    comps.normalVector, this->isShadowed(light, comps.overPoint, intersections));
-  }
-
-  reflectedColor += this->reflectedColor(comps, intersections, recursionLimit);
-  refractedColor += this->refractedColor(comps, intersections, recursionLimit);
-
-  if(comps.intersection.object->material().reflectance() > 0 && comps.intersection.object->material().transparency() > 0){
-    auto reflectance = geometry::schlick(comps);
-    return surfaceColor + reflectedColor * reflectance + refractedColor * (1 - reflectance);
+Color lighting(const geometry::ShapeBase* object, const PointLight& light, const Tuple& point, 
+                        const Tuple& eyeVector, const Tuple& normalVector, const bool inShadow) noexcept{
+  Color color;
+  if (object->material().pattern()) {
+    color = (*object->material().pattern()).drawPatternAt(object, point);
   } else {
-    return surfaceColor + reflectedColor + refractedColor;
+    color = object->material().surfaceColor();
   }
+  const auto effectiveColor = color * light.intensity;
+  const auto lightVector = (light.position - point).normalize();
+  const auto ambient = effectiveColor * object->material().ambient();
+
+  if (inShadow) {
+    return ambient; // specular and diffuse lighting are not relevant if the point is in shadow
+  }
+
+  auto lightDotNormal = lightVector.dot(normalVector);
+  Color diffuse;
+  Color specular;
+  if (lightDotNormal < 0) {
+    diffuse = Color(0,0,0);
+    specular = Color(0,0,0);
+  } else {
+    diffuse = effectiveColor * object->material().diffuse() * lightDotNormal;
+
+    auto reflectVector = (-lightVector).reflect(normalVector);
+    auto reflectDotEye = reflectVector.dot(eyeVector);
+    if (reflectDotEye <= 0) {
+      specular = Color(0,0,0);
+    } else {
+      auto factor = std::pow(reflectDotEye, object->material().shininess());
+      specular = light.intensity * object->material().specular() * factor;
+    }
+  }
+
+  return ambient + diffuse + specular;
 }
 
-Color World::reflectedColor(const Computations& comps, Arena<Intersection>& intersections, size_t recursionLimit) const noexcept{
+Color reflect(const Tuple& reflectVector, const Tuple& surfaceOffsetPoint, size_t recursionLimit) const noexcept{
   if(comps.intersection.object->material().reflectance() == 0) return Color{0,0,0};
   else if (recursionLimit == 0) return Color{0,0,0};
 
-  auto reflectedRay = utility::Ray(comps.overPoint, comps.reflectVector);
-  intersections.clear();
-  return this->colorAt(reflectedRay, intersections, recursionLimit - 1) * comps.intersection.object->material().reflectance();
+  auto reflectedRay = Ray(comps.surfaceOffsetPoint, comps.reflectVector);
+  return this->colorAt(reflectedRay, recursionLimit - 1) * comps.intersection.object->material().reflectance();
 }
 
-Color World::refractedColor(const Computations& comps, Arena<Intersection>& intersections, size_t recursionLimit) const noexcept{
+Color refract(const Tuple& normalVector, const Tuple& eyeVector, const Tuple& internalOffsetPoint, size_t recursionLimit) const noexcept{
   if(comps.intersection.object->material().transparency() == 0) return Color{0,0,0};
   if(recursionLimit == 0) return Color{0,0,0};
 
-  auto nRatio = comps.n1 / comps.n2;
+  static thread_local Arena<const geometry::ShapeBase*> unexitedShapes(GB(10));
+  unexitedShapes.clear();
+  float n1,n2; 
+  for(const auto& i: intersections){
+    if(i == intersection){
+      size_t size = unexitedShapes.size;
+      n1 = size == 0 ? 1.0 : unexitedShapes[size - 1]->material().refractiveIndex();
+    }
+
+    auto found = std::find(unexitedShapes.begin(), unexitedShapes.end(), i.object);
+    if(found != unexitedShapes.end()){
+      size_t size = unexitedShapes.size;
+      size_t index = found - unexitedShapes.begin();
+      unexitedShapes[index] = unexitedShapes[size - 1];
+      unexitedShapes.popBack();
+    } else {
+      unexitedShapes.pushBack(i.object);
+    }
+
+    if(i == intersection){
+      size_t size = unexitedShapes.size;
+      n2 = size == 0 ? 1.0 : unexitedShapes[size - 1]->material().refractiveIndex();
+      break;
+    }
+  }
+
+  auto nRatio = n1/n2;
   auto cosI = comps.eyeVector.dot(comps.normalVector);
   auto sin2T = nRatio * nRatio * (1 - cosI * cosI); // basically solving snell's law
 
@@ -84,43 +131,51 @@ Color World::refractedColor(const Computations& comps, Arena<Intersection>& inte
   // Calculate refracted ray then its color
   auto cosT = std::sqrt(1.0 - sin2T);
   auto direction = comps.normalVector * (nRatio * cosI - cosT) - comps.eyeVector * nRatio;
-  auto refractedRay = utility::Ray(comps.underPoint, direction);
+  auto refractedRay = Ray(comps.internalOffsetPoint, direction);
 
-  intersections.clear();
-  return this->colorAt(refractedRay, intersections, recursionLimit - 1) * comps.intersection.object->material().transparency();
+  return this->colorAt(refractedRay, recursionLimit - 1) * comps.intersection.object->material().transparency();
 }
 
-Color World::colorAt(const Ray& ray, Arena<Intersection>& intersections, size_t recursionLimit) const noexcept{
+Color World::colorAt(const Ray& ray, size_t recursionLimit) const noexcept{
   this->intersect(ray, intersections);
-  const auto hit = geometry::hit(intersections);
-  if (!hit.has_value()) return utility::Color{0,0,0};
-  const auto intersect_computations = geometry::prepareComputations(*hit, ray, intersections);
-  return this->shadeHit(intersect_computations, intersections, recursionLimit);
-}
+  std::ranges::sort(intersections, {}, [](const auto& intersection){ return intersection.dist; });
+  Intersection hit{nullptr, std::numeric_limits<double>::min()};
+  for(auto& i : intersections){
+    if(i.dist > hit.dist){
+      hit = i;
+    }
+  }
+  if (hit.dist < 0.0f) return Color{0,0,0};
 
-bool World::isShadowed(const PointLight& light, const Tuple& point, Arena<Intersection>& intersections) const noexcept{
-  const auto pointToLightVector = light.position_ - point;
-  const auto pointToLightDistance = pointToLightVector.magnitude();
-  const auto pointToLightDirection = pointToLightVector.normalize();
-  const auto pointToLightRay = Ray(point, pointToLightDirection);
+  // Calculate shading info
+  auto point = ray.position(hit.dist);
+  auto normalVector = hit.object->normalAt(point);
+  auto reflectVector = ray.direction_.reflect(normalVector);
+  auto eyeVector = -ray.direction_;
+  if(normalVector.dot(eyeVector) < 0){
+    normalVector = -normalVector;
+  }
+  auto surfaceOffsetPoint  = point + normalVector * SHADOW_OFFSET;
+  auto internalOffsetPoint = point - normalVector * SHADOW_OFFSET;
 
-  return this->intersectShadow(pointToLightRay, pointToLightDistance, intersections);
-}
+  auto surfaceColor   = Color{0,0,0};
+  auto refractedColor = Color{0,0,0};
+  auto reflectedColor = Color{0,0,0};
+  /* Refract be called first because any recursive call will overwrite the intersections buffer and
+     we will lose the ability to calculate the refractive indices. */ 
+  refractedColor += refract(reflectVector, surfaceOffsetPoint, recursionLimit); 
+  reflectedColor += reflect(normalVector, eyeVector, internalOffsetPoint, recursionLimit);
+  for(const auto& light : this->lights_) {
+    surfaceColor += scene::lighting(comps.intersection.object, light, comps.point, comps.eyeVector, 
+                                    comps.normalVector, this->isShadowed(light, comps.surfaceOffsetPoint));
+  }
 
-World defaultWorld() noexcept{
-  World world;
-
-  const auto light = scene::PointLight{Color{1,1,1}, Point(-10,10,-10)};
-  world.lights_.push_back(light);
-
-  auto s1 = geometry::makeSphere();
-  s1->setMaterial(material::Material(Color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2));
-  auto s2 = geometry::makeSphere();
-  s2->setTransform(utility::transformations::scaling(0.5, 0.5, 0.5));
-  world.objects_.emplace_back(s1);
-  world.objects_.emplace_back(s2);
-
-  return world;
+  if(comps.intersection.object->material().reflectance() > 0 && comps.intersection.object->material().transparency() > 0){
+    auto reflectance = geometry::schlick(comps);
+    return surfaceColor + reflectedColor * reflectance + refractedColor * (1 - reflectance);
+  } else {
+    return surfaceColor + reflectedColor + refractedColor;
+  } 
 }
 
 } // namespace scene

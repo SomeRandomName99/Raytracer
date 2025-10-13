@@ -20,7 +20,6 @@ bool operator==(Intersection const& lhs, Intersection const& rhs) noexcept{
   return utility::floatNearlyEqual(lhs.dist, rhs.dist) && lhs.object == rhs.object;
 }
 
-
 double schlick(const Computations& comps) noexcept{
   auto cos = comps.eyeVector.dot(comps.normalVector);
   if(comps.n1 > comps.n2){
