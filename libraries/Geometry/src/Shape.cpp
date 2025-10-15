@@ -64,8 +64,8 @@ std::pair<float, float> computeCircularIntersectionYCoords(float a, float b, flo
   return {y0, y1};
 }
 
-void rayObjectIntersection(const Ray& objectSpaceRay, const WorldObject& object, 
-                           Arena<Intersection>& intersections, std::vector<circularSolidData>& circularObjectData) noexcept{
+void localIntersect(const Ray& objectSpaceRay, const WorldObject& object, 
+                    Arena<Intersection>& intersections, std::vector<circularSolidData>& circularObjectData) noexcept{
   auto& dir = objectSpaceRay.direction;
   auto& orig = objectSpaceRay.origin;
   switch(object.shapeTag.type) {
@@ -123,14 +123,14 @@ void rayObjectIntersection(const Ray& objectSpaceRay, const WorldObject& object,
       auto b = 2*orig.x*dir.x + 2*orig.z*dir.z;
       auto c = orig.x*orig.x + orig.z*orig.z - 1;
       if(floatNearlyEqual(a, 0.f)){ // ray is parallel to the y axis
-        intersectCircularCaps(orig, dir, min, max, intersections);
+        intersectCircularCaps(orig, dir, min, max, closed, intersections);
         return;
       }
 
       auto [y0, y1] = computeCircularIntersectionYCoords(a, b, c, orig, dir);
       if(y0 > min && y0 < max){intersections.pushBack(Intersection{&object, t0});}
       if(y1 > min && y1 < max){intersections.pushBack(Intersection{&object, t1});}
-      intersectCircularCaps(orig, dir, min, max, intersections);
+      intersectCircularCaps(orig, dir, min, max, closed, intersections);
       break;
 
     case ShapeType::Cone:
@@ -142,7 +142,7 @@ void rayObjectIntersection(const Ray& objectSpaceRay, const WorldObject& object,
       auto c = orig.x*orig.x - orig.y*orig.y + orig.z*orig.z;
 
       if(floatNearlyEqual(a, 0.f)){ // ray is parallel to one of the cone's halves
-        intersectCircularCaps(orig, dir, min, max, intersections);
+        intersectCircularCaps(orig, dir, min, max, closed, intersections);
         if(floatNearlyEqual(b, 0.f)){ return; }
         intersections.pushBack(Intersection{&object, -c / (2 * b)});
         return;
@@ -151,7 +151,7 @@ void rayObjectIntersection(const Ray& objectSpaceRay, const WorldObject& object,
       auto [y0, y1] = computeCircularIntersectionYCoords(a, b, c, orig, dir);
       if(y0 > min && y0 < max){intersections.pushBack(Intersection{&object, t0});}
       if(y1 > min && y1 < max){intersections.pushBack(Intersection{&object, t1});}
-      intersectCircularCaps(orig, dir, min, max, intersections);
+      intersectCircularCaps(orig, dir, min, max, closed, intersections);
       break;
 
     case ShapeType::Group:
