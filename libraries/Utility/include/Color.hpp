@@ -32,10 +32,10 @@ public:
   const double& blue() const noexcept;
   void blue(const double& val) noexcept;
 
-  utility::Tuple  _color;
+  Tuple  _color;
 };
 
-utility::Color hexColor(unsigned int hex) noexcept;
+Color hexColor(unsigned int hex) noexcept;
 
 } // namespace utility
 } // namespace raytracer  
