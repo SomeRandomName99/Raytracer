@@ -7,17 +7,15 @@
 namespace raytracer {
 namespace utility {
 
-template <typename T> 
-requires std::floating_point<T> 
-const T EPSILON = 1e-4;
-
 template <typename T>
 concept floating = std::floating_point<T>;
 
 template <floating T> 
+const T EPSILON = 1e-4;
+
+template <floating T> 
 bool floatNearlyEqual(T a, T b) noexcept{
-  // TODO: Investigate best practices and how to do things using machine epsilon
-  return (std::fabs(a-b) < EPSILON<T>);
+  return (std::fabs(a-b) < (EPSILON<T> * std::max(std::fabs(a), std::fabs(b))));
 }
 
 template <floating T, floating U> 
