@@ -26,11 +26,11 @@ struct ShapeTypeTag{
 
 struct WorldObject {
   ShapeTypeTag shapeTag;
-  Material material;
   AABB boundingBox;
   Matrix<4,4> transform = Matrix<4,4>::identity();
   Matrix<4,4> inverseTransform = Matrix<4,4>::identity();
-  int32_t parentIndex = -1;
+  int16_t parentIndex = -1;
+  int16_t MaterialIndex = -1;
   bool hasShadow = true;
 };
 
@@ -44,9 +44,8 @@ struct circularSolidData {
   bool closed = true;
 };
 
-void calculateBoundingBox(SceneNode& node) noexcept;
-void rayObjectIntersection(const Tuple& objectSpaceRay, const WorldObject& object, Arena<Intersection>& intersections) noexcept; 
-
+void localIntersect(const Ray& objectSpaceRay, const WorldObject& object, Arena<Intersection>& intersections) noexcept; 
+Tuple normalAt(const WorldObject& object, const Tuple& point) noexcept;
 } // namespace raytracer::geometry
 
 #endif // SHAPE_HPP
