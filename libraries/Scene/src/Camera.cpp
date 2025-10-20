@@ -30,14 +30,12 @@ Canvas Camera::render(const World& world) noexcept{
 
   std::vector<size_t> pixelIndices(this->numHorPixels_ * this->numVerPixels_);
   std::iota(pixelIndices.begin(), pixelIndices.end(), 0);
-  thread_local Arena<geometry::Intersection> intersectionsArena(MB(1));
   for_each(std::execution::par_unseq, pixelIndices.begin(), pixelIndices.end(),
            [this, &image, &world](const auto index) {
              const auto x = index % this->numHorPixels_;
              const auto y = index / this->numHorPixels_;
              const auto ray = this->rayForPixel(x, y);
-             intersectionsArena.clear();
-             const auto color = world.colorAt(ray, intersectionsArena);
+             const auto color = world.colorAt(ray, world);
              image.pixelWrite(color, x, y);
            });
 
