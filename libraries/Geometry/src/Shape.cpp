@@ -45,7 +45,7 @@ static inline void addCircularSideIntersections(float a, float b, float c, const
 }
 
 void localIntersect(const Ray& objectSpaceRay, const WorldObject& object, 
-                    Arena<Intersection>& intersections, std::vector<circularSolidData>& circularObjectData) noexcept{
+                    Arena<Intersection>& intersections, const std::vector<CircularSolidData>& circularObjectData) noexcept{
   auto& dir = objectSpaceRay.direction;
   auto& orig = objectSpaceRay.origin;
   switch(object.shapeTag.type) {
@@ -156,7 +156,7 @@ void localIntersect(const Ray& objectSpaceRay, const WorldObject& object,
   }
 }
 
-Tuple normalAt(const WorldObject& object, const Tuple& point, std::vector<circularSolidData>& circularObjectData) noexcept{
+Tuple normalAt(const WorldObject& object, const Tuple& point, const std::vector<CircularSolidData>& circularObjectData) noexcept{
   auto objectSpacePoint = object.inverseTransform * point;
   Tuple normal;
   switch(object.shapeTag.type) {
