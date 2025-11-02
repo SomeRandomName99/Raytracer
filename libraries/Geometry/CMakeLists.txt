@@ -33,4 +33,5 @@ target_link_libraries(
   PUBLIC
     Utility
     Material
+    Scene
 )
