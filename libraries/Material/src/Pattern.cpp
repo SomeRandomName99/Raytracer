@@ -1,5 +1,7 @@
 #include "Pattern.hpp"
 #include "Tuple.hpp"
+
+#define STB_PERLIN_IMPLEMENTATION
 #include "stb_perlin.h"
 
 namespace raytracer::material {
