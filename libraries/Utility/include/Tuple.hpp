@@ -9,10 +9,10 @@
 namespace raytracer {
 namespace utility {
 
-struct alignas(32) Tuple {
-    double x, y, z, w;
+struct alignas(16) Tuple {
+    float x, y, z, w;
 
-    explicit Tuple(const double x, const double y, const double z, double w) noexcept : x(x), y(y), z(z), w(w) {}
+    explicit Tuple(const float x, const float y, const float z, float w) noexcept : x(x), y(y), z(z), w(w) {}
     explicit Tuple() noexcept = default;
 
     inline bool isVector() const noexcept {
@@ -34,23 +34,23 @@ struct alignas(32) Tuple {
     inline Tuple operator-(const Tuple& rhs) const noexcept {
         return Tuple(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
     }
-    inline Tuple operator*(const double& rhs) const noexcept {
+    inline Tuple operator*(const float& rhs) const noexcept {
         return Tuple(x * rhs, y * rhs, z * rhs, w * rhs);
     }
-    inline Tuple operator/(const double& rhs) const noexcept {
+    inline Tuple operator/(const float& rhs) const noexcept {
         return Tuple(x / rhs, y / rhs, z / rhs, w / rhs);
     }
     inline Tuple operator-() const noexcept {
         return *this * -1;
     }
-    double magnitude() const noexcept {
+    float magnitude() const noexcept {
         return std::sqrt(x * x + y * y + z * z);
     }
     inline Tuple normalize() const noexcept {
         const auto magnitude = this->magnitude();
         return Tuple(x / magnitude, y / magnitude, z / magnitude, w);
     }
-    inline double dot(const Tuple& rhs) const noexcept {
+    inline float dot(const Tuple& rhs) const noexcept {
         return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w;
     }
     inline Tuple cross(const Tuple& rhs) const noexcept {
@@ -68,10 +68,10 @@ struct alignas(32) Tuple {
 };
 
 // Definitions after the class
-inline Tuple Point(const double x, const double y, const double z) noexcept {
+inline Tuple Point(const float x, const float y, const float z) noexcept {
     return Tuple(x, y, z, 1);
 }
-inline Tuple Vector(const double x, const double y, const double z) noexcept {
+inline Tuple Vector(const float x, const float y, const float z) noexcept {
     return Tuple(x, y, z, 0);
 }
 
