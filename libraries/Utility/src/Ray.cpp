@@ -4,7 +4,7 @@ namespace raytracer {
 namespace utility {
 
 Tuple Ray::position(const double distance) const noexcept {
-  return this->origin_ + this->direction_ * distance;
+  return this->origin + this->direction * distance;
 }
 
 } // namespace utility

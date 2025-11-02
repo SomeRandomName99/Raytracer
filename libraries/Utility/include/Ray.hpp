@@ -7,21 +7,16 @@
 namespace raytracer {
 namespace utility {
 
-class Ray {
-public: 
+struct Ray {
   Ray(Tuple origin, Tuple direction) noexcept
-      : origin_{origin}, direction_{direction} {}
+      : origin{origin}, direction{direction} {}
   explicit Ray() noexcept = default;
 
   Tuple position(const double time) const noexcept;
 
-  Tuple origin_;
-  Tuple direction_;
+  Tuple origin;
+  Tuple direction;
 };
-
-inline Ray transform(const Ray &ray, const Matrix<4,4> &transformation) noexcept {
-  return Ray(transformation * ray.origin_, transformation * ray.direction_);
-}
 
 } // namespace utility
 } // namespace raytracer
