@@ -1,182 +1,98 @@
-#include <optional>
-#include <algorithm>
-
 #include "World.hpp"
-#include "Intersections.hpp"
-#include "Material.hpp"
-#include "FloatUtils.hpp"
-#include "Transformations.hpp"
+#include "Shape.hpp"
 
-namespace raytracer {
-namespace scene {
+namespace raytracer::scene {
 
-using utility::Arena;
-using utility::Ray;
-using geometry::Intersection;
-using utility::Color;
-using utility::Tuple;
-using utility::Point;
-
-// Buffer reused across recursive calls to avoid allocations
-static thread_local Arena<Intersection> intersectionsBuffer(GB(10));
-
-void intersect(const Ray& ray) const noexcept{
-  intersectionsBuffer.clear();
-  for(const auto& object : objects_){
-    object->intersect(ray, intersectionsBuffer);
-  }
-}
-
-inline bool isShadowed(const PointLight& light, const Tuple& point) const noexcept{
-  const auto pointToLightVector = light.position - point;
-  const auto pointToLightDistance = pointToLightVector.magnitude();
-  const auto pointToLightDirection = pointToLightVector.normalize();
-  const auto pointToLightRay = Ray(point, pointToLightDirection);
-
-  for(const auto& object : objects_){
-    if(!object->hasShadow()) continue;
-    intersect(pointToLightRay);
-    for(const auto& intersection : intersectionsBuffer){
-      if(intersection.dist > 0.0f && intersection.dist < pointToLightDistance){
-        return true;
+void setBoundingBox(const World& world, WorldObject& node) noexcept{
+  switch(node.shapeTag.type) {
+    case ShapeType::Sphere: {
+      node.boundingBox = {Point(-1, -1, -1), Point(1, 1, 1)};
+      break;
+    }
+    case ShapeType::Plane: {
+      node.boundingBox = {Point(-INFINITY, 0, -INFINITY), Point(INFINITY, 0, INFINITY)};
+      break;
+    }
+    case ShapeType::Cylinder: {
+      int32_t dataIndex = node.shapeTag.dataIndex;
+      float min = world.circularSolidData[dataIndex].minimum;
+      float max = world.circularSolidData[dataIndex].maximum;
+      node.boundingBox = {Point(-1, min, -1), Point(1, max, 1)};
+      break;
+    }
+    case ShapeType::Cube: {
+      node.boundingBox = {Point(-1, -1, -1), Point(1, 1, 1)};
+      break;
+    }
+    case ShapeType::Cone: {
+      int32_t dataIndex = node.shapeTag.dataIndex;
+      const float limit = std::max(std::abs(world.circularSolidData[dataIndex].minimum), std::abs(world.circularSolidData[dataIndex].maximum));
+      node.boundingBox = {Point(-limit, world.circularSolidData[dataIndex].minimum, -limit),
+                          Point(limit, world.circularSolidData[dataIndex].maximum, limit)};
+      break;
+    }
+    case ShapeType::Group: {
+      int32_t dataIndex = node.shapeTag.dataIndex;
+      for(auto& childIndex: world.groupData[dataIndex].childerenIndices) {
+        node.boundingBox.expandToInclude(world.objects[childIndex].boundingBox.transform(world.objects[childIndex].transform));
       }
-    }
-  }
-  return false;
-}
-
-Color lighting(const geometry::ShapeBase* object, const PointLight& light, const Tuple& point, 
-                        const Tuple& eyeVector, const Tuple& normalVector, const bool inShadow) noexcept{
-  Color color;
-  if (object->material().pattern()) {
-    color = (*object->material().pattern()).drawPatternAt(object, point);
-  } else {
-    color = object->material().surfaceColor();
-  }
-  const auto effectiveColor = color * light.intensity;
-  const auto lightVector = (light.position - point).normalize();
-  const auto ambient = effectiveColor * object->material().ambient();
-
-  if (inShadow) {
-    return ambient; // specular and diffuse lighting are not relevant if the point is in shadow
-  }
-
-  auto lightDotNormal = lightVector.dot(normalVector);
-  Color diffuse;
-  Color specular;
-  if (lightDotNormal < 0) {
-    diffuse = Color(0,0,0);
-    specular = Color(0,0,0);
-  } else {
-    diffuse = effectiveColor * object->material().diffuse() * lightDotNormal;
-
-    auto reflectVector = (-lightVector).reflect(normalVector);
-    auto reflectDotEye = reflectVector.dot(eyeVector);
-    if (reflectDotEye <= 0) {
-      specular = Color(0,0,0);
-    } else {
-      auto factor = std::pow(reflectDotEye, object->material().shininess());
-      specular = light.intensity * object->material().specular() * factor;
-    }
-  }
-
-  return ambient + diffuse + specular;
-}
-
-Color reflect(const Tuple& reflectVector, const Tuple& surfaceOffsetPoint, size_t recursionLimit) const noexcept{
-  if(comps.intersection.object->material().reflectance() == 0) return Color{0,0,0};
-  else if (recursionLimit == 0) return Color{0,0,0};
-
-  auto reflectedRay = Ray(comps.surfaceOffsetPoint, comps.reflectVector);
-  return this->colorAt(reflectedRay, recursionLimit - 1) * comps.intersection.object->material().reflectance();
-}
-
-Color refract(const Tuple& normalVector, const Tuple& eyeVector, const Tuple& internalOffsetPoint, size_t recursionLimit) const noexcept{
-  if(comps.intersection.object->material().transparency() == 0) return Color{0,0,0};
-  if(recursionLimit == 0) return Color{0,0,0};
-
-  static thread_local Arena<const geometry::ShapeBase*> unexitedShapes(GB(10));
-  unexitedShapes.clear();
-  float n1,n2; 
-  for(const auto& i: intersections){
-    if(i == intersection){
-      size_t size = unexitedShapes.size;
-      n1 = size == 0 ? 1.0 : unexitedShapes[size - 1]->material().refractiveIndex();
-    }
-
-    auto found = std::find(unexitedShapes.begin(), unexitedShapes.end(), i.object);
-    if(found != unexitedShapes.end()){
-      size_t size = unexitedShapes.size;
-      size_t index = found - unexitedShapes.begin();
-      unexitedShapes[index] = unexitedShapes[size - 1];
-      unexitedShapes.popBack();
-    } else {
-      unexitedShapes.pushBack(i.object);
-    }
-
-    if(i == intersection){
-      size_t size = unexitedShapes.size;
-      n2 = size == 0 ? 1.0 : unexitedShapes[size - 1]->material().refractiveIndex();
       break;
     }
   }
-
-  auto nRatio = n1/n2;
-  auto cosI = comps.eyeVector.dot(comps.normalVector);
-  auto sin2T = nRatio * nRatio * (1 - cosI * cosI); // basically solving snell's law
-
-  // Total internal reflection
-  if(sin2T > 1) return Color{0,0,0};
-
-  // Calculate refracted ray then its color
-  auto cosT = std::sqrt(1.0 - sin2T);
-  auto direction = comps.normalVector * (nRatio * cosI - cosT) - comps.eyeVector * nRatio;
-  auto refractedRay = Ray(comps.internalOffsetPoint, direction);
-
-  return this->colorAt(refractedRay, recursionLimit - 1) * comps.intersection.object->material().transparency();
 }
 
-Color World::colorAt(const Ray& ray, size_t recursionLimit) const noexcept{
-  this->intersect(ray, intersections);
-  std::ranges::sort(intersections, {}, [](const auto& intersection){ return intersection.dist; });
-  Intersection hit{nullptr, std::numeric_limits<double>::min()};
-  for(auto& i : intersections){
-    if(i.dist > hit.dist){
-      hit = i;
-    }
-  }
-  if (hit.dist < 0.0f) return Color{0,0,0};
-
-  // Calculate shading info
-  auto point = ray.position(hit.dist);
-  auto normalVector = hit.object->normalAt(point);
-  auto reflectVector = ray.direction_.reflect(normalVector);
-  auto eyeVector = -ray.direction_;
-  if(normalVector.dot(eyeVector) < 0){
-    normalVector = -normalVector;
-  }
-  auto surfaceOffsetPoint  = point + normalVector * SHADOW_OFFSET;
-  auto internalOffsetPoint = point - normalVector * SHADOW_OFFSET;
-
-  auto surfaceColor   = Color{0,0,0};
-  auto refractedColor = Color{0,0,0};
-  auto reflectedColor = Color{0,0,0};
-  /* Refract be called first because any recursive call will overwrite the intersections buffer and
-     we will lose the ability to calculate the refractive indices. */ 
-  refractedColor += refract(reflectVector, surfaceOffsetPoint, recursionLimit); 
-  reflectedColor += reflect(normalVector, eyeVector, internalOffsetPoint, recursionLimit);
-  for(const auto& light : this->lights_) {
-    surfaceColor += scene::lighting(comps.intersection.object, light, comps.point, comps.eyeVector, 
-                                    comps.normalVector, this->isShadowed(light, comps.surfaceOffsetPoint));
-  }
-
-  if(comps.intersection.object->material().reflectance() > 0 && comps.intersection.object->material().transparency() > 0){
-    auto reflectance = geometry::schlick(comps);
-    return surfaceColor + reflectedColor * reflectance + refractedColor * (1 - reflectance);
-  } else {
-    return surfaceColor + reflectedColor + refractedColor;
-  } 
+size_t addMaterial(World& world, const Material& material) noexcept{
+  world.materials.push_back(material);
+  return world.materials.size() - 1;
 }
 
-} // namespace scene
-} // namespace raytracer
+size_t addPattern(World& world, const Pattern& pattern) noexcept{
+  world.patterns.push_back(pattern);
+  return world.patterns.size() - 1;
+}
+
+size_t addObject(World& world, const WorldObject& object) noexcept{
+  // Make a local copy so we can ensure invariants (inverse transform, bounding box)
+  WorldObject newObject = object;
+
+  // Ensure inverseTransform matches transform
+  newObject.inverseTransform = inverse(newObject.transform);
+
+  // Initialize bounding box for the object based on its shape and world data
+  setBoundingBox(world, newObject);
+
+  world.objects.push_back(std::move(newObject));
+  return world.objects.size() - 1;
+}
+
+size_t addLight(World& world, const PointLight& light) noexcept{
+  world.lights.push_back(light);
+  return world.lights.size() - 1;
+}
+
+size_t addObjectWithMaterial(World& world, const WorldObject& object, 
+                             const Material& material, 
+                             const std::optional<Pattern>& pattern) noexcept{
+  size_t materialIndex = addMaterial(world, material);
+  WorldObject newObject = object;
+  newObject.MaterialIndex = materialIndex;
+  if(pattern.has_value()){
+    size_t patternIndex = addPattern(world, pattern.value());
+    world.materials[materialIndex].patternIndex = patternIndex;
+  }
+  return addObject(world, newObject);
+}
+
+void addTransformToObject(World& world, const size_t objectIndex, const utility::Matrix<4,4>& transform) noexcept{
+  WorldObject& object = world.objects[objectIndex];
+  object.transform = transform * object.transform;
+  object.inverseTransform = object.inverseTransform * inverse(transform);
+  setBoundingBox(world, object);
+}
+
+void setObjectShadow(World& world, const size_t objectIndex, const bool hasShadow) noexcept{
+  WorldObject& object = world.objects[objectIndex];
+  object.hasShadow = hasShadow;
+}
+
+} // namespace raytracer::scene
