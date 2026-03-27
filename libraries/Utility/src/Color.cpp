@@ -8,7 +8,7 @@ namespace utility {
 
 Color::Color() noexcept : _color{Tuple(0.0, 0.0, 0.0, 0.0)}
                  {}
-Color::Color(double red_, double green_, double blue_) noexcept : _color{Tuple(red_, green_, blue_, 0.0)}
+Color::Color(float red_, float green_, float blue_) noexcept : _color{Tuple(red_, green_, blue_, 0.0)}
                                                       {}
 
 bool Color::operator==(const Color& rhs) const noexcept{
@@ -27,7 +27,7 @@ Color Color::operator-(const Color& rhs) const noexcept{
   return Color(newTuple.x, newTuple.y, newTuple.z); 
 }
 
-Color Color::operator*(const double& rhs) const noexcept{
+Color Color::operator*(const float& rhs) const noexcept{
   const auto newTuple = this->_color * rhs;
   return Color(newTuple.x, newTuple.y, newTuple.z);
 }
@@ -37,29 +37,29 @@ Color Color::operator*(const Color& rhs) const noexcept{ // Hadamarad Product
 }
 
 // Color setters and getters
-const double& Color::red() const noexcept{
+const float& Color::red() const noexcept{
   return _color.x;
 }
-void Color::red(const double& val) noexcept {
+void Color::red(const float& val) noexcept {
   _color.x = val;
 }
 
-const double& Color::green() const noexcept{
+const float& Color::green() const noexcept{
   return _color.y;
 }
-void Color::green(const double& val) noexcept {
+void Color::green(const float& val) noexcept {
   _color.y = val;
 }
 
-const double& Color::blue() const noexcept{
+const float& Color::blue() const noexcept{
   return _color.z;
 }
-void Color::blue(const double& val) noexcept {
+void Color::blue(const float& val) noexcept {
   _color.z = val;
 }
 
 Color hexColor(unsigned int hex) noexcept{
- const auto red = (hex >> 16) & 0xFF;
+  const auto red = (hex >> 16) & 0xFF;
   const auto green = (hex >> 8) & 0xFF;
   const auto blue = hex & 0xFF;
   return Color(red/255.0, green/255.0, blue/255.0);

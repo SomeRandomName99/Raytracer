@@ -5,7 +5,6 @@
 #include <concepts>
 #include <optional>
 #include <memory>
-#include <span>
 
 #include "Tuple.hpp"
 #include "Ray.hpp"
@@ -17,7 +16,7 @@ constexpr double SHADOW_OFFSET = 1e-4;
 
 namespace raytracer {
 namespace geometry {
-class ShapeBase;
+struct WorldObject;
 
 /**
  * \class Intersection
@@ -25,7 +24,7 @@ class ShapeBase;
  */
 struct Intersection
 {
-  const ShapeBase* object;
+  const WorldObject* object;
   double dist; ///< Distance from the ray origin to the intersection point.
 };
 

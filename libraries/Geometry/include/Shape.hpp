@@ -21,7 +21,7 @@ enum class ShapeType{
 
 struct ShapeTypeTag{
   ShapeType type;
-  int32_t dataIndex;
+  int32_t dataIndex = -1;
 };
 
 struct WorldObject {
@@ -38,14 +38,14 @@ struct GroupData{
   std::vector<uint32_t> childerenIndices;
 };
 
-struct circularSolidData {
+struct CircularSolidData {
   float minimum = 1.0f;
   float maximum = -1.0f;
   bool closed = true;
 };
 
-void localIntersect(const Ray& objectSpaceRay, const WorldObject& object, Arena<Intersection>& intersections) noexcept; 
-Tuple normalAt(const WorldObject& object, const Tuple& point) noexcept;
+void localIntersect(const Ray& objectSpaceRay, const WorldObject& object, Arena<Intersection>& intersections, const std::vector<CircularSolidData>& circularObjectData) noexcept; 
+Tuple normalAt(const WorldObject& object, const Tuple& point, const std::vector<CircularSolidData>& circularObjectData) noexcept;
 } // namespace raytracer::geometry
 
 #endif // SHAPE_HPP

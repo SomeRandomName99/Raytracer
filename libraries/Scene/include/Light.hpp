@@ -1,27 +1,13 @@
 #ifndef LIGHT_HPP
 #define LIGHT_HPP
 
-#include <memory>
+namespace raytracer::scene{
 
-#include "Color.hpp"
-#include "Tuple.hpp"
-#include "Material.hpp"
-#include "Shape.hpp"
-
-namespace raytracer {
-namespace scene {
-
-class PointLight{
-public:
-  PointLight(utility::Color intensity, utility::Tuple position) noexcept: intensity_{intensity}, position_{position} {}
-
-  utility::Color intensity_;
-  utility::Tuple position_;
+struct PointLight{
+  utility::Color intensity;
+  utility::Tuple position;
 };
 
-utility::Color lighting(const geometry::ShapeBase* object, const PointLight& light, const utility::Tuple& point, 
-                        const utility::Tuple& eyeVector, const utility::Tuple& normalVector, const bool inShadow) noexcept;
-} // namespace raytracer
-} // namespace scene
+} // namespace raytracer::scene
 
 #endif // LIGHT_HPP

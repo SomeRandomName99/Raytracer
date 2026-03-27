@@ -15,7 +15,7 @@ const T EPSILON = 1e-4;
 
 template <floating T> 
 bool floatNearlyEqual(T a, T b) noexcept{
-  return (std::fabs(a-b) < (EPSILON<T> * std::max(std::fabs(a), std::fabs(b))));
+  return (std::fabs(a-b) <= (EPSILON<T> * std::max(std::fabs(a), std::fabs(b))));
 }
 
 template <floating T, floating U> 

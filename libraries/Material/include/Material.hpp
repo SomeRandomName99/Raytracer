@@ -18,7 +18,7 @@ struct Material{
   float reflectance;
   float transparency;
   float refractiveIndex;
-  int32_t patternIndex;
+  int32_t patternIndex = -1;
 };
 
 static inline Material createDefaultMaterial() noexcept{

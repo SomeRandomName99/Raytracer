@@ -17,20 +17,20 @@ struct AABB {
   AABB(const Tuple &p) noexcept : min{p}, max{p} {}
 
   bool intersect(const Ray &ray) const noexcept {
-    double tx1 = (min.x - ray.origin.x) / ray.direction.x;
-    double tx2 = (max.x - ray.origin.x) / ray.direction.x;
+    float tx1 = (min.x - ray.origin.x) / ray.direction.x;
+    float tx2 = (max.x - ray.origin.x) / ray.direction.x;
 
-    double tmin = std::min(tx1, tx2);
-    double tmax = std::max(tx1, tx2);
+    float tmin = std::min(tx1, tx2);
+    float tmax = std::max(tx1, tx2);
 
-    double ty1 = (min.y - ray.origin.y) / ray.direction.y;
-    double ty2 = (max.y - ray.origin.y) / ray.direction.y;
+    float ty1 = (min.y - ray.origin.y) / ray.direction.y;
+    float ty2 = (max.y - ray.origin.y) / ray.direction.y;
 
     tmin = std::max(tmin, std::min(ty1, ty2));
     tmax = std::min(tmax, std::max(ty1, ty2));
 
-    double tz1 = (min.z - ray.origin.z) / ray.direction.z;
-    double tz2 = (max.z - ray.origin.z) / ray.direction.z;
+    float tz1 = (min.z - ray.origin.z) / ray.direction.z;
+    float tz2 = (max.z - ray.origin.z) / ray.direction.z;
 
     tmin = std::max(tmin, std::min(tz1, tz2));
     tmax = std::min(tmax, std::max(tz1, tz2));

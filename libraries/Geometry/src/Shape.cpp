@@ -54,7 +54,7 @@ void localIntersect(const Ray& objectSpaceRay, const WorldObject& object,
       const auto centerToRay = orig - Point(0, 0, 0);
       const auto a = dir.dot(dir);
       const auto b = 2 * dir.dot(centerToRay);
-      const auto c = centerToRay.dot(centerToRay) - 1; // where 1 is the radius_ of the sphere
+      const auto c = centerToRay.dot(centerToRay) - 1; // where 1 is the radius of the sphere
 
       const float disc = b*b - 4*a*c;
       if (disc < 0){return;}

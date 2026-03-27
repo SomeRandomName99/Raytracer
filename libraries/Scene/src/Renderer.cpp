@@ -134,6 +134,7 @@ static inline std::pair<float, float> calculateRefractiveIndices(const World& wo
 }
 
 Color colorAt(const Ray& ray, const World& world, size_t recursionLimit) noexcept{
+  if(recursionLimit == 0) return Color{0,0,0};
   intersect(ray, world);
   std::ranges::sort(intersectionsBuffer, {}, [](const auto& intersection){ return intersection.dist; });
   Intersection hit{nullptr, std::numeric_limits<float>::max()};
@@ -142,7 +143,7 @@ Color colorAt(const Ray& ray, const World& world, size_t recursionLimit) noexcep
       hit = i;
     }
   }
-  if (hit.object==nullptr || hit.dist < 0.0f || recursionLimit == 0) return Color{0,0,0};
+  if (hit.object==nullptr || hit.dist < 0.0f) return Color{0,0,0};
 
   auto point = ray.position(hit.dist);
   auto normalVector = normalAt(*hit.object, point, world.circularSolidData).normalize();
@@ -176,14 +177,13 @@ Color colorAt(const Ray& ray, const World& world, size_t recursionLimit) noexcep
     auto sin2T = nRatio * nRatio * (1 - cosI * cosI); // basically solving snell's law
 
     // Total internal reflection
-    if(sin2T > 1) return Color{0,0,0};
-
-    // Calculate refracted ray then its color
-    auto cosT = std::sqrt(1.0 - sin2T);
-    auto direction = normalVector * (nRatio * cosI - cosT) - eyeVector * nRatio;
-    auto refractedRay = Ray(internalOffsetPoint, direction);
-
-    refractedColor += colorAt(refractedRay, world, recursionLimit - 1) * material.transparency;
+    if(sin2T <= 1){
+      // Calculate refracted ray then its color
+      auto cosT = std::sqrt(1.0 - sin2T);
+      auto direction = normalVector * (nRatio * cosI - cosT) - eyeVector * nRatio;
+      auto refractedRay = Ray(internalOffsetPoint, direction);
+      refractedColor += colorAt(refractedRay, world, recursionLimit - 1) * material.transparency;
+    }
   }
 
   if(material.reflectance > 0 && material.transparency > 0){

@@ -12,7 +12,7 @@ struct Ray {
       : origin{origin}, direction{direction} {}
   explicit Ray() noexcept = default;
 
-  Tuple position(const double time) const noexcept;
+  Tuple position(const float time) const noexcept;
 
   Tuple origin;
   Tuple direction;

@@ -2,10 +2,12 @@
 #include <execution>
 #include <numeric>
 #include <vector>
+#include <csignal>
 
 #include "Camera.hpp"
 #include "Intersections.hpp"
 #include "Arena.hpp"
+#include "Renderer.hpp"
 
 namespace raytracer {
 namespace scene {
@@ -30,14 +32,21 @@ Canvas Camera::render(const World& world) noexcept{
 
   std::vector<size_t> pixelIndices(this->numHorPixels_ * this->numVerPixels_);
   std::iota(pixelIndices.begin(), pixelIndices.end(), 0);
-  for_each(std::execution::par_unseq, pixelIndices.begin(), pixelIndices.end(),
-           [this, &image, &world](const auto index) {
-             const auto x = index % this->numHorPixels_;
-             const auto y = index / this->numHorPixels_;
-             const auto ray = this->rayForPixel(x, y);
-             const auto color = world.colorAt(ray, world);
-             image.pixelWrite(color, x, y);
-           });
+  for(const auto index : pixelIndices){
+    const auto x = index % this->numHorPixels_;
+    const auto y = index / this->numHorPixels_;
+    const auto ray = this->rayForPixel(x, y);
+    const auto color = colorAt(ray, world);
+    image.pixelWrite(color, x, y);
+  }
+  // for_each(std::execution::par_unseq, pixelIndices.begin(), pixelIndices.end(),
+  //          [this, &image, &world](const auto index) {
+  //            const auto x = index % this->numHorPixels_;
+  //            const auto y = index / this->numHorPixels_;
+  //            const auto ray = this->rayForPixel(x, y);
+  //            const auto color = colorAt(ray, world);
+  //            image.pixelWrite(color, x, y);
+  //          });
 
   return image;
 }
