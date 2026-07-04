@@ -1,5 +1,5 @@
-#include "World.hpp"
-#include "Shape.hpp"
+#include "libraries/Scene/include/World.hpp"
+#include "libraries/Geometry/include/Shape.hpp"
 
 namespace raytracer::scene {
 

@@ -5,12 +5,12 @@
 #include <memory>
 #include <cstdint>
 
-#include "Intersections.hpp"
-#include "Shape.hpp"
-#include "Light.hpp"
-#include "Arena.hpp"
-#include "Material.hpp"
-#include "Pattern.hpp"
+#include "libraries/Geometry/include/Intersections.hpp"
+#include "libraries/Geometry/include/Shape.hpp"
+#include "libraries/Scene/include/Light.hpp"
+#include "libraries/Utility/include/Arena.hpp"
+#include "libraries/Material/include/Material.hpp"
+#include "libraries/Material/include/Pattern.hpp"
 
 namespace raytracer::scene {
 

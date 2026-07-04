@@ -5,10 +5,10 @@
 #include <algorithm>
 #include <memory>
 
-#include "Intersections.hpp"
-#include "FloatUtils.hpp"
-#include "Shape.hpp"
-#include "Transformations.hpp"
+#include "libraries/Geometry/include/Intersections.hpp"
+#include "libraries/Utility/include/FloatUtils.hpp"
+#include "libraries/Geometry/include/Shape.hpp"
+#include "libraries/Utility/include/Transformations.hpp"
 
 namespace raytracer {
 namespace geometry {

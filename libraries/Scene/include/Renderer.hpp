@@ -1,9 +1,9 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
-#include "Color.hpp"
-#include "Ray.hpp"
-#include "World.hpp"
+#include "libraries/Utility/include/Color.hpp"
+#include "libraries/Utility/include/Ray.hpp"
+#include "libraries/Scene/include/World.hpp"
 
 namespace raytracer::scene{ 
 using namespace utility;

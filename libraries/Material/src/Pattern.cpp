@@ -1,8 +1,8 @@
-#include "Pattern.hpp"
-#include "Tuple.hpp"
+#include "libraries/Material/include/Pattern.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
 
 #define STB_PERLIN_IMPLEMENTATION
-#include "stb_perlin.h"
+#include "3rdParty/stb_perlin.h"
 
 namespace raytracer::material {
   void setPatternTransform(Pattern& pattern, const utility::Matrix<4, 4>& transform) {

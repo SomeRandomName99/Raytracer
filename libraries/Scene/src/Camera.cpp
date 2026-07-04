@@ -4,10 +4,10 @@
 #include <vector>
 #include <csignal>
 
-#include "Camera.hpp"
-#include "Intersections.hpp"
-#include "Arena.hpp"
-#include "Renderer.hpp"
+#include "libraries/Scene/include/Camera.hpp"
+#include "libraries/Geometry/include/Intersections.hpp"
+#include "libraries/Utility/include/Arena.hpp"
+#include "libraries/Scene/include/Renderer.hpp"
 
 namespace raytracer {
 namespace scene {

@@ -2,7 +2,7 @@
 #include <ranges>
 #include <iostream>
 
-#include "Canvas.hpp"
+#include "libraries/Canvas/include/Canvas.hpp"
 
 namespace raytracer {
 

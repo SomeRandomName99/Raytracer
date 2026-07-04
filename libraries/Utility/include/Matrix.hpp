@@ -8,8 +8,8 @@
 #include <iostream>
 #include <execution>
 
-#include "Tuple.hpp"
-#include "FloatUtils.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
+#include "libraries/Utility/include/FloatUtils.hpp"
 
 namespace raytracer {
 namespace utility {

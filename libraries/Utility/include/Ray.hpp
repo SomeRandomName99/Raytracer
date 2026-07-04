@@ -1,8 +1,8 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "Tuple.hpp"
-#include "Matrix.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
+#include "libraries/Utility/include/Matrix.hpp"
 
 namespace raytracer {
 namespace utility {

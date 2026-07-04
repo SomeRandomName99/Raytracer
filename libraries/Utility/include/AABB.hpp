@@ -1,8 +1,8 @@
 #ifndef AABB_H
 #define AABB_H
 
-#include "Tuple.hpp"
-#include "Intersections.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
+#include "libraries/Geometry/include/Intersections.hpp"
 
 namespace raytracer {
 namespace utility {

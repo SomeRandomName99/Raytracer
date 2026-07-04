@@ -6,11 +6,11 @@
 #include <optional>
 #include <memory>
 
-#include "Tuple.hpp"
-#include "Ray.hpp"
-#include "Material.hpp"
-#include "Matrix.hpp"
-#include "Arena.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
+#include "libraries/Utility/include/Ray.hpp"
+#include "libraries/Material/include/Material.hpp"
+#include "libraries/Utility/include/Matrix.hpp"
+#include "libraries/Utility/include/Arena.hpp"
 
 constexpr double SHADOW_OFFSET = 1e-4;
 

@@ -1,7 +1,7 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include "Tuple.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
 
 namespace raytracer {
 namespace utility {

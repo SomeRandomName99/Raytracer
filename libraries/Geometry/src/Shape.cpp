@@ -2,8 +2,8 @@
 #include <cmath>
 #include <tuple>
 
-#include "Shape.hpp"
-#include "World.hpp"
+#include "libraries/Geometry/include/Shape.hpp"
+#include "libraries/Scene/include/World.hpp"
 
 namespace raytracer::geometry{
 using namespace utility;

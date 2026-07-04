@@ -2,12 +2,12 @@
 #include <algorithm>
 #include <utility>
 
-#include "World.hpp"
-#include "Intersections.hpp"
-#include "Material.hpp"
-#include "FloatUtils.hpp"
-#include "Transformations.hpp"
-#include "Shape.hpp"
+#include "libraries/Scene/include/World.hpp"
+#include "libraries/Geometry/include/Intersections.hpp"
+#include "libraries/Material/include/Material.hpp"
+#include "libraries/Utility/include/FloatUtils.hpp"
+#include "libraries/Utility/include/Transformations.hpp"
+#include "libraries/Geometry/include/Shape.hpp"
 
 namespace raytracer {
 namespace scene {

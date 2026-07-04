@@ -1,9 +1,9 @@
 #ifndef PATTERN_HPP
 #define PATTERN_HPP
 
-#include "Color.hpp"
-#include "Matrix.hpp"
-#include "Tuple.hpp"
+#include "libraries/Utility/include/Color.hpp"
+#include "libraries/Utility/include/Matrix.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
 
 namespace raytracer::material {
   enum class PatternType {

@@ -4,8 +4,8 @@
 #include <memory>
 #include <optional>
 
-#include "Color.hpp"
-#include "Tuple.hpp"
+#include "libraries/Utility/include/Color.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
 
 namespace raytracer::material {
 

@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 
-#include "Color.hpp"
+#include "libraries/Utility/include/Color.hpp"
 
 namespace raytracer {
 

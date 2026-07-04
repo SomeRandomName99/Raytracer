@@ -1,16 +1,16 @@
 #ifndef SHAPE_HPP
 #define SHAPE_HPP
 
+#include "libraries/Material/include/Material.hpp"
+#include "libraries/Utility/include/AABB.hpp"
+#include "libraries/Utility/include/Matrix.hpp"
 #include <cstdint>
-#include "Matrix.hpp"
-#include "AABB.hpp"
-#include "Material.hpp"
 
 namespace raytracer::geometry {
 using namespace utility;
 using namespace material;
 
-enum class ShapeType{
+enum class ShapeType {
   Group,
   Sphere,
   Plane,
@@ -19,7 +19,7 @@ enum class ShapeType{
   Cone,
 };
 
-struct ShapeTypeTag{
+struct ShapeTypeTag {
   ShapeType type;
   int32_t dataIndex = -1;
 };
@@ -27,14 +27,14 @@ struct ShapeTypeTag{
 struct WorldObject {
   ShapeTypeTag shapeTag;
   AABB boundingBox;
-  Matrix<4,4> transform = Matrix<4,4>::identity();
-  Matrix<4,4> inverseTransform = Matrix<4,4>::identity();
+  Matrix<4, 4> transform = Matrix<4, 4>::identity();
+  Matrix<4, 4> inverseTransform = Matrix<4, 4>::identity();
   int16_t parentIndex = -1;
   int16_t MaterialIndex = -1;
   bool hasShadow = true;
 };
 
-struct GroupData{
+struct GroupData {
   std::vector<uint32_t> childerenIndices;
 };
 
@@ -44,8 +44,13 @@ struct CircularSolidData {
   bool closed = true;
 };
 
-void localIntersect(const Ray& objectSpaceRay, const WorldObject& object, Arena<Intersection>& intersections, const std::vector<CircularSolidData>& circularObjectData) noexcept; 
-Tuple normalAt(const WorldObject& object, const Tuple& point, const std::vector<CircularSolidData>& circularObjectData) noexcept;
+void localIntersect(
+    const Ray &objectSpaceRay, const WorldObject &object,
+    Arena<Intersection> &intersections,
+    const std::vector<CircularSolidData> &circularObjectData) noexcept;
+Tuple normalAt(
+    const WorldObject &object, const Tuple &point,
+    const std::vector<CircularSolidData> &circularObjectData) noexcept;
 } // namespace raytracer::geometry
 
 #endif // SHAPE_HPP

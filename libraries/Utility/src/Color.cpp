@@ -1,6 +1,6 @@
 #include <cstdint>
 
-#include "Color.hpp"
+#include "libraries/Utility/include/Color.hpp"
 
 
 namespace raytracer {
