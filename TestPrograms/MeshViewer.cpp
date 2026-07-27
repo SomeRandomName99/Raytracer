@@ -1,0 +1,77 @@
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+
+#include "libraries/Canvas/include/Canvas.hpp"
+#include "libraries/Material/include/Material.hpp"
+#include "libraries/Scene/include/Camera.hpp"
+#include "libraries/Scene/include/Light.hpp"
+#include "libraries/Scene/include/World.hpp"
+#include "libraries/Utility/include/Transformations.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
+
+using namespace raytracer;
+using namespace material;
+using namespace geometry;
+using namespace scene;
+
+// Loads an arbitrary model from an OBJ file given on the command line and
+// renders it. The camera is aimed at the center of the mesh's bounding box and
+// pulled back far enough to fit it in view, so meshes of any size work.
+int main(int argc, char *argv[]) {
+  if (argc != 2) {
+    std::cerr << "Usage: " << argv[0] << " <model.obj>\n";
+    return 1;
+  }
+  const std::filesystem::path objPath{argv[1]};
+
+  World world;
+
+  const auto meshIndex = loadMeshFromObjFile(world, objPath.string());
+  if (!meshIndex.has_value()) {
+    std::cerr << "Could not load " << objPath << '\n';
+    return 1;
+  }
+
+  auto meshMaterial = material::Material(utility::Color(0.9f, 0.6f, 0.2f), // surface color
+                                         0.1f,                             // ambient
+                                         0.9f,                             // diffuse
+                                         0.9f,                             // specular
+                                         200.0f,                           // shininess
+                                         0.0f,                             // reflectance
+                                         0.0f,                             // transparency
+                                         1.0f);                            // refractive index
+  const size_t materialIndex = addMaterial(world, meshMaterial);
+  world.objects[*meshIndex].MaterialIndex = static_cast<int16_t>(materialIndex);
+
+  // Aim the camera at the center of the mesh's bounding box
+  const auto &boundingBox = world.objects[*meshIndex].boundingBox;
+  const auto center = utility::Point((boundingBox.min.x + boundingBox.max.x) / 2.0f,
+                                     (boundingBox.min.y + boundingBox.max.y) / 2.0f,
+                                     (boundingBox.min.z + boundingBox.max.z) / 2.0f);
+
+  // Scale the camera and light distances with the mesh size so models of any
+  // scale fill the frame roughly the same way Suzanne does.
+  const auto extent = std::max({boundingBox.max.x - boundingBox.min.x,
+                                boundingBox.max.y - boundingBox.min.y,
+                                boundingBox.max.z - boundingBox.min.z});
+
+  addLight(world, scene::PointLight{utility::Color(1.0f, 1.0f, 1.0f),
+                                    center + utility::Vector(-3.0f * extent, 3.0f * extent, 3.0f * extent)});
+
+  // The model is assumed to face towards positive z, so the camera is placed
+  // on that side
+  auto camera = scene::Camera(1000, 1000, 1.0f);
+  camera.setTransform(utility::transformations::view_transform(
+      center + utility::Vector(0.0f, 0.0f, 2.0f * extent), center, utility::Vector(0.0f, 1.0f, 0.0f)));
+
+  auto canvas = camera.render(world);
+
+  const auto outputPath = objPath.stem().string() + ".ppm";
+  std::ofstream image{outputPath, std::ios::out | std::ios::trunc};
+  canvas.canvasToPPM(image);
+
+  std::cout << "Wrote " << outputPath << '\n';
+
+  return 0;
+}
