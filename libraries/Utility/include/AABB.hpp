@@ -1,19 +1,18 @@
 #ifndef AABB_H
 #define AABB_H
 
-#include "libraries/Utility/include/Tuple.hpp"
 #include "libraries/Geometry/include/Intersections.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
 
 namespace raytracer {
 namespace utility {
-
 
 struct AABB {
   Tuple min{};
   Tuple max{};
 
   AABB() noexcept = default;
-  AABB(const Tuple &p1, const Tuple &p2) noexcept : min{componentWiseMin(p1, p2)}, max{componentWiseMax(p1,p2)} {}
+  AABB(const Tuple &p1, const Tuple &p2) noexcept : min{componentWiseMin(p1, p2)}, max{componentWiseMax(p1, p2)} {}
   AABB(const Tuple &p) noexcept : min{p}, max{p} {}
 
   bool intersect(const Ray &ray) const noexcept {
@@ -35,7 +34,7 @@ struct AABB {
     tmin = std::max(tmin, std::min(tz1, tz2));
     tmax = std::min(tmax, std::max(tz1, tz2));
 
-    return tmax < tmin;
+    return tmin < tmax;
   }
 
   void expandToInclude(const AABB &other) noexcept {
@@ -51,14 +50,14 @@ struct AABB {
   AABB transform(const Matrix<4, 4> &matrix) const noexcept {
     AABB transformedAABB;
 
-    transformedAABB.expandToInclude(matrix*Point(min.x, min.y, min.z));
-    transformedAABB.expandToInclude(matrix*Point(min.x, min.y, max.z));
-    transformedAABB.expandToInclude(matrix*Point(min.x, max.y, min.z));
-    transformedAABB.expandToInclude(matrix*Point(min.x, max.y, max.z));
-    transformedAABB.expandToInclude(matrix*Point(max.x, min.y, min.z));
-    transformedAABB.expandToInclude(matrix*Point(max.x, min.y, max.z));
-    transformedAABB.expandToInclude(matrix*Point(max.x, max.y, min.z));
-    transformedAABB.expandToInclude(matrix*Point(max.x, max.y, max.z));
+    transformedAABB.expandToInclude(matrix * Point(min.x, min.y, min.z));
+    transformedAABB.expandToInclude(matrix * Point(min.x, min.y, max.z));
+    transformedAABB.expandToInclude(matrix * Point(min.x, max.y, min.z));
+    transformedAABB.expandToInclude(matrix * Point(min.x, max.y, max.z));
+    transformedAABB.expandToInclude(matrix * Point(max.x, min.y, min.z));
+    transformedAABB.expandToInclude(matrix * Point(max.x, min.y, max.z));
+    transformedAABB.expandToInclude(matrix * Point(max.x, max.y, min.z));
+    transformedAABB.expandToInclude(matrix * Point(max.x, max.y, max.z));
 
     return transformedAABB;
   }

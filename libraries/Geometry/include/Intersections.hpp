@@ -26,6 +26,9 @@ struct Intersection
 {
   const WorldObject* object;
   double dist; ///< Distance from the ray origin to the intersection point.
+  float u = 0.0f; ///< Barycentric coordinate of the hit (used for smooth triangles).
+  float v = 0.0f; ///< Barycentric coordinate of the hit (used for smooth triangles).
+  int32_t triangleIndex = -1; ///< Index of the hit triangle in the world's triangle data (used for meshes).
 };
 
 bool operator==(Intersection const& lhs, Intersection const& rhs) noexcept;

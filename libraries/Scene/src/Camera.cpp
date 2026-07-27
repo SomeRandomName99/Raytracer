@@ -1,52 +1,52 @@
 #include <algorithm>
+#include <csignal>
 #include <execution>
 #include <numeric>
 #include <vector>
-#include <csignal>
 
-#include "libraries/Scene/include/Camera.hpp"
 #include "libraries/Geometry/include/Intersections.hpp"
-#include "libraries/Utility/include/Arena.hpp"
+#include "libraries/Scene/include/Camera.hpp"
 #include "libraries/Scene/include/Renderer.hpp"
+#include "libraries/Utility/include/Arena.hpp"
 
 namespace raytracer {
 namespace scene {
 
 using namespace utility;
 
-Ray Camera::rayForPixel(const unsigned int x, const unsigned int y) const noexcept{
+Ray Camera::rayForPixel(const unsigned int x, const unsigned int y) const noexcept {
   const auto xOffsetToPixelCenter = (x + 0.5) * this->pixelSize_;
   const auto yOffsetToPixelCenter = (y + 0.5) * this->pixelSize_;
 
-  const auto worldX = this->halfWidth_  - xOffsetToPixelCenter;
+  const auto worldX = this->halfWidth_ - xOffsetToPixelCenter;
   const auto worldY = this->halfHeight_ - yOffsetToPixelCenter;
   // z-coord is -1 because the canvas is always 1 unit away from the camera
-  const auto pixel     = this->inverseTransform_ * Point(worldX, worldY, -1); 
+  const auto pixel = this->inverseTransform_ * Point(worldX, worldY, -1);
   const auto direction = (pixel - this->cameraOrigin_).normalize();
 
   return Ray{this->cameraOrigin_, direction};
 }
 
-Canvas Camera::render(const World& world) noexcept{
+Canvas Camera::render(const World &world) noexcept {
   auto image = Canvas(this->numHorPixels_, this->numVerPixels_);
 
   std::vector<size_t> pixelIndices(this->numHorPixels_ * this->numVerPixels_);
   std::iota(pixelIndices.begin(), pixelIndices.end(), 0);
-  for(const auto index : pixelIndices){
-    const auto x = index % this->numHorPixels_;
-    const auto y = index / this->numHorPixels_;
-    const auto ray = this->rayForPixel(x, y);
-    const auto color = colorAt(ray, world);
-    image.pixelWrite(color, x, y);
-  }
-  // for_each(std::execution::par_unseq, pixelIndices.begin(), pixelIndices.end(),
-  //          [this, &image, &world](const auto index) {
-  //            const auto x = index % this->numHorPixels_;
-  //            const auto y = index / this->numHorPixels_;
-  //            const auto ray = this->rayForPixel(x, y);
-  //            const auto color = colorAt(ray, world);
-  //            image.pixelWrite(color, x, y);
-  //          });
+  // for (const auto index : pixelIndices) {
+  //   const auto x = index % this->numHorPixels_;
+  //   const auto y = index / this->numHorPixels_;
+  //   const auto ray = this->rayForPixel(x, y);
+  //   const auto color = colorAt(ray, world);
+  //   image.pixelWrite(color, x, y);
+  // }
+  for_each(std::execution::par_unseq, pixelIndices.begin(), pixelIndices.end(),
+           [this, &image, &world](const auto index) {
+             const auto x = index % this->numHorPixels_;
+             const auto y = index / this->numHorPixels_;
+             const auto ray = this->rayForPixel(x, y);
+             const auto color = colorAt(ray, world);
+             image.pixelWrite(color, x, y);
+           });
 
   return image;
 }
