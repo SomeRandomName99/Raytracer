@@ -4,9 +4,9 @@
 #include <numbers>
 #include <algorithm>
 
-#include "Tuple.hpp"
-#include "Canvas.hpp"
-#include "Transformations.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
+#include "libraries/Canvas/include/Canvas.hpp"
+#include "libraries/Utility/include/Transformations.hpp"
 
 
 const auto orange = raytracer::utility::Color(1.0, 0.65, 0.0);

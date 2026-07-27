@@ -3,17 +3,17 @@
 #include <string>
 #include <numbers>
 
-#include "Tuple.hpp"
-#include "Canvas.hpp"
-#include "Transformations.hpp"
-#include "Ray.hpp"
-#include "Intersections.hpp"
-#include "Light.hpp"
-#include "Material.hpp"
-#include "Pattern.hpp"
-#include "World.hpp"
-#include "Shape.hpp"
-#include "Renderer.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
+#include "libraries/Canvas/include/Canvas.hpp"
+#include "libraries/Utility/include/Transformations.hpp"
+#include "libraries/Utility/include/Ray.hpp"
+#include "libraries/Geometry/include/Intersections.hpp"
+#include "libraries/Scene/include/Light.hpp"
+#include "libraries/Material/include/Material.hpp"
+#include "libraries/Material/include/Pattern.hpp"
+#include "libraries/Scene/include/World.hpp"
+#include "libraries/Geometry/include/Shape.hpp"
+#include "libraries/Scene/include/Renderer.hpp"
 
 using namespace raytracer;
 using namespace material;

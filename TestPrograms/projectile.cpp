@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "Tuple.hpp"
-#include "Canvas.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
+#include "libraries/Canvas/include/Canvas.hpp"
 
 using namespace raytracer;
 

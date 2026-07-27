@@ -4,13 +4,13 @@
 #include <numbers>
 #include <algorithm>
 
-#include "Tuple.hpp"
-#include "Canvas.hpp"
-#include "Transformations.hpp"
-#include "Ray.hpp"
+#include "libraries/Utility/include/Tuple.hpp"
+#include "libraries/Canvas/include/Canvas.hpp"
+#include "libraries/Utility/include/Transformations.hpp"
+#include "libraries/Utility/include/Ray.hpp"
 #include "Sphere.hpp"
-#include "Intersections.hpp"
-#include "Light.hpp"
+#include "libraries/Geometry/include/Intersections.hpp"
+#include "libraries/Scene/include/Light.hpp"
 
 using namespace raytracer;
 
