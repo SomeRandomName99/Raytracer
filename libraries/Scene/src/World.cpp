@@ -104,10 +104,6 @@ size_t addTriangle(World &world, const utility::Tuple &v0, const utility::Tuple 
   data.n0 = n0;
   data.n1 = n1;
   data.n2 = n2;
-  data.e0 = v1 - v0;
-  data.e1 = v2 - v0;
-  data.u = u;
-  data.v = v;
   world.triangleData.push_back(data);
   const int32_t dataIndex = static_cast<int32_t>(world.triangleData.size() - 1);
 
@@ -185,15 +181,15 @@ std::optional<size_t> loadMeshFromObjFile(World &world, const std::string &input
       tri.v0 = readVertex(i0.vertex_index);
       tri.v1 = readVertex(i1.vertex_index);
       tri.v2 = readVertex(i2.vertex_index);
-      tri.e0 = tri.v1 - tri.v0;
-      tri.e1 = tri.v2 - tri.v0;
+      Tuple e0 = tri.v1 - tri.v0;
+      Tuple e1 = tri.v2 - tri.v0;
       if (i0.normal_index >= 0 && i1.normal_index >= 0 && i2.normal_index >= 0) {
         tri.n0 = readNormal(i0.normal_index);
         tri.n1 = readNormal(i1.normal_index);
         tri.n2 = readNormal(i2.normal_index);
       } else {
         // No vertex normals in the file, fall back to the geometric face normal
-        const utility::Tuple faceNormal = tri.e0.cross(tri.e1).normalize();
+        const utility::Tuple faceNormal = e0.cross(e1).normalize();
         tri.n0 = faceNormal;
         tri.n1 = faceNormal;
         tri.n2 = faceNormal;

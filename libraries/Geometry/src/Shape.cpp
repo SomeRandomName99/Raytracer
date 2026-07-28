@@ -62,8 +62,10 @@ static inline void addCircularSideIntersections(float a, float b, float c, const
 static inline void addTriangleIntersection(const TriangleData &tri, const Tuple &orig, const Tuple &dir,
                                            const WorldObject &object, const int32_t triangleIndex,
                                            Arena<Intersection> &intersections) noexcept {
-  const Tuple perpVec = dir.cross(tri.e1); // perpendicular to dir and edge2
-  const float det = tri.e0.dot(perpVec);
+  Tuple e0 = tri.v1 - tri.v0;
+  Tuple e1 = tri.v2 - tri.v0;
+  const Tuple perpVec = dir.cross(e1); // perpendicular to dir and edge2
+  const float det = e0.dot(perpVec);
   if (fabs(det) < EPSILON<float> * EPSILON<float>)
     return;
 
@@ -75,13 +77,13 @@ static inline void addTriangleIntersection(const TriangleData &tri, const Tuple 
     return;
 
   // replace the last column vector by O - A
-  const Tuple origCrossEdge1 = v0ToOrig.cross(tri.e0);
+  const Tuple origCrossEdge1 = v0ToOrig.cross(e0);
   const float v = invDet * dir.dot(origCrossEdge1);
   if (v < 0.0f || u + v > 1.0f)
     return;
 
   // Replace the first column by vector O-A
-  const float t = invDet * tri.e1.dot(origCrossEdge1);
+  const float t = invDet * e1.dot(origCrossEdge1);
   if (t > EPSILON<float>) {
     // Record the barycentric coordinates so the normal can be interpolated
     intersections.pushBack(Intersection{&object, t, u, v, triangleIndex});

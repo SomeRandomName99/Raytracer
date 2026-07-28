@@ -47,10 +47,8 @@ struct CircularSolidData {
 };
 
 struct TriangleData {
-  Tuple v0, v1, v2;         // vertex positions
-  Tuple n0, n1, n2;         // per-vertex normals (for smooth shading)
-  Tuple e0, e1;             // precomputed edges: v1 - v0 and v2 - v0
-  float u = 0.0f, v = 0.0f; // texture coordinates from the object file
+  Tuple v0, v1, v2; // vertex positions
+  Tuple n0, n1, n2; // per-vertex normals (for smooth shading)
 };
 
 // A mesh is a contiguous range of triangles in the world's triangle data vector
@@ -59,17 +57,13 @@ struct MeshData {
   int32_t triangleCount = 0;
 };
 
-void localIntersect(
-    const Ray &objectSpaceRay, const WorldObject &object,
-    Arena<Intersection> &intersections,
-    const std::vector<CircularSolidData> &circularObjectData,
-    const std::vector<TriangleData> &triObjectData,
-    const std::vector<MeshData> &meshObjectData) noexcept;
-Tuple normalAt(
-    const WorldObject &object, const Tuple &point,
-    const std::vector<CircularSolidData> &circularObjectData,
-    const std::vector<TriangleData> &triObjectData, float u = 0.0f,
-    float v = 0.0f, int32_t triangleIndex = -1) noexcept;
+void localIntersect(const Ray &objectSpaceRay, const WorldObject &object, Arena<Intersection> &intersections,
+                    const std::vector<CircularSolidData> &circularObjectData,
+                    const std::vector<TriangleData> &triObjectData,
+                    const std::vector<MeshData> &meshObjectData) noexcept;
+Tuple normalAt(const WorldObject &object, const Tuple &point, const std::vector<CircularSolidData> &circularObjectData,
+               const std::vector<TriangleData> &triObjectData, float u = 0.0f, float v = 0.0f,
+               int32_t triangleIndex = -1) noexcept;
 } // namespace raytracer::geometry
 
 #endif // SHAPE_HPP
