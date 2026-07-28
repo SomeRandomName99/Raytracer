@@ -54,14 +54,11 @@ inline Color lighting(const WorldObject &object, const PointLight &light, const 
   const auto ambient = effectiveColor * material.ambient;
 
   bool inShadow = false;
-  for (const auto &object : world.objects) {
-    if (!object.hasShadow)
-      continue;
-    intersect(Ray(point, pointToLightDirection), world);
-    for (const auto &intersection : intersectionsBuffer) {
-      if (intersection.dist > 0.0f && intersection.dist < pointToLightDistance) {
-        inShadow = true;
-      }
+  intersect(Ray(point, pointToLightDirection), world);
+  for (const auto &intersection : intersectionsBuffer) {
+    if (object.hasShadow && intersection.dist > 0.0f && intersection.dist < pointToLightDistance) {
+      inShadow = true;
+      break;
     }
   }
 
